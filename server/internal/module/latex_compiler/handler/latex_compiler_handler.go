@@ -1,11 +1,23 @@
 package handler
 
-import ()
+import (
+	"cse-question-bank/internal/module/latex_compiler/usecase"
 
-type LatexCompilerHandler interface {}
+	"github.com/gin-gonic/gin"
+)
 
-type latexCompilerHandlerImpl struct {}
+type LatexCompilerHandler interface {
+	CompileHandler(c *gin.Context)
+}
 
-func NewLatexCompilerHandler() LatexCompilerHandler {
-	return &latexCompilerHandlerImpl{}
+type latexCompilerHandlerImpl struct {
+	latexCompilerUsecase usecase.LatexCompilerUsecase
+}
+
+func NewLatexCompilerHandler(
+	latexCompilerUsecase usecase.LatexCompilerUsecase,
+) LatexCompilerHandler {
+	return &latexCompilerHandlerImpl{
+		latexCompilerUsecase: latexCompilerUsecase,
+	}
 }

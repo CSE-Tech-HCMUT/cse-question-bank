@@ -2,6 +2,7 @@ package server
 
 import (
 	"cse-question-bank/internal/database"
+	"cse-question-bank/internal/routes"
 	"fmt"
 	"net/http"
 	"os"
@@ -22,6 +23,7 @@ func InitServer() *http.Server {
 
 	server := &http.Server{
 		Addr: fmt.Sprintf(":%d", NewServer.port),
+		Handler: routes.RegisterRoutes(),
 	}
 
 	return server

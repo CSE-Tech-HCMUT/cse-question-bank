@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +16,7 @@ func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
 	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "fail to get request"})
 	// 	return
 	// }
-	slog.Info("hi")
-	
+
 	pdfFile, err := h.latexCompilerUsecase.LatexCompile("")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "fail to get pdf file"})

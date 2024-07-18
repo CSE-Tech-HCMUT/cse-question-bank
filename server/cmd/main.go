@@ -2,7 +2,6 @@ package main
 
 import (
 	"cse-question-bank/internal/server"
-	"fmt"
 
 	"github.com/joho/godotenv"
 )
@@ -18,7 +17,5 @@ func main() {
 	err = server.ListenAndServe()
 	if err != nil {
 		panic("cannot start server")
-	} else {
-		fmt.Print("server is running")
 	}
 }

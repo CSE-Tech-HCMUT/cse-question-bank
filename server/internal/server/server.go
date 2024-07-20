@@ -2,7 +2,10 @@ package server
 
 import (
 	"cse-question-bank/internal/database"
+	"cse-question-bank/internal/routes"
+	"cse-question-bank/pkg/logger"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 	"strconv"
@@ -15,6 +18,13 @@ type Server struct {
 
 func InitServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("SERVER_PORT"))
+
+	opts := &slog.HandlerOptions{
+		AddSource: true,
+	}
+	newLogger := slog.New(logger.NewHandler(opts))
+	slog.SetDefault(newLogger)
+
 	NewServer := &Server{
 		port: port,
 		db:   database.InitDatabase(),
@@ -22,6 +32,7 @@ func InitServer() *http.Server {
 
 	server := &http.Server{
 		Addr: fmt.Sprintf(":%d", NewServer.port),
+		Handler: routes.RegisterRoutes(),
 	}
 
 	return server

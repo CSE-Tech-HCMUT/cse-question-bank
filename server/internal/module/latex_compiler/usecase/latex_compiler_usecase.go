@@ -1,5 +1,9 @@
 package usecase
 
+import (
+	"cse-question-bank/internal/core/errors"
+)
+
 // flow
 // get request -> get latex content
 // -> embed to latex template question
@@ -11,7 +15,7 @@ package usecase
 // -> delete pdf file, delete latex folder
 
 type LatexCompilerUsecase interface {
-	LatexCompile(content string) ([]byte, error)
+	LatexCompile(content string) ([]byte, errors.DomainError)
 }
 
 type latexCompilerImpl struct {

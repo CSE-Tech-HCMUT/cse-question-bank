@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"cse-question-bank/internal/core/errors"
+	"cse-question-bank/internal/module/latex_compiler/constant"
 	"cse-question-bank/pkg/execute"
 	"log/slog"
 	"os"
@@ -13,11 +15,11 @@ import (
 // open file to check then Readfile with os package
 // delete folder
 // return file
-func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
+func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, errors.DomainError) {
 	folderPath, err := createFolder()
 	if err != nil {
 		slog.Error("Fail to create folder", "error-message", err)
-		return nil, err
+		return nil, constant.NewInternalServerError()
 	}
 	slog.Info("Create folder successfully", "folder-path", folderPath)
 	defer deleteFolder(folderPath)
@@ -29,20 +31,20 @@ func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
 	err = pdfLatexCompile(folderPath+"/output.tex", args...)
 	if err != nil {
 		slog.Error("Fail to compile latex", "error-message", err)
-		return nil, err
+		return nil, constant.NewInternalServerError()
 	}
 
 	pdfFile, err := os.Open(folderPath + "/output.pdf")
 	if err != nil {
 		slog.Error("Fail to open file PDF result", "error-message", err)
-		return nil, err
+		return nil, constant.NewInternalServerError()
 	}
 	defer pdfFile.Close()
 
 	pdfContent, err := os.ReadFile(folderPath + "/output.pdf")
 	if err != nil {
 		slog.Error("Fail to get file PDF content", "error-message", err)
-		return nil, err
+		return nil, constant.NewInternalServerError()
 	}
 
 	return pdfContent, nil

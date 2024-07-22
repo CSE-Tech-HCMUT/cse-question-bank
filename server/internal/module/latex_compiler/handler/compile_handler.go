@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"cse-question-bank/internal/core/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,7 @@ func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
 
 	pdfFile, err := h.latexCompilerUsecase.LatexCompile("")
 	if err != nil {
+		response.ResponseError(c, err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "fail to get pdf file"})
 		return
 	}

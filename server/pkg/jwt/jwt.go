@@ -22,6 +22,7 @@ type UserClaims struct {
 func Generate(userID, role string) (string, error) {
 	jwtSecretKey := os.Getenv("JWT_SECRET_KEY")
 	tokenDuration, _ := strconv.Atoi((os.Getenv("TOKEN_DURATION")))
+	
 	claims := UserClaims{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Duration(tokenDuration)).Unix(),

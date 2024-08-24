@@ -25,6 +25,5 @@ func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
 		return
 	}
 
-	// c.Header("Content-Disposition", "attachment; filename=output.pdf")
 	c.Data(http.StatusOK, "application/pdf", pdfFile)
 }

@@ -18,3 +18,5 @@ apiInstance.interceptors.response.use(
 apiInstance.get('/longRequest', {
   timeout: 10000
 })
+
+export default apiInstance;

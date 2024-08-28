@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import BankQuestionState from "../../types/bankQuestion";
+import BankQuestionState from "../../types/bankQuestion/bankQuestion";
 
 const initialState: BankQuestionState = {
   addModalShow: false

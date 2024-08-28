@@ -33,12 +33,12 @@ func InitDatabase() Service {
 	}
 
 	var (
-		database   = os.Getenv("DB_DATABASE")
-		password   = os.Getenv("DB_PASSWORD")
-		username   = os.Getenv("DB_USERNAME")
-		port       = os.Getenv("DB_PORT")
-		host       = os.Getenv("DB_HOST")
-		db_schema  = os.Getenv("DB_SCHEMA")
+		database  = os.Getenv("DB_DATABASE")
+		password  = os.Getenv("DB_PASSWORD")
+		username  = os.Getenv("DB_USERNAME")
+		port      = os.Getenv("DB_PORT")
+		host      = os.Getenv("DB_HOST")
+		db_schema = os.Getenv("DB_SCHEMA")
 	)
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable search_path=%s",

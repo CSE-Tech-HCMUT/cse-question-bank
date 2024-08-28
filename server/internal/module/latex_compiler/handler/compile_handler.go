@@ -8,7 +8,7 @@ import (
 )
 
 type latexCompileReq struct {
-	latexContent string
+	latexContent string `json:"latex-content"`
 }
 
 func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
@@ -21,7 +21,6 @@ func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
 	pdfFile, err := h.latexCompilerUsecase.LatexCompile(latexCompileReq.latexContent)
 	if err != nil {
 		response.ResponseError(c, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "fail to get pdf file"})
 		return
 	}
 

@@ -1,33 +1,42 @@
 package constant
 
 import (
-	"cse-question-bank/internal/core/errors"
+	ce "cse-question-bank/internal/core/errors"
+	"net/http"
 )
 
-type LatexCompilerError struct {
-	Key     errors.ErrorKey
-	Message string
+func ErrCreateFolder(err error) error {
+	return ce.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"can not create folder for containing latex source",
+		"ERR_CREATE_FOLDER",
+	)
 }
 
-func (e *LatexCompilerError) ErrorKey() errors.ErrorKey {
-	return e.Key
+func ErrCompileLatex(err error) error {
+	return ce.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"fail to compile latex file",
+		"ERR_COMPILE_LATEX",
+	)
 }
 
-func (e *LatexCompilerError) ErrorMessage() string {
-	return e.Message
+func ErrOpenFilePDF(err error) error {
+	return ce.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"fail to get file PDF",
+		"ERR_OPEN_FILE_PDF",
+	)
 }
 
-func (e *LatexCompilerError) Error() string {
-	return e.Message
-}
-
-func newDomainError(key errors.ErrorKey, message string) errors.DomainError {
-	return &LatexCompilerError{
-		Key:     key,
-		Message: message,
-	}
-}
-
-func NewInternalServerError() errors.DomainError {
-	return newDomainError(errors.ErrInternalServer, "Can not compile latex now. Please try again later")
+func ErrGetPDFContent(err error) error {
+	return ce.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"fail to get PDF content",
+		"ERR_GET_PDF_CONTENT",
+	)
 }

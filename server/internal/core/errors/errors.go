@@ -1,15 +1,43 @@
 package errors
 
-type DomainError interface {
-    ErrorKey() ErrorKey
-    ErrorMessage() string
-    Error() string
-}
+import "errors"
+
+// type DomainError interface {
+// 	ErrorKey() ErrorKey
+// 	ErrorMessage() string
+// 	Error() string
+// }
 
 type ErrorKey string
 
-var (
-    ErrNotFound       = ErrorKey("ERR_NOT_FOUND")
-    ErrInvalidInput   = ErrorKey("ERR_INVALID_INPUT")
-    ErrInternalServer = ErrorKey("ERR_INTERNAL_SERVER")
-)
+type DomainError struct {
+	StatusCode int
+	RootError  error
+	Log        string
+	Message    string
+	ErrorKey   string
+}
+
+func (e *DomainError) Error() string {
+	return e.RootError.Error()
+}
+
+func NewDomainError(statusCode int, rootError error, message string, errorKey string) *DomainError {
+	if rootError == nil {
+		rootError = errors.New(message)
+	}
+
+	return &DomainError{
+		StatusCode: statusCode,
+		RootError:  rootError,
+		Message:    message,
+		Log:        rootError.Error(),
+		ErrorKey:   errorKey,
+	}
+}
+
+// var (
+// 	ErrNotFound       = ErrorKey("ERR_NOT_FOUND")
+// 	ErrInvalidInput   = ErrorKey("ERR_INVALID_INPUT")
+// 	ErrInternalServer = ErrorKey("ERR_INTERNAL_SERVER")
+// )

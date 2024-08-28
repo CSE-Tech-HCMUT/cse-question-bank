@@ -24,12 +24,6 @@ type service struct {
 }
 
 var (
-	database   = os.Getenv("DB_DATABASE")
-	password   = os.Getenv("DB_PASSWORD")
-	username   = os.Getenv("DB_USERNAME")
-	port       = os.Getenv("DB_PORT")
-	host       = os.Getenv("DB_HOST")
-	db_schema  = os.Getenv("DB_SCHEMA")
 	dbInstance *service
 )
 
@@ -37,6 +31,15 @@ func InitDatabase() Service {
 	if dbInstance != nil {
 		return dbInstance
 	}
+
+	var (
+		database   = os.Getenv("DB_DATABASE")
+		password   = os.Getenv("DB_PASSWORD")
+		username   = os.Getenv("DB_USERNAME")
+		port       = os.Getenv("DB_PORT")
+		host       = os.Getenv("DB_HOST")
+		db_schema  = os.Getenv("DB_SCHEMA")
+	)
 
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable search_path=%s",
 		host, username, password, database, port, db_schema)
@@ -123,7 +126,7 @@ func (s *service) Close() error {
 	if err != nil {
 		return fmt.Errorf("failed to get DB from GORM: %v", err)
 	}
-	slog.Info("Disconnected from database", slog.String("database", database))
+	slog.Info("Disconnected from database", slog.String("database", os.Getenv("DB_DATABASE")))
 
 	return DB.Close()
 }

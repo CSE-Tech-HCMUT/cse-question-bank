@@ -10,7 +10,7 @@ import (
 func initLatexCompileGroupRoutes(r *gin.Engine) {
 	latexCompileUsecase := usecase.NewLatexCompiler()
 	latexCompileHandler := handler.NewLatexCompilerHandler(latexCompileUsecase)
-	latexComileRoutes := r.Group("/latex-compile")
+	latexComileRoutes := r.Group("/api/latex-compile")
 	{
 		addGroupRoutes(latexComileRoutes, getLatexCompileRoutes(latexCompileHandler))
 	}
@@ -19,8 +19,8 @@ func initLatexCompileGroupRoutes(r *gin.Engine) {
 func getLatexCompileRoutes(h handler.LatexCompilerHandler) []Route {
 	return []Route{
 		{
-			Method:  "GET",
-			Path:    "/",
+			Method:  "POST",
+			Path:    "",
 			Handler: h.CompileHandler,
 		},
 	}

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const apiInstance = axios.create({
-  baseURL: process.env.API_PATH,
+export const apiInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_PATH,
   method: "get",
   headers: {
     "Content-Type": "application/json",
@@ -15,8 +15,8 @@ apiInstance.interceptors.response.use(
   }
 )
 
-apiInstance.get('/longRequest', {
-  timeout: 10000
-})
+// apiInstance.get('/longRequest', {
+//   timeout: 10000
+// })
 
 export default apiInstance;

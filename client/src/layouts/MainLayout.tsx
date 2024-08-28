@@ -77,10 +77,16 @@ const MainLayout = React.memo(() => {
           <Avatar icon={<UserOutlined />} className="mr-[24px]"/>
         </Header>
         <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>{title}</Breadcrumb.Item>
-          </Breadcrumb>
+          <Breadcrumb style={{ margin: '16px 0' }} 
+            items={[
+              {
+                title: 'User'
+              },
+              {
+                title
+              }
+            ]}
+          />
           <div
             style={{
               padding: 24,

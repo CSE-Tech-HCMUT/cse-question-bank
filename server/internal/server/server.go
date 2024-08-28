@@ -31,7 +31,7 @@ func InitServer() *http.Server {
 	}
 
 	server := &http.Server{
-		Addr: fmt.Sprintf(":%d", NewServer.port),
+		Addr:    fmt.Sprintf(":%d", NewServer.port),
 		Handler: routes.RegisterRoutes(),
 	}
 

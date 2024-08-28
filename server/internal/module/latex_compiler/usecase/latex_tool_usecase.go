@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"cse-question-bank/internal/module/latex_compiler/constant"
 	"cse-question-bank/pkg/execute"
 	"log/slog"
 	"os"
@@ -17,7 +18,7 @@ func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
 	folderPath, err := createFolder()
 	if err != nil {
 		slog.Error("Fail to create folder", "error-message", err)
-		return nil, err
+		return nil, constant.ErrCreateFolder(err)
 	}
 	slog.Info("Create folder successfully", "folder-path", folderPath)
 	defer deleteFolder(folderPath)
@@ -29,20 +30,20 @@ func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
 	err = pdfLatexCompile(folderPath+"/output.tex", args...)
 	if err != nil {
 		slog.Error("Fail to compile latex", "error-message", err)
-		return nil, err
+		return nil, constant.ErrCompileLatex(err)
 	}
 
 	pdfFile, err := os.Open(folderPath + "/output.pdf")
 	if err != nil {
 		slog.Error("Fail to open file PDF result", "error-message", err)
-		return nil, err
+		return nil, constant.ErrOpenFilePDF(err)
 	}
 	defer pdfFile.Close()
 
 	pdfContent, err := os.ReadFile(folderPath + "/output.pdf")
 	if err != nil {
 		slog.Error("Fail to get file PDF content", "error-message", err)
-		return nil, err
+		return nil, constant.ErrGetPDFContent(err)
 	}
 
 	return pdfContent, nil

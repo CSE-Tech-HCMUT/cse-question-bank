@@ -1,11 +1,11 @@
-import { MenuProps } from "antd";
+import { Avatar, MenuProps } from "antd";
 import React, { useCallback, useState } from "react"
 import {
-  DesktopOutlined,
+  ContainerOutlined,
   FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
+  HomeOutlined,
+  CodeOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from "react-router-dom";
@@ -30,15 +30,10 @@ const getItem = (
 }
 
 const items: MenuItem[] = [
-  getItem('Dashboard', '1', <PieChartOutlined />),
-  getItem('Option', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Question Bank', '9', <FileOutlined />),
+  getItem('Dashboard', '1', <HomeOutlined />),
+  getItem('Question Bank', '2', <FileOutlined />),
+  getItem('Exam Paper', '3', <ContainerOutlined />),
+  getItem('Latex Compiler', '4', <CodeOutlined />)
 ];
 
 const MainLayout = React.memo(() => {
@@ -58,26 +53,12 @@ const MainLayout = React.memo(() => {
         setTitle('Dashboard');
         break;
       case 2:
-        setTitle('Option');
-        break;
-      case 3:
-        setTitle('Tom');
-        break;
-      case 4:
-        setTitle('Bill');
-        break;
-      case 5:
-        setTitle('Alex');
-        break;
-      case 6:
-        setTitle('Team 1');
-        break;
-      case 8:
-        setTitle('Team 2');
-        break;
-      case 9:
         navigate(PATH.QUESTION_BANK);
         setTitle('Question Bank');
+        break;
+      case 4:
+        navigate(PATH.LATEX_COMPILER);
+        setTitle('Latex Compiler');
         break;
       default:
         setTitle('Dashboard');
@@ -88,20 +69,28 @@ const MainLayout = React.memo(() => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" />
+        <div className="demo-logo-vertical"></div>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick}/>
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header style={{ padding: 0, background: colorBgContainer }} className="flex items-center justify-end">
+          <Avatar icon={<UserOutlined />} className="mr-[24px]"/>
+        </Header>
         <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>{title}</Breadcrumb.Item>
-          </Breadcrumb>
+          <Breadcrumb style={{ margin: '16px 0' }} 
+            items={[
+              {
+                title: 'User'
+              },
+              {
+                title
+              }
+            ]}
+          />
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              minHeight: 470,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
             }}

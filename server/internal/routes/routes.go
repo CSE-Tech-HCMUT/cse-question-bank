@@ -2,7 +2,6 @@ package routes
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -17,9 +16,9 @@ type Route struct {
 func RegisterRoutes() http.Handler {
 	r := gin.Default()
 
-	domainName := os.Getenv("DOMAIN_NAME")
+	// domainName := os.Getenv("DOMAIN_NAME")
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://" + domainName},
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

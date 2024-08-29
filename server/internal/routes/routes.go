@@ -25,7 +25,10 @@ func RegisterRoutes() http.Handler {
 		AllowCredentials: true,
 	}))
 
-	initLatexCompileGroupRoutes(r)
+	api := r.Group("/api")
+	{
+		initLatexCompileGroupRoutes(api)
+	}
 
 	return r
 }

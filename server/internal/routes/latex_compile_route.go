@@ -7,10 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func initLatexCompileGroupRoutes(r *gin.Engine) {
+func initLatexCompileGroupRoutes(api *gin.RouterGroup) {
 	latexCompileUsecase := usecase.NewLatexCompiler()
 	latexCompileHandler := handler.NewLatexCompilerHandler(latexCompileUsecase)
-	latexComileRoutes := r.Group("/api/latex-compile")
+
+	latexComileRoutes := api.Group("/latex-compile")
 	{
 		addGroupRoutes(latexComileRoutes, getLatexCompileRoutes(latexCompileHandler))
 	}

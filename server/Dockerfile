@@ -1,16 +1,4 @@
-# Start from the latest golang base image
-FROM golang:latest
-
-
-# Install required packages for MiKTeX
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889
-
-
-RUN echo "deb http://miktex.org/download/ubuntu bionic universe" \ 
-    tee /etc/apt/sources.list.d/miktex.list \
-    apt-get update \
-    apt-get install miktex
-
+FROM golang:latest AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -26,5 +14,22 @@ RUN go mod download
 # Build the Go app
 RUN go build -o main ./cmd
 
-# Command to run the executable
-CMD ["./main"]
+
+# miktex
+FROM miktex/miktex:latest
+
+
+RUN mpm --admin --update
+
+WORKDIR /app
+# Copy the Go application from the builder stage
+COPY --from=builder /app /app
+
+RUN pdflatex ./internal/module/latex_compiler/latex_source/example.tex
+
+
+
+
+
+# Set the entry point to run the Go application
+ENTRYPOINT ["/app/main"]

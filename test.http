@@ -1,2 +1,7 @@
 ### TEST LATEX
-localhost:8080/latex-compile
+POST http://localhost:8080/api/latex-compile
+Content-Type: application/json
+
+{
+    "latex-content": ""
+}

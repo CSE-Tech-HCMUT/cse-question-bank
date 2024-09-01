@@ -33,7 +33,7 @@ func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
 		return nil, constant.ErrCompileLatex(err)
 	}
 
-	pdfFile, err := os.Open(folderPath + "/output.pdf")
+	pdfFile, err := os.Open(folderPath + "/outpuvt.pdf")
 	if err != nil {
 		slog.Error("Fail to open file PDF result", "error-message", err)
 		return nil, constant.ErrOpenFilePDF(err)

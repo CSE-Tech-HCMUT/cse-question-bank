@@ -5,9 +5,10 @@ import (
 	"cse-question-bank/internal/module/latex_compiler/usecase"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func initLatexCompileGroupRoutes(api *gin.RouterGroup) {
+func initLatexCompileGroupRoutes(db *gorm.DB, api *gin.RouterGroup) {
 	latexCompileUsecase := usecase.NewLatexCompiler()
 	latexCompileHandler := handler.NewLatexCompilerHandler(latexCompileUsecase)
 

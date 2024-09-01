@@ -1,21 +1,21 @@
 package constant
 
 import (
-	ce "cse-question-bank/internal/core/errors"
+	de "cse-question-bank/internal/core/errors"
 	"net/http"
 )
 
 func ErrCreateFolder(err error) error {
-	return ce.NewDomainError(
+	return de.NewDomainError(
 		http.StatusInternalServerError,
 		err,
-		"can not create folder for containing latex source",
+		"can not create folder for containing latex sourde",
 		"ERR_CREATE_FOLDER",
 	)
 }
 
 func ErrCompileLatex(err error) error {
-	return ce.NewDomainError(
+	return de.NewDomainError(
 		http.StatusInternalServerError,
 		err,
 		"fail to compile latex file",
@@ -24,7 +24,7 @@ func ErrCompileLatex(err error) error {
 }
 
 func ErrOpenFilePDF(err error) error {
-	return ce.NewDomainError(
+	return de.NewDomainError(
 		http.StatusInternalServerError,
 		err,
 		"fail to get file PDF",
@@ -33,7 +33,7 @@ func ErrOpenFilePDF(err error) error {
 }
 
 func ErrGetPDFContent(err error) error {
-	return ce.NewDomainError(
+	return de.NewDomainError(
 		http.StatusInternalServerError,
 		err,
 		"fail to get PDF content",

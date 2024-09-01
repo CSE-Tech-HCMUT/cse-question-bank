@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type Route struct {
@@ -13,7 +14,7 @@ type Route struct {
 	Handler gin.HandlerFunc
 }
 
-func RegisterRoutes() http.Handler {
+func RegisterRoutes(db *gorm.DB) http.Handler {
 	r := gin.Default()
 
 	// domainName := os.Getenv("DOMAIN_NAME")
@@ -27,7 +28,7 @@ func RegisterRoutes() http.Handler {
 
 	api := r.Group("/api")
 	{
-		initLatexCompileGroupRoutes(api)
+		initLatexCompileGroupRoutes(db, api)
 	}
 
 	return r

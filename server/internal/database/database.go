@@ -15,7 +15,7 @@ import (
 
 type Service interface {
 	Health() map[string]string
-
+	GetDB() *gorm.DB
 	Close() error
 }
 
@@ -60,6 +60,10 @@ func InitDatabase() Service {
 	}
 
 	return dbInstance
+}
+
+func (s *service) GetDB() *gorm.DB {
+	return s.db
 }
 
 // Health checks the health of the database connection by running a raw SQL query.

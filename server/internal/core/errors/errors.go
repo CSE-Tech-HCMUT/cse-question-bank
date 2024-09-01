@@ -13,7 +13,6 @@ type ErrorKey string
 type DomainError struct {
 	StatusCode int
 	RootError  error
-	Log        string
 	Message    string
 	ErrorKey   string
 }
@@ -30,8 +29,6 @@ func NewDomainError(statusCode int, rootError error, message string, errorKey st
 	return &DomainError{
 		StatusCode: statusCode,
 		RootError:  rootError,
-		Message:    message,
-		Log:        rootError.Error(),
 		ErrorKey:   errorKey,
 	}
 }

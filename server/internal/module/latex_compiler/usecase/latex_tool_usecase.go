@@ -39,7 +39,7 @@ func (u *latexCompilerImpl) LatexCompile(question *model.QuestionCompile) ([]byt
 		return nil, constant.ErrCompileLatex(err)
 	}
 
-	pdfFile, err := os.Open(folderPath + "/output.pdf")
+	pdfFile, err := os.Open(folderPath + "/outpuvt.pdf")
 	if err != nil {
 		slog.Error("Fail to open file PDF result", "error-message", err)
 		return nil, constant.ErrOpenFilePDF(err)

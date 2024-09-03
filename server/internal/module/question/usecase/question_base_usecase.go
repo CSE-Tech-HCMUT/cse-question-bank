@@ -5,12 +5,17 @@ import (
 	"cse-question-bank/internal/module/question/constant"
 	"cse-question-bank/internal/module/question/model"
 	"cse-question-bank/internal/module/question/repository"
-	"cse-question-bank/internal/util"
 	"log/slog"
 )
 
 type questionBaseUsecaseImpl struct {
 	repo repository.QuestionRepository
+}
+
+func NewQuestionUsecase(repo repository.QuestionRepository) QuestionUsecase {
+	return &questionBaseUsecaseImpl{
+		repo: repo,
+	}
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *model.Question) error {
@@ -37,17 +42,14 @@ func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId
 }
 
 func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *model.Question) error {
-	questionId, err := util.GenerateUUID()
-	if err != nil {
-		slog.Error("Fail to generate UUID", "error-message", err)
-		return constant.ErrCreateQuestion(err)
-	}
-
-	question.Id = questionId
-	if err = u.repo.Create(ctx, question); err != nil {
+	if err := u.repo.Create(ctx, question); err != nil {
 		slog.Error("Fail to create question in database", "error-message", err)
 		return constant.ErrCreateQuestion(err)
 	}
-	
+
 	return nil
+}
+
+func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (*model.Question, error) {
+	return nil, nil
 }

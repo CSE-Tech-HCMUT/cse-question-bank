@@ -4,6 +4,7 @@ import (
 	de "cse-question-bank/internal/core/errors"
 	"net/http"
 )
+
 func ErrQuestionNotFound(err error) error {
 	return de.NewDomainError(
 		http.StatusNotFound,
@@ -46,5 +47,23 @@ func ErrCreateQuestion(err error) error {
 		err,
 		"fail to create question",
 		"ERR_CREATE_QUESTION",
+	)
+}
+
+func ErrInvalidQuestionID(err error) error {
+	return de.NewDomainError(
+		http.StatusBadRequest,
+		err,
+		"invalid question id type",
+		"ERR_INVALID_QUESTION_ID",
+	)
+}
+
+func ErrEditQuestion(err error) error {
+	return de.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"fail to edit question",
+		"ERR_EDIT_QUESTION",
 	)
 }

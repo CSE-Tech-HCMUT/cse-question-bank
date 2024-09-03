@@ -29,6 +29,7 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 	api := r.Group("/api")
 	{
 		initLatexCompileGroupRoutes(db, api)
+		iniQuestionGroupRoutes(db, api)
 	}
 
 	return r

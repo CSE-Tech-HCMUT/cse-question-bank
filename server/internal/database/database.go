@@ -59,6 +59,10 @@ func InitDatabase() Service {
 		db: db,
 	}
 
+	if err = DataMigrate(db); err != nil {
+		slog.Error("Fail to migrate database", "error-message", err)
+	}
+
 	return dbInstance
 }
 

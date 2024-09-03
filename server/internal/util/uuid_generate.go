@@ -2,11 +2,11 @@ package util
 
 import "github.com/google/uuid"
 
-func GenerateUUID() (string, error) {
+func GenerateUUID() (uuid.UUID, error) {
 	newUUID, err := uuid.NewRandom() 	
 	if err != nil {
-		return "", err
+		return uuid.Nil, err
 	}
 
-	return newUUID.String(), nil
+	return newUUID, nil
 }

@@ -12,13 +12,13 @@ type latexCompileReq struct {
 }
 
 func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
-	var latexCompileReq latexCompileReq
-	if err := c.ShouldBindJSON(&latexCompileReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "fail to get request"})
-		return
-	}
+	// var latexCompileReq latexCompileReq
+	// if err := c.ShouldBindJSON(&latexCompileReq); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "fail to get request"})
+	// 	return
+	// }
 
-	pdfFile, err := h.latexCompilerUsecase.LatexCompile(latexCompileReq.latexContent)
+	pdfFile, err := h.latexCompilerUsecase.LatexCompile("")
 	if err != nil {
 		response.ResponseError(c, err)
 		return

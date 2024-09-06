@@ -6,6 +6,8 @@ import (
 	"cse-question-bank/internal/module/question/model"
 	"cse-question-bank/internal/module/question/repository"
 	"log/slog"
+
+	"github.com/goccy/go-json"
 )
 
 type questionBaseUsecaseImpl struct {
@@ -50,6 +52,82 @@ func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *
 	return nil
 }
 
-func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (*model.Question, error) {
-	return nil, nil
+type SingleQuestionResponse struct {
+	Id        string
+	Content   string
+	Type      string
+	Tag       string
+	Difficult int
+	Answer    json.RawMessage
+}
+
+type ParentQuestionResponse struct {
+	Id        string
+	Content   string
+	// Type      string
+	Tag       string
+	Difficult int
+	Question  []*SingleQuestionResponse
+}
+
+func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (interface{}, error) {
+	questions, err := u.repo.Find(ctx, map[string]interface{}{
+		"id": questionId,
+	})
+
+	if err != nil {
+		slog.Error("Fail to get question", "error-message", err)
+		return nil, constant.ErrGetQuestion(err)
+	}
+
+	if len(questions) < 1 {
+		slog.Error("Question not found")
+		return nil, constant.ErrQuestionNotFound(nil)
+	}
+
+	question := questions[0]
+
+	if question.IsParent {
+		childQuestions, err := u.repo.Find(ctx, map[string]interface{}{
+			"parent_id": questionId,
+		})
+		
+		if err != nil {
+			slog.Error("Fail to get question", "error-message", err)
+			return nil, constant.ErrGetQuestion(err)
+		}
+		// print(childQuestions[0])
+		childQuestionsRes := make([]*SingleQuestionResponse, 0)
+		for _, childQuestion := range childQuestions {
+			childQuestionsRes = append(childQuestionsRes, u.questionModelToSingleQuestion(childQuestion))
+		}
+		
+		questionRes := u.questionModelToParentQuestion(question, childQuestionsRes)
+
+		return questionRes, nil
+	}	
+	
+	return u.questionModelToSingleQuestion(question), nil
+
+}
+
+func (u *questionBaseUsecaseImpl) questionModelToSingleQuestion(question *model.Question) *SingleQuestionResponse {
+	return &SingleQuestionResponse{
+		Id: question.Id.String(),
+		Content: question.Content,
+		Type: string(question.Type),
+		Tag: question.Tag,
+		Difficult: question.Difficult,
+		Answer: question.Answer.Content,
+	}
+}
+
+func (u *questionBaseUsecaseImpl) questionModelToParentQuestion(question *model.Question, childQuestion []*SingleQuestionResponse) *ParentQuestionResponse {
+	return &ParentQuestionResponse{
+		Id: question.Id.String(),
+			Content: question.Content,
+			Tag: question.Tag,
+			Difficult: question.Difficult,
+			Question: childQuestion,
+	}
 }

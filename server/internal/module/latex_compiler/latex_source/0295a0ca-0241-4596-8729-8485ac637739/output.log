@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.9.8)  8 SEP 2024 00:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.9.8)  8 SEP 2024 01:12
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
-**./example.tex
-(example.tex
+**./output.tex
+(output.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
 
@@ -253,10 +253,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@minted@pygmentizecounter=\count310
 \@float@every@listing=\toks28
 \c@listing=\count311
-)
-runsystem(if not exist _minted-example mkdir _minted-example)...executed.
-
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
@@ -474,10 +471,10 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 )
-runsystem(for ^%i in (pygmentize.exe pygmentize.bat pygmentize.cmd) do set > ex
-ample.aex <nul: /p x=^%~$PATH:i>> example.aex)...executed.
+runsystem(for ^%i in (pygmentize.exe pygmentize.bat pygmentize.cmd) do set > ou
+tput.aex <nul: /p x=^%~$PATH:i>> output.aex)...executed.
 
-runsystem(del example.aex)...executed.
+runsystem(del output.aex)...executed.
 
 
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
@@ -486,8 +483,8 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count315
 \l__pdf_internal_box=\box63
 )
-No file example.aux.
-\openout1 = `example.aux'.
+No file output.aux.
+\openout1 = `output.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
 LaTeX Font Info:    ... okay on input line 10.
@@ -557,11 +554,16 @@ ii
 \makeMPintoPDFobject=\count321
 \everyMPtoPDFconversion=\toks33
 )
-\openout3 = `example.pyg'.
+\openout3 = `output.pyg'.
 
-(_minted-example/default.pygstyle)
-(_minted-example/44392CCCC17897C9A139EC32BD33C09B0BC671E66740E8C7CAE57278676489
-14.pygtex
+runsystem(pygmentize -S default -f latex -P commandprefix=PYG > output.out.pyg)
+...executed.
+
+(output.out.pyg)
+runsystem(pygmentize -l "cpp" -f latex -P commandprefix=PYG -F tokenmerge -P st
+ripnl="False" -o output.out.pyg output.pyg)...executed.
+
+(output.out.pyg
 LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 1
 .
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/vntex\t5cmtt.fd
@@ -571,29 +573,32 @@ LaTeX Font Info:    Font shape `T5/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `T5/cmtt/m/n' tried instead on input line 2.
 )
 Preview: Tightpage -786432 -786432 786432 786432
-[1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] (example.a
-ux)
+[1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] (output.au
+x)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
-runsystem(del example.pyg)...executed.
+runsystem(del output.pyg)...executed.
+
+runsystem(del output.out.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 7900 strings out of 474486
- 142717 string characters out of 5743756
+ 7887 strings out of 474486
+ 142074 string characters out of 5743756
  1927542 words of memory out of 5000000
- 30068 multiletter control sequences out of 15000+600000
+ 30061 multiletter control sequences out of 15000+600000
  561307 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 77i,5n,79p,276b,651s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 77i,5n,79p,275b,643s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vnbx10.pf
 b><C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vnr10.pfb
 ><C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vnr5.pfb><
 C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vntt10.pfb>
 Output written on C:\Users\ADMIN\Desktop\cse-question-bank\server\internal\modu
-le\latex_compiler\latex_source\example.pdf (1 page, 41057 bytes).
+le\latex_compiler\latex_source\0295a0ca-0241-4596-8729-8485ac637739\output.pdf 
+(1 page, 41057 bytes).
 PDF statistics:
  26 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

@@ -26,6 +26,7 @@ func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
 	args := []string{
 		"-output-directory=" + folderPath,
 		"-interaction=batchmode",
+		"-shell-escape",
 	}
 	err = pdfLatexCompile(folderPath+"/output.tex", args...)
 	if err != nil {

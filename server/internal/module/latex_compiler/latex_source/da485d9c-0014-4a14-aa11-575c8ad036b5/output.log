@@ -1,9 +1,12 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.9.8)  8 SEP 2024 00:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2024.9.8)  8 SEP 2024 01:12
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
-**./example.tex
-(example.tex
+**./internal/module/latex_compiler/latex_source/da485d9c-0014-4a14-aa11-575c8ad
+036b5/output.tex
+
+(internal/module/latex_compiler/latex_source/da485d9c-0014-4a14-aa11-575c8ad036
+b5/output.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
 
@@ -125,158 +128,29 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \mathdisplay@stack=\toks24
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/minted\minted.sty
-Package: minted 2023/12/18 v2.9 Yet another Pygments shim for LaTeX
-
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
-Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
-Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-)
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
-Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-)) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/fvextra\fvextra.sty
-Package: fvextra 2024/05/16 v1.7.0 fvextra - extensions and patches for fancyvr
-b
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count277
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/fancyvrb\fancyvrb.sty
-Package: fancyvrb 2024/01/20 4.5c verbatim text (tvz,hv)
-\FV@CodeLineNo=\count278
-\FV@InFile=\read2
-\FV@TabBox=\box54
-\c@FancyVerbLine=\count279
-\FV@StepNumber=\count280
-\FV@OutFile=\write3
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
-Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
-tim
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/lineno\lineno.sty
-Package: lineno 2023/05/20 line numbers on paragraphs v5.3
-\linenopenalty=\count281
-\output=\toks25
-\linenoprevgraf=\count282
-\linenumbersep=\dimen151
-\linenumberwidth=\dimen152
-\c@linenumber=\count283
-\c@pagewiselinenumber=\count284
-\c@LN@truepage=\count285
-\c@internallinenumber=\count286
-\c@internallinenumbers=\count287
-\quotelinenumbersep=\dimen153
-\bframerule=\dimen154
-\bframesep=\dimen155
-\bframebox=\box55
-\linenoamsmath@ams@eqpen=\count288
-LaTeX Info: Redefining \\ on input line 3180.
-)
-\c@FancyVerbWriteLine=\count289
-\c@FancyVerbBufferIndex=\count290
-\c@FancyVerbBufferLength=\count291
-\c@FancyVerbBufferLine=\count292
-\c@FV@oldbufferlength=\count293
-\c@FV@TrueTabGroupLevel=\count294
-\c@FV@TrueTabCounter=\count295
-\FV@TabBox@Group=\box56
-\FV@TmpLength=\skip53
-\c@FV@HighlightLinesStart=\count296
-\c@FV@HighlightLinesStop=\count297
-\FV@LoopCount=\count298
-\FV@NCharsBox=\box57
-\FV@BreakIndent=\dimen156
-\FV@BreakIndentNChars=\count299
-\FV@BreakSymbolSepLeft=\dimen157
-\FV@BreakSymbolSepLeftNChars=\count300
-\FV@BreakSymbolSepRight=\dimen158
-\FV@BreakSymbolSepRightNChars=\count301
-\FV@BreakSymbolIndentLeft=\dimen159
-\FV@BreakSymbolIndentLeftNChars=\count302
-\FV@BreakSymbolIndentRight=\dimen160
-\FV@BreakSymbolIndentRightNChars=\count303
-\c@FancyVerbLineBreakLast=\count304
-\FV@LineBox=\box58
-\FV@LineIndentBox=\box59
-\c@FV@BreakBufferDepth=\count305
-\FV@LineWidth=\dimen161
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
-Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
-)
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/ifplatform\ifplatform.s
-ty
-Package: ifplatform 2017/10/13 v0.4a Testing for the operating system
-
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
-.sty
-Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
-ty
-Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
-)
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/catchfile\catchfile.s
-ty
-Package: catchfile 2019/12/09 v1.8 Catch the contents of a file (HO)
-
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\etexcmds.sty
-Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
-))) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/xstring\xstring.sty
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/xstring\xstring.tex
-\xs_counta=\count306
-\xs_countb=\count307
-)
-Package: xstring 2023/08/22 v1.86 String manipulations (CT)
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/framed\framed.sty
-Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip54
-\fb@frw=\dimen162
-\fb@frh=\dimen163
-\FrameRule=\dimen164
-\FrameSep=\dimen165
-) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count308
-\float@exts=\toks26
-\float@box=\box60
-\@float@everytoks=\toks27
-\@floatcapt=\box61
-)
-\minted@appexistsfile=\read3
-\minted@bgbox=\box62
-\minted@code=\write4
-\c@minted@FancyVerbLineTemp=\count309
-\c@minted@pygmentizecounter=\count310
-\@float@every@listing=\toks28
-\c@listing=\count311
-)
-runsystem(if not exist _minted-example mkdir _minted-example)...executed.
-
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count312
-\Gm@cntv=\count313
-\c@Gm@tempcnt=\count314
-\Gm@bindingoffset=\dimen166
-\Gm@wd@mp=\dimen167
-\Gm@odd@mp=\dimen168
-\Gm@even@mp=\dimen169
-\Gm@layoutwidth=\dimen170
-\Gm@layoutheight=\dimen171
-\Gm@layouthoffset=\dimen172
-\Gm@layoutvoffset=\dimen173
-\Gm@dimlist=\toks29
+\Gm@cnth=\count277
+\Gm@cntv=\count278
+\c@Gm@tempcnt=\count279
+\Gm@bindingoffset=\dimen151
+\Gm@wd@mp=\dimen152
+\Gm@odd@mp=\dimen153
+\Gm@even@mp=\dimen154
+\Gm@layoutwidth=\dimen155
+\Gm@layoutheight=\dimen156
+\Gm@layouthoffset=\dimen157
+\Gm@layoutvoffset=\dimen158
+\Gm@dimlist=\toks25
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/vntex\vntex.sty
 Package: vntex 2009/07/12 v1.1 support for Vietnamese
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+Package: ifthen 2022/04/13 v1.1d Standard LaTeX ifthen package (DPC)
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/vntex\t5enc.def
 File: t5enc.def 2006/11/21 v1.4 Vietnamese T5 encoding
@@ -447,12 +321,138 @@ nput line 88.
 
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
 Package: inputenc 2021/02/14 v1.3d Input encoding file
-\inpenc@prehook=\toks30
-\inpenc@posthook=\toks31
+\inpenc@prehook=\toks26
+\inpenc@posthook=\toks27
 ) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/vntex\vncaps.tex
 File: vncaps.tex 2006/06/07 v1.1 Captions in Vietnamese
-)) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
+)) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/minted\minted.sty
+Package: minted 2023/12/18 v2.9 Yet another Pygments shim for LaTeX
+
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/fvextra\fvextra.sty
+Package: fvextra 2024/05/16 v1.7.0 fvextra - extensions and patches for fancyvr
+b
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count280
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/fancyvrb\fancyvrb.sty
+Package: fancyvrb 2024/01/20 4.5c verbatim text (tvz,hv)
+\FV@CodeLineNo=\count281
+\FV@InFile=\read2
+\FV@TabBox=\box54
+\c@FancyVerbLine=\count282
+\FV@StepNumber=\count283
+\FV@OutFile=\write3
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+)) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/lineno\lineno.sty
+Package: lineno 2023/05/20 line numbers on paragraphs v5.3
+\linenopenalty=\count284
+\output=\toks28
+\linenoprevgraf=\count285
+\linenumbersep=\dimen159
+\linenumberwidth=\dimen160
+\c@linenumber=\count286
+\c@pagewiselinenumber=\count287
+\c@LN@truepage=\count288
+\c@internallinenumber=\count289
+\c@internallinenumbers=\count290
+\quotelinenumbersep=\dimen161
+\bframerule=\dimen162
+\bframesep=\dimen163
+\bframebox=\box55
+\linenoamsmath@ams@eqpen=\count291
+LaTeX Info: Redefining \\ on input line 3180.
+)
+\c@FancyVerbWriteLine=\count292
+\c@FancyVerbBufferIndex=\count293
+\c@FancyVerbBufferLength=\count294
+\c@FancyVerbBufferLine=\count295
+\c@FV@oldbufferlength=\count296
+\c@FV@TrueTabGroupLevel=\count297
+\c@FV@TrueTabCounter=\count298
+\FV@TabBox@Group=\box56
+\FV@TmpLength=\skip53
+\c@FV@HighlightLinesStart=\count299
+\c@FV@HighlightLinesStop=\count300
+\FV@LoopCount=\count301
+\FV@NCharsBox=\box57
+\FV@BreakIndent=\dimen164
+\FV@BreakIndentNChars=\count302
+\FV@BreakSymbolSepLeft=\dimen165
+\FV@BreakSymbolSepLeftNChars=\count303
+\FV@BreakSymbolSepRight=\dimen166
+\FV@BreakSymbolSepRightNChars=\count304
+\FV@BreakSymbolIndentLeft=\dimen167
+\FV@BreakSymbolIndentLeftNChars=\count305
+\FV@BreakSymbolIndentRight=\dimen168
+\FV@BreakSymbolIndentRightNChars=\count306
+\c@FancyVerbLineBreakLast=\count307
+\FV@LineBox=\box58
+\FV@LineIndentBox=\box59
+\c@FV@BreakBufferDepth=\count308
+\FV@LineWidth=\dimen169
+)
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/ifplatform\ifplatform.s
+ty
+Package: ifplatform 2017/10/13 v0.4a Testing for the operating system
+
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/catchfile\catchfile.s
+ty
+Package: catchfile 2019/12/09 v1.8 Catch the contents of a file (HO)
+
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+))) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/xstring\xstring.sty
+(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/generic/xstring\xstring.tex
+\xs_counta=\count309
+\xs_countb=\count310
+)
+Package: xstring 2023/08/22 v1.86 String manipulations (CT)
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/framed\framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip54
+\fb@frw=\dimen170
+\fb@frh=\dimen171
+\FrameRule=\dimen172
+\FrameSep=\dimen173
+) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count311
+\float@exts=\toks29
+\float@box=\box60
+\@float@everytoks=\toks30
+\@floatcapt=\box61
+)
+\minted@appexistsfile=\read3
+\minted@bgbox=\box62
+\minted@code=\write4
+\c@minted@FancyVerbLineTemp=\count312
+\c@minted@pygmentizecounter=\count313
+\@float@every@listing=\toks31
+\c@listing=\count314
 ) (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
 Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
@@ -474,10 +474,10 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
 )
-runsystem(for ^%i in (pygmentize.exe pygmentize.bat pygmentize.cmd) do set > ex
-ample.aex <nul: /p x=^%~$PATH:i>> example.aex)...executed.
+runsystem(for ^%i in (pygmentize.exe pygmentize.bat pygmentize.cmd) do set > ou
+tput.aex <nul: /p x=^%~$PATH:i>> output.aex)...executed.
 
-runsystem(del example.aex)...executed.
+runsystem(del output.aex)...executed.
 
 
 (C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
@@ -486,8 +486,8 @@ File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count315
 \l__pdf_internal_box=\box63
 )
-No file example.aux.
-\openout1 = `example.aux'.
+No file output.aux.
+\openout1 = `output.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
 LaTeX Font Info:    ... okay on input line 10.
@@ -557,45 +557,45 @@ ii
 \makeMPintoPDFobject=\count321
 \everyMPtoPDFconversion=\toks33
 )
-\openout3 = `example.pyg'.
+\openout3 = `output.pyg'.
 
-(_minted-example/default.pygstyle)
-(_minted-example/44392CCCC17897C9A139EC32BD33C09B0BC671E66740E8C7CAE57278676489
-14.pygtex
-LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 1
-.
-(C:\Users\ADMIN\AppData\Local\Programs\MiKTeX\tex/latex/vntex\t5cmtt.fd
-File: t5cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `T5/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `T5/cmtt/m/n' tried instead on input line 2.
-)
+runsystem(pygmentize -S default -f latex -P commandprefix=PYG > output.out.pyg)
+...executed.
+
+(output.out.pyg)
+runsystem(pygmentize -l "cpp" -f latex -P commandprefix=PYG -F tokenmerge -P st
+ripnl="False" -o output.out.pyg output.pyg)...executed.
+
+(output.out.pyg)
 Preview: Tightpage -786432 -786432 786432 786432
-[1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] (example.a
-ux)
+[1{C:/Users/ADMIN/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
+(C:\Users\ADMIN\Desktop\cse-question-bank\server\internal\module\latex_compiler
+\latex_source\da485d9c-0014-4a14-aa11-575c8ad036b5\output.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
-runsystem(del example.pyg)...executed.
+runsystem(del output.pyg)...executed.
+
+runsystem(del output.out.pyg)...executed.
 
  ) 
 Here is how much of TeX's memory you used:
- 7900 strings out of 474486
- 142717 string characters out of 5743756
- 1927542 words of memory out of 5000000
- 30068 multiletter control sequences out of 15000+600000
- 561307 words of font info for 40 fonts, out of 8000000 for 9000
+ 7928 strings out of 474486
+ 142570 string characters out of 5743756
+ 1926542 words of memory out of 5000000
+ 30105 multiletter control sequences out of 15000+600000
+ 560021 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 77i,5n,79p,276b,651s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 77i,3n,81p,335b,331s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vnbx10.pf
 b><C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vnr10.pfb
-><C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vnr5.pfb><
-C:/Users/ADMIN/AppData/Local/Programs/MiKTeX/fonts/type1/vntex/vnr/vntt10.pfb>
+>
 Output written on C:\Users\ADMIN\Desktop\cse-question-bank\server\internal\modu
-le\latex_compiler\latex_source\example.pdf (1 page, 41057 bytes).
+le\latex_compiler\latex_source\da485d9c-0014-4a14-aa11-575c8ad036b5\output.pdf 
+(1 page, 28914 bytes).
 PDF statistics:
- 26 PDF objects out of 1000 (max. 8388607)
+ 16 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

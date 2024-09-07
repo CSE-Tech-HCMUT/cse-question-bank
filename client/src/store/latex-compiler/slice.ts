@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import CompileLatexState from '../../types/complieLatex/compileLatexState'
 import { exportPDFFileThunk } from './thunk'
 
-const initialState: CompileLatexState = {}
+const initialState: CompileLatexState = {
+  urlPDF: ''
+}
 
 export const compileLatexSlice = createSlice({
   name: 'compileLatex',
@@ -10,7 +12,7 @@ export const compileLatexSlice = createSlice({
   reducers: {},
   extraReducers: (build) => {
     build.addCase(exportPDFFileThunk.fulfilled, (state, { payload }) => {
-      console.log('PDF File Check', payload, state)
+      state.urlPDF = payload
     })
   }
 })

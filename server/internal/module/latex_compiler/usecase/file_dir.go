@@ -17,15 +17,19 @@ func createFolder() (string, error) {
 	// 		1. 1 số package chưa có phải tải -> lỗi (lỗi timeout), phải config để package đc tải on the fly
 	// 		2. Ban đầu khi t dùng package minted thì nó lỗi là thiếu outdir cho cài package này, phải chỉnh lại thêm
 	// 		[cache=false] thì mới chạy đc
-	texContent := `\documentclass[preview,border=12pt]{standalone}
+
+	packageContent := `\documentclass[preview,border=12pt]{standalone}
 \usepackage{amsmath} % Optional, for math environments if needed
 \usepackage{geometry}
 \usepackage{vntex}
-\usepackage[cache=false]{minted}
+
 
 % Set page geometry to increase width
-\geometry{a4paper, margin=2cm}
+\geometry{a4paper, margin=2cm}`
 
+	mintedPackage := `\usepackage[outputdir=` + folderPath + `]{minted}`
+
+	docContent := `
 \begin{document}
 % Your question here
 \textbf{Câu 2:} Cho biết giá trị các phần tử của mảng A sau khi thực hiện đoạn lệnh dưới đây:
@@ -40,12 +44,14 @@ p++;
 \end{minted}
 
 \begin{enumerate}
-    \item {5, 7, 20, 20, 2, 6}
-    \item {6, 20, 19, 1, 3, 6}
-    \item {5, 7, 19, 1, 2, 6}
-    \item \textbf{{5, 7, 19, 39, 3, 6}}
+\item {5, 7, 20, 20, 2, 6}
+\item {6, 20, 19, 1, 3, 6}
+\item {5, 7, 19, 1, 2, 6}
+\item \textbf{{5, 7, 19, 39, 3, 6}}
 \end{enumerate}
 \end{document}`
+
+	texContent := packageContent + "\n" + mintedPackage + "\n" + docContent
 
 	// Tên file .tex
 	fileName := folderPath + "/output.tex"

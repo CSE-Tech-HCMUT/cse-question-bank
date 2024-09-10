@@ -1,4 +1,4 @@
-package model
+package entity
 
 import (
 	"cse-question-bank/internal/util"

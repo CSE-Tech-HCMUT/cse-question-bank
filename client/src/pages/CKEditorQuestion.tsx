@@ -1,8 +1,8 @@
-
+import CKEditorQuestionTemplate from "../templates/CKEditorQuestionTemplate"
 
 export const CKEditorQuestion = () => {
   return (
-    <div>CKEditorQuestion</div>
+    <CKEditorQuestionTemplate />
   )
 }
 

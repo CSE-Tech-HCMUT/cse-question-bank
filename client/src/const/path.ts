@@ -3,5 +3,5 @@ export const PATH = {
   DASHBOARD: '/',
   QUESTION_BANK: '/question-bank',
   LATEX_COMPILER: '/latex-compiler',
-  CKEDITOR_QUESTION: '/ckeditor_question'
+  CKEDITOR_QUESTION: '/ckeditor-question'
 }

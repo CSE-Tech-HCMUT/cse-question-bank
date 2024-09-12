@@ -17,6 +17,7 @@ export const LatexCompile: React.FC<LatexEditor> = ({ content, placeholder, onCh
   return (
     <AceEditor
           height="50px"
+          width="100%"
           placeholder={placeholder}
           mode="latex"
           name="blah2"

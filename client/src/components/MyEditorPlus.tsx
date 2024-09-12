@@ -1,5 +1,5 @@
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { Bold, ClassicEditor, Essentials, Italic, Paragraph, SpecialCharactersMathematical } from "ckeditor5";
+import { Bold, ClassicEditor, Essentials, Italic, Paragraph } from "ckeditor5";
 import { useEffect, useRef, useState } from "react";
 
 import 'ckeditor5/ckeditor5.css';
@@ -27,16 +27,11 @@ export const MyEditorPlus: React.FC<MyEditorPlusProps> = ({ content, placeholder
   }, []);
 
   return (
-    <div>
+    <div className="MyEditorPlus">
       <div 
         ref={editorToolbarRef}
         style={{ 
           display: isToolbarVisible ? 'block' : 'none',
-          // position: 'absolute',
-          // top: '0%',
-          // left: '80%',
-          // transform: 'translate(-50%, -100%)',
-          // scale: '0.8'
         }}
       ></div>
       <div>

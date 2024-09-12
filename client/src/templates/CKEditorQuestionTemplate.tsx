@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import { Question } from '../types/question/question';
 import MyEditorPlus from '../components/MyEditorPlus';
 import { extractTextFromHtml } from '../utils/Utils';
 import LatexCompile from '../components/LatexCompile';
+import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+
 
 export const CKEditorQuestionTemplate = () => {
   const [form] = Form.useForm();
@@ -137,95 +139,130 @@ export const CKEditorQuestionTemplate = () => {
   return (
     <>
       <Row>
-        <Col span={24}>
-          <Button type='primary' htmlType='button' onClick={() => { setIsCKEditor(!isCKEditor) }}>Change</Button>
-          <Form form={form} name="CKEditorForm" layout="vertical" autoComplete="off" onFinish={handleSubmit}>
-            {
-              <div key={parentQuestion.id}>
-                <Form.Item label={`Block Question`}>
-                  {
-                    isCKEditor ? <MyEditorPlus
-                      content={parentQuestion.content}
-                      placeholder='Please Enter Parent Question'
-                      onChange={(newContent) => handleQuestionChange(newContent)} 
-                    /> : <LatexCompile 
-                      content={parentQuestion.content}
-                      placeholder='Please Enter Parent Question'
-                      onChange={(newContent) => handleQuestionChange(newContent)}
-                    />
-                  }
-                </Form.Item>
-                {parentQuestion.subQuestions.map((subQuestion) => (
-                  <div key={subQuestion.id} style={{ marginLeft: '20px' }}>
-                    <Form.Item label={`Sub-Question ${subQuestion.id}`}>
-                      {/* <Input
-                        value={subQuestion.content}
-                        onChange={(e) =>
-                          handleSubQuestionChange(subQuestion.id, e.target.value)
-                        }
-                        placeholder="Enter sub-question"
-                      /> */}
-                      {
-                        isCKEditor ? <MyEditorPlus
-                          content={subQuestion.content}
-                          placeholder='Please Enter sub-question'
-                          onChange={(newContent) => handleSubQuestionChange(subQuestion.id, newContent)} 
-                        /> : <LatexCompile 
-                          content={parentQuestion.content}
-                          placeholder='Please Enter Parent Question'
-                          onChange={(newContent) => handleQuestionChange(newContent)}
-                        />
-                      }
-                    </Form.Item>
-                    {subQuestion.answer.map((answer) => (
-                      <Form.Item key={answer.id} style={{ marginLeft: '20px' }}>
-                        {/* <Input
-                          value={answer.content!}
-                          onChange={(e) =>
-                            handleAnswerChange(subQuestion.id, answer.id, e.target.value)
+        <Col span={12}>
+          <Col className='header flex justify-between items-center mb-2' span={24}>
+            <h1 className='font-semibold text-2xl'>Create Question</h1>
+            <div>
+              <Button className='mr-2' type='primary' htmlType='button' onClick={() => { setIsCKEditor(!isCKEditor) }}>
+                Switch Editor
+              </Button>
+
+              <Button type='primary' htmlType='button' onClick={() => { setIsCKEditor(!isCKEditor) }}>
+                Preview
+              </Button>
+            </div>
+          </Col>
+          <Col span={24}>
+            <Form form={form} name="CKEditorForm" layout="vertical" autoComplete="off" onFinish={handleSubmit}>
+              {
+                <div key={parentQuestion.id}>
+                  <Form.Item label={`Question`}>
+                    {
+                      isCKEditor ? <MyEditorPlus
+                        content={parentQuestion.content}
+                        placeholder='Please Enter Parent Question'
+                        onChange={(newContent) => handleQuestionChange(newContent)}
+                      /> : <LatexCompile
+                        content={parentQuestion.content}
+                        placeholder='Please Enter Parent Question'
+                        onChange={(newContent) => handleQuestionChange(newContent)}
+                      />
+                    }
+                  </Form.Item>
+                  {parentQuestion.subQuestions.map((subQuestion, index) => (
+                    <div key={subQuestion.id}>
+                      <Row>
+                        <Col span={22}>
+                          <Form.Item label={`Sub-Question ${index + 1}`}>
+                          {
+                            isCKEditor ? <MyEditorPlus
+                              content={subQuestion.content}
+                              placeholder='Please Enter sub-question'
+                              onChange={(newContent) => handleSubQuestionChange(subQuestion.id, newContent)}
+                            /> : <LatexCompile
+                              content={parentQuestion.content}
+                              placeholder='Please Enter Parent Question'
+                              onChange={(newContent) => handleQuestionChange(newContent)}
+                            />
                           }
-                          placeholder="Enter answer"
-                        /> */}
-                        {
-                        isCKEditor ? <MyEditorPlus
-                          content={answer.content!}
-                          placeholder='Enter answer'
-                          onChange={(newContent) => handleAnswerChange(subQuestion.id, answer.id, newContent)} 
-                        /> : <LatexCompile 
-                          content={answer.content!}
-                          placeholder='Enter answer'
-                          onChange={(newContent) => handleAnswerChange(subQuestion.id, answer.id, newContent)} 
-                        />
-                      }
-                      </Form.Item>
-                    ))}
-                    <Button
-                      type="link"
-                      onClick={() => addAnswer(subQuestion.id)}
-                    >
-                      Add Answer
-                    </Button>
-                    <Button
-                      type="link"
-                      onClick={() => removeSubQuestion(subQuestion.id)}
-                    >
-                      Remove Sub-Question
-                    </Button>
-                  </div>
-                ))}
+                          </Form.Item>
+                        </Col>
+                        <Col span={1}>
+                            <Button
+                              className='scale-[1.35] mt-[34px] ml-2 w-[80%] bg-gray-400'
+                              type="primary"
+                              onClick={() => addAnswer(subQuestion.id)}
+                            >
+                              <PlusOutlined />
+                            </Button>
+                          </Col>
+                      </Row>
+                      {subQuestion.answer.map((answer, index) => (
+                        <Row>
+                          <Col span={22}>
+                            <Form.Item key={answer.id} label={`Answer ${index + 1}`}>
+                            {
+                            isCKEditor ? <MyEditorPlus
+                              content={answer.content!}
+                              placeholder='Enter answer'
+                              onChange={(newContent) => handleAnswerChange(subQuestion.id, answer.id, newContent)}
+                            /> : <LatexCompile
+                              content={answer.content!}
+                              placeholder='Enter answer'
+                              onChange={(newContent) => handleAnswerChange(subQuestion.id, answer.id, newContent)}
+                            />
+                            }
+                            </Form.Item>
+                          </Col>
+                          <Col span={1}>
+                            <Button
+                              className='scale-[1.3] mt-[34px] ml-2 w-[80%]'
+                              type="primary"
+                              danger
+                              onClick={() => removeAnswer(subQuestion.id, answer.id)}
+                            >
+                              <DeleteOutlined />
+                            </Button>
+                          </Col>
+                        </Row>
+                      ))}
+          
+                      <Button
+                        type="primary"
+                        danger
+                        onClick={() => removeSubQuestion(subQuestion.id)}
+                        className='mb-4'
+                      >
+                        <MinusOutlined />
+                        Remove Sub-Question
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              }
+              <Col span={24} className='flex flex-col justify-center items-start'>
                 <Button
-                  type="link"
+                  type="primary"
                   onClick={() => addSubQuestion()}
+                  className='mb-4 bg-gray-400'
                 >
+                  <PlusOutlined />
                   Add Sub-Question
                 </Button>
-              </div>
-            }
-        
-            <Button type="primary" htmlType="submit">
-              Submit
+                <Button type='primary' htmlType='submit' >
+                  Save
+                </Button>
+              </Col>
+            </Form>
+          </Col>
+        </Col>
+
+        <Col span={12}>
+          <Col span={24}>
+            <Button type='primary' htmlType='button'>
+              PDF
             </Button>
-          </Form>
+          </Col>
         </Col>
       </Row>
     </>

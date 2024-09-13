@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import BankQuestionState from "../../types/bankQuestion/bankQuestion";
+import { previewPDFFileThunk } from "./thunk";
 
 const initialState: BankQuestionState = {
-  addModalShow: false
+  addModalShow: false,
+  urlPDF: ""
 }
 
 export const manageBankQuestionSlice = createSlice({
@@ -12,6 +14,11 @@ export const manageBankQuestionSlice = createSlice({
     setAddModalVisibility(state, { payload }){
       state.addModalShow = payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(previewPDFFileThunk.fulfilled, (state, {payload}) => {
+      state.urlPDF = payload;
+    })
   }
 })
 

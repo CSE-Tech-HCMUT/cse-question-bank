@@ -1,7 +1,12 @@
+import { InputBlockQuestion } from "../types/question/inputQuestion";
 import apiInstance from "./apiInstance";
 
 
 export const bankQuestionService = {
+  previewPDFQuestion: (payload: InputBlockQuestion) => apiInstance.post<Blob>('/latex-compile', payload, {
+    responseType: 'blob'
+  }),
+
   // Implement type of output
   getAllBankQuestions: () => apiInstance.get<any>('/question/get-all'),
   getBankQuestionById: (id: number) => apiInstance.get<any>(`/question/get/}${id}`),

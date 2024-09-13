@@ -1,25 +1,26 @@
 export type Answer = {
   id: string,
-  content: string | null
+  content: string | null,
+  isCorrect: boolean
 }
 
-export type SubQuestion = {
+export type SimpleQuestion = {
   id: string,
   content: string,
-  type: string,
+  type: 'mutilple-choice',
   tag: string,
   difficult: number,
-  subQuestions: null,
+  isParent: false,
   answer: Answer[]
 }
 
-export type Question = {
+export type BlockQuestion = {
   id: string,
   content: string,
-  type: string,
+  type: 'mutilple-choice',
   tag: string,
   difficult: number,
-  subQuestions: SubQuestion[],
-  answer: null
+  isParent: true,
+  subQuestions: SimpleQuestion[]
 }
 

@@ -25,7 +25,7 @@ WORKDIR /app
 # Copy the Go application from the builder stage
 COPY --from=builder /app /app
 
-RUN pdflatex ./internal/module/latex_compiler/latex_source/example.tex
+RUN pdflatex -output-directory=./internal/module/latex_compiler/latex_source/ -interaction=batchmode -shell-escape ./internal/module/latex_compiler/latex_source/example.tex
 
 
 

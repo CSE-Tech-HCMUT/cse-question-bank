@@ -16,7 +16,7 @@ func StartProcess(name string, timeout time.Duration, args ...string) error {
 		return err
 	}
 
-	done := make(chan error)
+	done := make(chan error, 1)
 	go func() {
 		done <- cmd.Wait()
 	}()
@@ -29,6 +29,7 @@ func StartProcess(name string, timeout time.Duration, args ...string) error {
 		return ctx.Err()
 	case err := <- done:
 		if err != nil {
+			print(err)
 			return err
 		}
 	}

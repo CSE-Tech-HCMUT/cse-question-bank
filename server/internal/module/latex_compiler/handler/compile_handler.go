@@ -2,23 +2,20 @@ package handler
 
 import (
 	"cse-question-bank/internal/core/response"
+	"cse-question-bank/internal/module/latex_compiler/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type latexCompileReq struct {
-	latexContent string `json:"latex-content"`
-}
-
 func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
-	var latexCompileReq latexCompileReq
-	if err := c.ShouldBindJSON(&latexCompileReq); err != nil {
+	var questionCompileReq model.QuestionCompile
+	if err := c.ShouldBindJSON(&questionCompileReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "fail to get request"})
 		return
 	}
 
-	pdfFile, err := h.latexCompilerUsecase.LatexCompile(latexCompileReq.latexContent)
+	pdfFile, err := h.latexCompilerUsecase.LatexCompile(&questionCompileReq)
 	if err != nil {
 		response.ResponseError(c, err)
 		return

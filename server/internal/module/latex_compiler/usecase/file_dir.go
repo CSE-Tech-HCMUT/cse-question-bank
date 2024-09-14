@@ -4,6 +4,7 @@ import (
 	"cse-question-bank/internal/module/latex_compiler/model"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -54,7 +55,12 @@ func (u *latexCompilerImpl) createOuputLatexFile(folderPath string, question *mo
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			slog.Error("Can not close file", "error-message", err)
+		}
+	}(file)
 
 	// Ghi nội dung vào file .tex
 	_, err = file.WriteString(finalContent)
@@ -102,7 +108,7 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *model.QuestionComp
 		}
 		result += answerContent + "\n\\end{question}"
 	}
-	
+
 	return result, nil
 }
 

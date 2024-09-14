@@ -15,7 +15,7 @@ import (
 
 type Service interface {
 	Health() map[string]string
-
+	GetDB() *gorm.DB
 	Close() error
 }
 
@@ -59,7 +59,15 @@ func InitDatabase() Service {
 		db: db,
 	}
 
+	if err = DataMigrate(db); err != nil {
+		slog.Error("Fail to migrate database", "error-message", err)
+	}
+
 	return dbInstance
+}
+
+func (s *service) GetDB() *gorm.DB {
+	return s.db
 }
 
 // Health checks the health of the database connection by running a raw SQL query.

@@ -16,8 +16,20 @@ RUN go build -o main ./cmd
 
 
 # miktex
-FROM miktex/miktex:latest
+FROM ubuntu:jammy
 
+RUN apt-get update && \
+    apt-get install curl -y && \
+    curl -fsSL https://miktex.org/download/key | tee /usr/share/keyrings/miktex-keyring.asc > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/miktex-keyring.asc] https://miktex.org/download/ubuntu jammy universe" \
+    | tee /etc/apt/sources.list.d/miktex.list   
+
+RUN apt-get update && \
+    apt-get install python3-pygments -y && \
+    apt-get install miktex -y && \
+    miktexsetup finish
+
+RUN initexmf --set-config-value=[MPM]AutoInstall=yes
 
 RUN mpm --admin --update
 
@@ -25,7 +37,9 @@ WORKDIR /app
 # Copy the Go application from the builder stage
 COPY --from=builder /app /app
 
-RUN pdflatex -output-directory=./internal/module/latex_compiler/latex_source/ -interaction=batchmode -shell-escape ./internal/module/latex_compiler/latex_source/example.tex
+
+# need to pre-compile to check if the latex compiler works
+# RUN pdflatex -output-directory=./internal/module/latex_compiler/latex_source/ -interaction=batchmode -shell-escape ./internal/module/latex_compiler/latex_source/example.tex
 
 
 

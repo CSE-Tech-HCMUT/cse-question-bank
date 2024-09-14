@@ -1,9 +1,5 @@
 version: "1"
 services:
-  # miktex:
-  #   build:
-  #     context: ./tex
-  #     dockerfile: Dockerfile
   db:
     image: postgres:16
     environment:

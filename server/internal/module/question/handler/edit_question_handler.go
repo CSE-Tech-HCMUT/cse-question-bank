@@ -11,7 +11,7 @@ import (
 )
 
 type EditAnswerRequest struct {
-	Id string `json:"id"`
+	Id      string          `json:"id"`
 	Content json.RawMessage `json:"answer-content"`
 }
 
@@ -44,13 +44,13 @@ func (h *questionHandlerImpl) editReqToQuestionModel(req *EditQuestionRequest) *
 	questionUUID, _ := uuid.Parse(req.Id)
 	answerUUID, _ := uuid.Parse(req.Answer.Id)
 	return &model.Question{
-		Id:           questionUUID,
-		Content:      req.Content,
-		Type:         model.QuestionType(req.Type),
-		Tag:          req.Tag,
-		Difficult:    req.Difficult,
+		Id:        questionUUID,
+		Content:   req.Content,
+		Type:      model.QuestionType(req.Type),
+		Tag:       req.Tag,
+		Difficult: req.Difficult,
 		Answer: &model.Answer{
-			Id: answerUUID,
+			Id:      answerUUID,
 			Content: req.Answer.Content,
 		},
 	}

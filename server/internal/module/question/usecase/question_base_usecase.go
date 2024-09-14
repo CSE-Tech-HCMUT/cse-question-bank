@@ -62,8 +62,8 @@ type SingleQuestionResponse struct {
 }
 
 type ParentQuestionResponse struct {
-	Id        string
-	Content   string
+	Id      string
+	Content string
 	// Type      string
 	Tag       string
 	Difficult int
@@ -91,7 +91,7 @@ func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId st
 		childQuestions, err := u.repo.Find(ctx, map[string]interface{}{
 			"parent_id": questionId,
 		})
-		
+
 		if err != nil {
 			slog.Error("Fail to get question", "error-message", err)
 			return nil, constant.ErrGetQuestion(err)
@@ -101,33 +101,33 @@ func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId st
 		for _, childQuestion := range childQuestions {
 			childQuestionsRes = append(childQuestionsRes, u.questionModelToSingleQuestion(childQuestion))
 		}
-		
+
 		questionRes := u.questionModelToParentQuestion(question, childQuestionsRes)
 
 		return questionRes, nil
-	}	
-	
+	}
+
 	return u.questionModelToSingleQuestion(question), nil
 
 }
 
 func (u *questionBaseUsecaseImpl) questionModelToSingleQuestion(question *model.Question) *SingleQuestionResponse {
 	return &SingleQuestionResponse{
-		Id: question.Id.String(),
-		Content: question.Content,
-		Type: string(question.Type),
-		Tag: question.Tag,
+		Id:        question.Id.String(),
+		Content:   question.Content,
+		Type:      string(question.Type),
+		Tag:       question.Tag,
 		Difficult: question.Difficult,
-		Answer: question.Answer.Content,
+		Answer:    question.Answer.Content,
 	}
 }
 
 func (u *questionBaseUsecaseImpl) questionModelToParentQuestion(question *model.Question, childQuestion []*SingleQuestionResponse) *ParentQuestionResponse {
 	return &ParentQuestionResponse{
-		Id: question.Id.String(),
-			Content: question.Content,
-			Tag: question.Tag,
-			Difficult: question.Difficult,
-			Question: childQuestion,
+		Id:        question.Id.String(),
+		Content:   question.Content,
+		Tag:       question.Tag,
+		Difficult: question.Difficult,
+		Question:  childQuestion,
 	}
 }

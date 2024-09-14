@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import CompileLatexState from "../../types/complieLatex/compileLatexState";
-import { exportPDFFileThunk } from "./thunk";
+import { createSlice } from '@reduxjs/toolkit'
+import CompileLatexState from '../../types/complieLatex/compileLatexState'
+import { exportPDFFileThunk } from './thunk'
 
 const initialState: CompileLatexState = {
-  urlPDF: '',
+  urlPDF: ''
 }
 
 export const compileLatexSlice = createSlice({
@@ -12,9 +12,9 @@ export const compileLatexSlice = createSlice({
   reducers: {},
   extraReducers: (build) => {
     build.addCase(exportPDFFileThunk.fulfilled, (state, { payload }) => {
-      state.urlPDF = payload;
+      state.urlPDF = payload
     })
   }
 })
 
-export const { reducer: compileLatexReducer, actions: compileLatexActions } = compileLatexSlice;
+export const { reducer: compileLatexReducer, actions: compileLatexActions } = compileLatexSlice

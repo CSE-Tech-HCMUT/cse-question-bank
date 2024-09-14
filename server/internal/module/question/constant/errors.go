@@ -50,6 +50,15 @@ func ErrCreateQuestion(err error) error {
 	)
 }
 
+func ErrGetQuestion(err error) error {
+	return de.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"fail to get question",
+		"ERR_GET_QUESTION",
+	)
+}
+
 func ErrInvalidQuestionID(err error) error {
 	return de.NewDomainError(
 		http.StatusBadRequest,

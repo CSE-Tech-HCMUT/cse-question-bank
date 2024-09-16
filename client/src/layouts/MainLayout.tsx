@@ -33,7 +33,8 @@ const items: MenuItem[] = [
   getItem('Dashboard', '1', <HomeOutlined />),
   getItem('Question Bank', '2', <FileOutlined />),
   getItem('Exam Paper', '3', <ContainerOutlined />),
-  getItem('Latex Compiler', '4', <CodeOutlined />)
+  getItem('Latex Compiler', '4', <CodeOutlined />),
+  getItem('CKEditor Question', '5', <CodeOutlined />)
 ];
 
 const MainLayout = React.memo(() => {
@@ -60,6 +61,11 @@ const MainLayout = React.memo(() => {
         navigate(PATH.LATEX_COMPILER);
         setTitle('Latex Compiler');
         break;
+      case 5:
+        navigate(PATH.CKEDITOR_QUESTION);
+        setTitle('CKEditor Question');
+        break;
+
       default:
         setTitle('Dashboard');
         break;

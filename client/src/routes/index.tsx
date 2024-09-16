@@ -3,6 +3,7 @@ import MainLayout from '../layouts/MainLayout';
 import { lazy } from 'react';
 import LazyLoad from '../components/LazyLoadProps';
 import LatexCompiler from '../pages/LatexCompiler';
+import CKEditorQuestion from '../pages/CKEditorQuestion';
 
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const QuestionBank = lazy(() => import('../pages/QuestionBank'));
@@ -28,6 +29,12 @@ export const router: RouteObject[] = [
         path: 'latex-compiler',
         element: <LazyLoad>
           <LatexCompiler />
+        </LazyLoad>
+      },
+      {
+        path: 'ckeditor-question',
+        element: <LazyLoad>
+          <CKEditorQuestion />
         </LazyLoad>
       }
     ]

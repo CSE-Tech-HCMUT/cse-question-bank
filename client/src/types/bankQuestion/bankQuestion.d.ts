@@ -1,5 +1,6 @@
 type BankQuestionState = {
-  addModalShow: bool
+  addModalShow: bool,
+  urlPDF: string,
 }
 
 export default BankQuestionState

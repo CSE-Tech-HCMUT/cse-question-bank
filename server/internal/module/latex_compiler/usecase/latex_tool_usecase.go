@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"cse-question-bank/internal/module/latex_compiler/constant"
+	"cse-question-bank/internal/module/latex_compiler/model"
 	"cse-question-bank/pkg/execute"
 	"log/slog"
 	"os"
@@ -13,36 +15,41 @@ import (
 // open file to check then Readfile with os package
 // delete folder
 // return file
-func (u *latexCompilerImpl) LatexCompile(content string) ([]byte, error) {
-	folderPath, err := createFolder()
+func (u *latexCompilerImpl) LatexCompile(question *model.QuestionCompile) ([]byte, error) {
+	folderPath, err := u.createFolder()
 	if err != nil {
 		slog.Error("Fail to create folder", "error-message", err)
-		return nil, err
+		return nil, constant.ErrCreateFolder(err)
 	}
 	slog.Info("Create folder successfully", "folder-path", folderPath)
 	defer deleteFolder(folderPath)
 
+	if err := u.createOuputLatexFile(folderPath, question); err != nil {
+		return nil, err
+	}
+
 	args := []string{
 		"-output-directory=" + folderPath,
 		"-interaction=batchmode",
+		"-shell-escape",
 	}
-	err = pdfLatexCompile(folderPath+"/output.tex", args...)
+	err = pdfLatexCompile(folderPath + "/output.tex", args...)
 	if err != nil {
 		slog.Error("Fail to compile latex", "error-message", err)
-		return nil, err
+		return nil, constant.ErrCompileLatex(err)
 	}
 
 	pdfFile, err := os.Open(folderPath + "/output.pdf")
 	if err != nil {
 		slog.Error("Fail to open file PDF result", "error-message", err)
-		return nil, err
+		return nil, constant.ErrOpenFilePDF(err)
 	}
 	defer pdfFile.Close()
 
 	pdfContent, err := os.ReadFile(folderPath + "/output.pdf")
 	if err != nil {
 		slog.Error("Fail to get file PDF content", "error-message", err)
-		return nil, err
+		return nil, constant.ErrGetPDFContent(err)
 	}
 
 	return pdfContent, nil

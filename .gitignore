@@ -1,0 +1,11 @@
+# dotenv environment variable files
+.env
+
+
+# client
+/client/node_modules
+/client/dist
+/client/.env
+
+# server
+/server/.env

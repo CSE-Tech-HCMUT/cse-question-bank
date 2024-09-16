@@ -1,18 +1,20 @@
-import { createSlice } from "@reduxjs/toolkit";
-import CompileLatexState from "../../types/complieLatex/compileLatexState";
-import { exportPDFFileThunk } from "./thunk";
+import { createSlice } from '@reduxjs/toolkit'
+import CompileLatexState from '../../types/complieLatex/compileLatexState'
+import { exportPDFFileThunk } from './thunk'
 
-const initialState: CompileLatexState = {}
+const initialState: CompileLatexState = {
+  urlPDF: ''
+}
 
 export const compileLatexSlice = createSlice({
   name: 'compileLatex',
   initialState,
   reducers: {},
   extraReducers: (build) => {
-    build.addCase(exportPDFFileThunk.fulfilled, (state, {payload}) => {
-      console.log("PDF File Check");
+    build.addCase(exportPDFFileThunk.fulfilled, (state, { payload }) => {
+      state.urlPDF = payload
     })
   }
 })
 
-export const { reducer: compileLatexReducer, actions: compileLatexActions } = compileLatexSlice;
+export const { reducer: compileLatexReducer, actions: compileLatexActions } = compileLatexSlice

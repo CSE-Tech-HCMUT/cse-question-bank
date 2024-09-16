@@ -3,7 +3,9 @@ package routes
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type Route struct {
@@ -12,10 +14,23 @@ type Route struct {
 	Handler gin.HandlerFunc
 }
 
-func RegisterRoutes() http.Handler {
+func RegisterRoutes(db *gorm.DB) http.Handler {
 	r := gin.Default()
 
-	initLatexCompileGroupRoutes(r)
+	// domainName := os.Getenv("DOMAIN_NAME")
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
+
+	api := r.Group("/api")
+	{
+		initLatexCompileGroupRoutes(db, api)
+		iniQuestionGroupRoutes(db, api)
+	}
 
 	return r
 }

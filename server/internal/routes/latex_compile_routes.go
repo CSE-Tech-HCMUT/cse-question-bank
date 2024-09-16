@@ -5,12 +5,14 @@ import (
 	"cse-question-bank/internal/module/latex_compiler/usecase"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func initLatexCompileGroupRoutes(r *gin.Engine) {
+func initLatexCompileGroupRoutes(db *gorm.DB, api *gin.RouterGroup) {
 	latexCompileUsecase := usecase.NewLatexCompiler()
 	latexCompileHandler := handler.NewLatexCompilerHandler(latexCompileUsecase)
-	latexComileRoutes := r.Group("/latex-compile")
+
+	latexComileRoutes := api.Group("/latex-compile")
 	{
 		addGroupRoutes(latexComileRoutes, getLatexCompileRoutes(latexCompileHandler))
 	}
@@ -19,8 +21,8 @@ func initLatexCompileGroupRoutes(r *gin.Engine) {
 func getLatexCompileRoutes(h handler.LatexCompilerHandler) []Route {
 	return []Route{
 		{
-			Method:  "GET",
-			Path:    "/",
+			Method:  "POST",
+			Path:    "",
 			Handler: h.CompileHandler,
 		},
 	}

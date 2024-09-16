@@ -4,8 +4,8 @@ import { InputLatex } from "../../types/complieLatex/compileLatex";
 
 export const exportPDFFileThunk = createAsyncThunk('compileLatex/exportPDFFileThunk', async (payload: InputLatex, {rejectWithValue}) => {
   try {
-    const data = await latexCompilerService.getPDFFile(payload);
-    return data.data;
+    const data = await latexCompilerService.getPDFFile(payload);   
+    return window.URL.createObjectURL(data.data);
   } catch (error) {
     return rejectWithValue(error);
   }

@@ -1,0 +1,119 @@
+\documentclass[11pt]{./internal/module/latex_compiler/latex_source/examdesign}
+\usepackage{amsmath,amsxtra,latexsym, amssymb, amscd}
+\usepackage[utf8]{vietnam}
+\usepackage{pstricks-add}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{times} 
+\usepackage{ifthen} 
+\usepackage{arydshln} 
+\setlength\dashlinedash{0.5pt}
+\setlength\dashlinegap{1.5pt}
+\setlength\arrayrulewidth{0.3pt}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tikz}% http://ctan.org/pkg/pgf
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+
+\usetikzlibrary{automata,arrows,positioning, chains, shapes.callouts, calc, trees}
+
+\tikzstyle{mnode}=[circle, draw, fill=black, inner sep=0pt, minimum width=4pt]
+\tikzstyle{thinking} = [draw=blue, very thick]
+\tikzstyle{subtree} = [draw=blue, fill=blue!10, shape border uses incircle,
+  isosceles triangle,shape border rotate=90, inner sep=.8pt, minimum size=3ex]
+\tikzstyle{cgreen} = [color={rgb:red,0.0;green,0.42;blue,0.24}]
+
+\usetikzlibrary{shapes.geometric,arrows,fit,matrix,positioning}
+\usetikzlibrary{matrix,backgrounds}
+
+\tikzstyle{process} = [rectangle, thick, draw, minimum size = 1mm, font = \tiny]
+\tikzstyle{decision} = [diamond, thick, draw, minimum size = 1mm, font = \tiny, aspect = 2]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110,  thick, draw, minimum size = 1mm, font = \tiny]
+\tikzstyle{startstop} = [rectangle, rounded corners=3pt, thick, draw, minimum size = 1mm, font = \tiny]
+\tikzstyle{arrow} = [->, thick]
+\tikzstyle{arrow1} = [dashed,->, thick]
+\tikzstyle{connector} = [circle, draw, thick, minimum size = 2mm]
+\tikzset{font = \tiny}
+
+% Lstlistings
+\lstset{
+language=Python, 
+basicstyle=\scriptsize\ttfamily\color{black},
+}
+
+
+\lstdefinestyle{ANTLR}{
+    basicstyle=\scriptsize\ttfamily\color{black},%
+    breaklines=true,%                                      allow line breaks
+    moredelim=[s][\color{black}\ttfamily]{'}{'},
+    moredelim=*[s][\color{black}\ttfamily]{options}{\},
+    commentstyle={\color{black}\itshape},%                  gray italics for comments
+    morecomment=[l]{//},%                                  define // comment
+    emph={%
+        STRING%                                            literal strings listed here
+        },emphstyle={\color{black}\ttfamily},%              and formatted in blue
+    alsoletter={:,|,;},%
+    morekeywords={:,|,;},%                                 define the special characters
+    keywordstyle={\color{black}},%                         and format them in black
+}
+\usepackage[linesnumbered]{algorithm2e}
+
+\usepackage{./internal/module/latex_compiler/latex_source/dethi}
+
+\usepackage{geometry} % Required for adjusting page dimensions and margins
+
+\IncludeFromFile{chunks/chunks}
+
+\geometry{
+	bottom=1cm, % Bottom margin
+}
+
+\Fullpages %Định dạng trang đề thi
+\ContinuousNumbering %Đánh số liên tục các bài thi
+\ShortKey 
+%\OneKey %Lệnh chỉ in ra 1 bản đáp án
+%\NoKey %Lệnh không in ra phần đáp án
+\NumberOfVersions{1} %20 là số bài thi khác nhau được in ra
+\SectionPrefix{\relax }%\bf Phần \Roman{sectionindex}. \space}
+\setrandomseed{7}
+\tieudetracnghiem
+%\tieudethiviet
+\tieudedapan
+%\tieudetren
+% \tieudeduoi
+% \daungoac{[}{]}%Dấu quanh phương án trả lời: {(}{)};{}{.};{}{)}
+% \chuphuongan{\alph}%Ký tự cho các phương án
+% \chuphuongan{\arabic}%\Roman%\roman%kể cả số cho các phương án
+\chucauhoi{Câu} %Chữ trước các số câu hỏi
+\mauchu{black}
+\sotrang{10}
+\setlength{\baselineskip}{0truept}
+\def\v#1{\overrightarrow{#1}}
+\newcommand{\nn}{\mathbb{N}}
+\newcommand{\zz}{\mathbb{Z}}
+\newcommand{\rr}{\mathbb{R}}
+\newcommand{\cc}{\mathbb{C}}
+
+\begin{document}
+\normalsize
+\setlength{\beforesectsep}{10pt}
+
+\begin{vnmultiplechoice}
+    \begin{question}
+test 1 sub 1
+\datcot
+\bonpa
+{\sai{ans 1 sub 1}}
+{\sai{ans 1 sub 2}}
+{\sai{ans 1 sub 3}}
+{\dung{ans 1 sub 4}}
+
+\end{question}
+\end{vnmultiplechoice}
+\end{document}

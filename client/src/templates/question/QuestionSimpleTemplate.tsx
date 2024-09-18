@@ -1,14 +1,14 @@
-import { Button, Col, Form, Row, Switch, Dropdown, Menu } from "antd";
+import { Button, Col, Form, Row, Dropdown, Menu } from "antd";
 import { useCallback, useState } from "react";
 import { SimpleQuestion } from "../../types/question/question";
 import { convertSimpleQuestionToInputSimpleQuestion, extractTextFromHtml } from "../../utils/Utils";
 import { InputSimpleQuestion } from "../../types/question/inputQuestion";
-import MyEditorPlus from "../MyEditorPlus";
-import LatexCompile from "../LatexCompile";
+import MyEditorPlus from "../../components/MyEditorPlus";
+import LatexCompile from "../../components/LatexCompile";
 import { DeleteOutlined, PlusOutlined, EyeOutlined, MenuOutlined, SwapOutlined } from "@ant-design/icons";
 import '../../style/style.scss';
 
-export const QuestionSimple = () => {
+export const QuestionSimpleTemplate = () => {
   const [form] = Form.useForm();
   const [isCKEditor, setIsCKEditor] = useState(true);
   const [simpleQuestion, setSimpleQuestion] = useState<SimpleQuestion>({
@@ -184,4 +184,4 @@ export const QuestionSimple = () => {
   );
 }
 
-export default QuestionSimple;
+export default QuestionSimpleTemplate;

@@ -1,9 +1,7 @@
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { Bold, ClassicEditor, Essentials, Italic, Paragraph } from "ckeditor5";
-import { useEffect, useRef, useState } from "react";
-
-import 'ckeditor5/ckeditor5.css';
-import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+import React from "react";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
+import '../style/style.scss'; 
 
 interface MyEditorPlusProps {
   content: string;
@@ -11,56 +9,30 @@ interface MyEditorPlusProps {
   onChange: (content: string) => void;
 }
 
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, 3, false] }],
+    [{ font: [] }],
+    [{ size: [] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['link', 'image'],
+    ['clean'] 
+  ],
+};
+
 export const MyEditorPlus: React.FC<MyEditorPlusProps> = ({ content, placeholder, onChange }) => {
-  const editorToolbarRef = useRef<HTMLDivElement | null>(null);
-  const [isToolbarVisible, setToolbarVisible] = useState(false);
-
-  const handleEditorChange = (editor: ClassicEditor) => { 
-    const data = editor.getData();
-    onChange(data);
-  }
-
-  useEffect(() => {
-    return () => {
-      setToolbarVisible(false);
-    };
-  }, []);
-
   return (
-    <div className="MyEditorPlus">
-      <div 
-        ref={editorToolbarRef}
-        style={{ 
-          display: isToolbarVisible ? 'block' : 'none',
-        }}
-      ></div>
-      <div>
-        <CKEditor
-          editor={ ClassicEditor }
-          data={content}
-          config={{
-            placeholder: {placeholder},
-            plugins: [Bold, Italic, Paragraph, Essentials, Paragraph],
-            toolbar: ['paragraph', 'undo', 'redo', '|', 'bold', 'italic']
-          }}
-          onReady={(editor) => {
-            const toolbarElement = editorToolbarRef.current;
-            if (toolbarElement) {
-              toolbarElement.appendChild(editor.ui.view.toolbar.element!);
-            }
-          }}
-          onChange={(_event, editor) => handleEditorChange(editor)}
-          onFocus={() => {
-            setToolbarVisible(true); 
-          }}
-          onBlur={() => {
-            setToolbarVisible(false); 
-          }}
-          onAfterDestroy={() => {
-            setToolbarVisible(false); 
-          }}
-        />
-      </div>
+    <div className="editor-container">
+      <ReactQuill
+        theme='snow'
+        value={content}
+        onChange={onChange}
+        className='editor-input'
+        modules={modules}
+        placeholder={placeholder}
+        style={{ zIndex: 1, width: '100%' }}
+      />
     </div>
   );
 };

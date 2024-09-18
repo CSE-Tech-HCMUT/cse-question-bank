@@ -7,7 +7,7 @@ export type Answer = {
 export type SimpleQuestion = {
   id: string,
   content: string,
-  type: 'mutilple-choice',
+  type: 'multiple-choice',
   tag: string,
   difficult: number,
   isParent: false,
@@ -17,7 +17,7 @@ export type SimpleQuestion = {
 export type BlockQuestion = {
   id: string,
   content: string,
-  type: 'mutilple-choice',
+  type: 'multiple-choice',
   tag: string,
   difficult: number,
   isParent: true,

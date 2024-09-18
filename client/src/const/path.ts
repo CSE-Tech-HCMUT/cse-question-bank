@@ -3,5 +3,7 @@ export const PATH = {
   DASHBOARD: '/',
   QUESTION_BANK: '/question-bank',
   LATEX_COMPILER: '/latex-compiler',
-  CKEDITOR_QUESTION: '/ckeditor-question'
+  EDITOR_QUESTION: '/editor-question',
+  SIMPLE_QUESTION: '/editor-question/simple-question',
+  BLOCK_QUESTION: '/editor-question/block-question',
 }

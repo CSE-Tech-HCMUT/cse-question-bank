@@ -1,44 +1,24 @@
-import { useState, useMemo, useCallback } from 'react';
-import { Button, Col, Form, Row, Select, Switch } from 'antd';
-import { BlockQuestion, SimpleQuestion } from '../types/question/question';
-import MyEditorPlus from '../components/MyEditorPlus';
-import { convertBlockQuestionToInputBlockQuestion, extractTextFromHtml } from '../utils/Utils';
-import LatexCompile from '../components/LatexCompile';
-import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from '../store';
-import { previewPDFFileThunk } from '../store/question-bank/thunk';
-import { InputBlockQuestion } from '../types/question/inputQuestion';
+import { Button, Col, Dropdown, Form, Menu, Row } from "antd"
+import { useCallback, useMemo, useState } from "react";
+import { BlockQuestion, SimpleQuestion } from "../../types/question/question";
+import { convertBlockQuestionToInputBlockQuestion, extractTextFromHtml } from "../../utils/Utils";
+import { InputBlockQuestion } from "../../types/question/inputQuestion";
+import MyEditorPlus from "../MyEditorPlus";
+import LatexCompile from "../LatexCompile";
+import { DeleteOutlined, EyeOutlined, MenuOutlined, MinusOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
 
-export const CKEditorQuestionTemplate = () => {
+export const QuestionBlock = () => {
   const [form] = Form.useForm();
   const [isCKEditor, setIsCKEditor] = useState(true);
-  const [typeQuestionValue, setTypeQuestionValue] = useState(0);
   const [parentQuestion, setParentQuestion] = useState<BlockQuestion>({
     id: String(Date.now()),
     content: '',
-    type: 'mutilple-choice',
+    type: 'multiple-choice',
     tag: '',
     difficult: 0,
     isParent: true,
     subQuestions: [],
   });
-  const [simpleQuestion, setSimpleQuestion] = useState<SimpleQuestion>({
-    id: String(Date.now()),
-    content: '',
-    type: 'mutilple-choice',
-    tag: '',
-    difficult: 0,
-    isParent: false,
-    answer: []
-  })
-
-  const { urlPDF } = useSelector((state: RootState) => state.manageBankQuestionReducer);
-  const dispatch = useAppDispatch();
-
-  const handleChangeTypeQuestion = useCallback((value: number) => {
-    setTypeQuestionValue(value);
-  }, [typeQuestionValue])
 
   const addSubQuestion = useCallback(() => {
     const updatedQuestion: BlockQuestion = {
@@ -48,7 +28,7 @@ export const CKEditorQuestionTemplate = () => {
         {
           id: String(Date.now()),
           content: '',
-          type: 'mutilple-choice',
+          type: 'multiple-choice',
           tag: '',
           difficult: 0,
           isParent: false,
@@ -170,13 +150,7 @@ export const CKEditorQuestionTemplate = () => {
     } : parentQuestion
     
     const inputRequest: InputBlockQuestion =  convertBlockQuestionToInputBlockQuestion(updatedQuestion)
-    dispatch(
-      previewPDFFileThunk(inputRequest)
-    )
-
-    console.log(urlPDF);
-    
-
+  
     // Additional submit logic
   }, [parentQuestion, isCKEditor]);
 
@@ -227,7 +201,7 @@ export const CKEditorQuestionTemplate = () => {
           </Col>
           <Col span={1}>
             <Button
-              className='scale-[1.3] mt-[34px] ml-2 w-[80%]'
+              className='scale-[1.3] mt-[118px] ml-4 w-[80%]'
               type="primary"
               ghost
               onClick={() => handleAnswerTrigger(subQuestion.id, answer.id)}
@@ -237,7 +211,7 @@ export const CKEditorQuestionTemplate = () => {
           </Col>
           <Col span={1} offset={1}>
             <Button
-              className='scale-[1.3] mt-[34px] ml-2 w-[80%]'
+              className='scale-[1.3] mt-[118px] ml-4 w-[80%]'
               type="primary"
               danger
               onClick={() => removeAnswer(subQuestion.id, answer.id)}
@@ -260,28 +234,33 @@ export const CKEditorQuestionTemplate = () => {
     </div>
   )), [parentQuestion.subQuestions, isCKEditor, handleSubQuestionChange, handleAnswerChange, handleAnswerTrigger, removeAnswer, removeSubQuestion, addAnswer]);
 
+  const menu = (
+    <Menu>
+      <Menu.Item key="add" onClick={addSubQuestion}>
+        <PlusOutlined /> Add Sub Question
+      </Menu.Item>
+      <Menu.Item key="pdf">
+        <EyeOutlined />  Preview PDF
+      </Menu.Item>
+      <Menu.Item key="toggleEditor" onClick={() => setIsCKEditor(!isCKEditor)}>
+        <SwapOutlined /> Change Editor
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
-    <>
-      <Row>
-        <Col span={12}>
-          <Col className='header flex justify-between items-center mb-2' span={24}>
-            <h1 className='font-semibold text-2xl'>Create Question</h1>
-            <div>
-            <Select
-              defaultValue={0}
-              style={{ width: 120 }}
-              onChange={handleChangeTypeQuestion}
-              options={[
-                { value: 0, label: 'Simple Question' },
-                { value: 1, label: 'Block Question' },
-              ]}
-              />
-              <Switch onClick={() => setIsCKEditor(!isCKEditor)} className='mr-8 ml-8 mb-[3px] scale-[1.45]' checkedChildren="Text Editor" unCheckedChildren="Latex Editor" defaultChecked />
-              <Button type='primary' htmlType='button' onClick={() => setIsCKEditor(!isCKEditor)}>
-                Preview
+    <Row gutter={[16, 16]} justify="center">
+        <Col xs={24} md={12}>
+        <Col className='header' span={24}>
+          <h1 className="text-2xl font-semibold">Create Question</h1>
+          <div className="flex items-center">
+            <Dropdown overlay={menu} trigger={['click']}>
+              <Button type='primary' icon={<MenuOutlined />}>
+                Menu
               </Button>
-            </div>
-          </Col>
+            </Dropdown>
+          </div>
+        </Col>
           <Col span={24}>
             <Form form={form} name="CKEditorForm" layout="vertical" autoComplete="off" onFinish={handleSubmit}>
               <div key={parentQuestion.id}>
@@ -300,15 +279,7 @@ export const CKEditorQuestionTemplate = () => {
                 </Form.Item>
                 {renderedSubQuestions}
               </div>
-              <Col span={24} className='flex flex-col justify-center items-start'>
-                <Button
-                  type="primary"
-                  onClick={addSubQuestion}
-                  className='mb-4 bg-gray-400'
-                >
-                  <PlusOutlined />
-                  Add Sub-Question
-                </Button>
+              <Col span={24}>
                 <Button type='primary' htmlType='submit'>
                   Save
                 </Button>
@@ -317,16 +288,16 @@ export const CKEditorQuestionTemplate = () => {
           </Col>
         </Col>
 
-        <Col span={12}>
-          <Col span={24}>
-            <Button type='primary' htmlType='button'>
-              PDF
-            </Button>
-          </Col>
+        <Col xs={24} md={12}>
+        <Col span={24}>
+          <h1 className="text-2xl font-semibold">PDF Preview</h1>
         </Col>
+        <Col span={24}>
+          
+        </Col>
+      </Col>
       </Row>
-    </>
-  );
+  )
 }
 
-export default CKEditorQuestionTemplate;
+export default QuestionBlock

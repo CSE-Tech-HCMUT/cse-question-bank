@@ -1,5 +1,5 @@
 import { Avatar, MenuProps } from "antd";
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useState } from "react";
 import {
   ContainerOutlined,
   FileOutlined,
@@ -33,13 +33,14 @@ const items: MenuItem[] = [
   getItem('Dashboard', '1', <HomeOutlined />),
   getItem('Question Bank', '2', <FileOutlined />),
   getItem('Exam Paper', '3', <ContainerOutlined />),
-  getItem('Latex Compiler', '4', <CodeOutlined />),
-  getItem('CKEditor Question', '5', <CodeOutlined />)
+  getItem('Editor Question', '4', <CodeOutlined />, [
+    getItem('Simple Question', '5', <CodeOutlined/>),
+    getItem('Block Question', '6', <CodeOutlined/>)
+  ]),
 ];
 
 const MainLayout = React.memo(() => {
   const navigate = useNavigate();
-
   const [collapsed, setCollapsed] = useState(false);
   const [title, setTitle] = useState('Dashboard');
   
@@ -58,14 +59,17 @@ const MainLayout = React.memo(() => {
         setTitle('Question Bank');
         break;
       case 4:
-        navigate(PATH.LATEX_COMPILER);
-        setTitle('Latex Compiler');
+        navigate(PATH.EDITOR_QUESTION);
+        setTitle('Editor Question');
         break;
       case 5:
-        navigate(PATH.CKEDITOR_QUESTION);
-        setTitle('CKEditor Question');
+        navigate(PATH.SIMPLE_QUESTION);
+        setTitle('Simple Question');
         break;
-
+      case 6:
+        navigate(PATH.BLOCK_QUESTION);
+        setTitle('Block Question');
+        break;
       default:
         setTitle('Dashboard');
         break;
@@ -76,21 +80,18 @@ const MainLayout = React.memo(() => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="demo-logo-vertical"></div>
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick}/>
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} onClick={handleMenuClick} />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} className="flex items-center justify-end">
-          <Avatar icon={<UserOutlined />} className="mr-[24px]"/>
+        <Header style={{ padding: '0 16px', background: colorBgContainer }} className="flex items-center justify-end">
+          <Avatar icon={<UserOutlined />} className="mr-[16px]" />
         </Header>
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }} 
+        <Content style={{ margin: '16px' }}>
+          <Breadcrumb 
+            style={{ margin: '16px 0' }} 
             items={[
-              {
-                title: 'User'
-              },
-              {
-                title
-              }
+              { title: 'User' },
+              { title }
             ]}
           />
           <div
@@ -110,6 +111,6 @@ const MainLayout = React.memo(() => {
       </Layout>
     </Layout>
   );
-})
+});
 
-export default MainLayout
+export default MainLayout;

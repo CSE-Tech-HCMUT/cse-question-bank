@@ -2,8 +2,8 @@ import { RouteObject } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import { lazy } from 'react';
 import LazyLoad from '../components/LazyLoadProps';
-import LatexCompiler from '../pages/LatexCompiler';
-import CKEditorQuestion from '../pages/CKEditorQuestion';
+import QuestionSimple from '../components/question/QuestionSimple';
+import QuestionBlock from '../components/question/QuestionBlock';
 
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const QuestionBank = lazy(() => import('../pages/QuestionBank'));
@@ -26,16 +26,21 @@ export const router: RouteObject[] = [
         </LazyLoad>
       },
       {
-        path: 'latex-compiler',
-        element: <LazyLoad>
-          <LatexCompiler />
-        </LazyLoad>
-      },
-      {
-        path: 'ckeditor-question',
-        element: <LazyLoad>
-          <CKEditorQuestion />
-        </LazyLoad>
+        path: 'editor-question',
+        children: [
+          {
+            path: 'simple-question',
+            element: <LazyLoad>
+              <QuestionSimple />
+            </LazyLoad>
+          },
+          {
+            path: 'block-question',
+            element: <LazyLoad>
+              <QuestionBlock />
+            </LazyLoad>
+          }
+        ]
       }
     ]
   }

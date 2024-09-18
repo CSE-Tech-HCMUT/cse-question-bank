@@ -10,3 +10,12 @@ func GenerateUUID() (uuid.UUID, error) {
 
 	return newUUID, nil
 }
+
+func ParseUUID(s string) (uuid.UUID, error) {
+	parseUUID, err := uuid.Parse(s)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return parseUUID, nil
+}

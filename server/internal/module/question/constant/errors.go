@@ -76,3 +76,12 @@ func ErrEditQuestion(err error) error {
 		"ERR_EDIT_QUESTION",
 	)
 }
+
+func ErrDatabaseQuestion(err error) error {
+	return de.NewDomainError(
+		http.StatusInternalServerError,
+		err,
+		"error in database handler",
+		"ERR_DATABASE_QUESTION",
+	)
+}

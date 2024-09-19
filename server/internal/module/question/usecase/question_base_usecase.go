@@ -14,18 +14,18 @@ type questionBaseUsecaseImpl struct {
 }
 
 type QuestionResponse struct {
-	Id        string
-	Content   string
-	Type      string
-	Tag       string
-	Difficult int
-	Question  []*QuestionResponse `json:"sub-questions"`
-	Answer    *AnswerResponse
+	Id        string `json:"id"`
+	Content   string	`json:"content"`
+	Type      string	`json:"type"`
+	Tag       string	`json:"tag"`
+	Difficult int	`json:"difficult"`
+	Question  []*QuestionResponse `json:"subQuestions"`
+	Answer    *AnswerResponse	`json:"answer"`
 }
 
 type AnswerResponse struct {
-	Id      string
-	Content json.RawMessage
+	Id      string	`json:"id"`
+	Content json.RawMessage	`json:"content"`
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {

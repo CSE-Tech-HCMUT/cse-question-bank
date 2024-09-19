@@ -15,8 +15,8 @@ type CreateAnswerRequest struct {
 type CreateQuestionRequest struct {
 	Content      string                   `json:"content" binding:"required"`
 	Type         string                   `json:"type" binding:"required"`
-	IsParent     bool                     `json:"is-parent"`
-	ParentId     *string                  `json:"parent-id"`
+	IsParent     bool                     `json:"isParent"`
+	ParentId     *string                  `json:"parentId"`
 	Tag          string                   `json:"tag" binding:"required"`
 	Difficult    int                      `json:"difficult" binding:"required"`
 	Answer       *CreateAnswerRequest     `json:"answer"`

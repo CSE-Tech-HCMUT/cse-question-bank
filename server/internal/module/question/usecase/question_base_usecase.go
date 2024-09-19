@@ -14,18 +14,18 @@ type questionBaseUsecaseImpl struct {
 }
 
 type QuestionResponse struct {
-	Id        string `json:"id"`
-	Content   string	`json:"content"`
-	Type      string	`json:"type"`
-	Tag       string	`json:"tag"`
-	Difficult int	`json:"difficult"`
+	Id        string              `json:"id"`
+	Content   string              `json:"content"`
+	Type      string              `json:"type"`
+	Tag       string              `json:"tag"`
+	Difficult int                 `json:"difficult"`
 	Question  []*QuestionResponse `json:"subQuestions"`
-	Answer    *AnswerResponse	`json:"answer"`
+	Answer    *AnswerResponse     `json:"answer"`
 }
 
 type AnswerResponse struct {
-	Id      string	`json:"id"`
-	Content json.RawMessage	`json:"content"`
+	Id      string          `json:"id"`
+	Content json.RawMessage `json:"content"`
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {
@@ -68,7 +68,7 @@ func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId
 			return constant.ErrDeleteQuestion(err)
 		}
 	}
-	
+
 	err = u.repo.Delete(ctx, tx, map[string]interface{}{
 		"id": questionId,
 	})
@@ -77,7 +77,7 @@ func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId
 		return constant.ErrDeleteQuestion(err)
 	}
 
-	err = u.repo.CommitTx(tx) 
+	err = u.repo.CommitTx(tx)
 	if err != nil {
 		slog.Error("Fail when commit transaction", "error-message", err)
 		return constant.ErrDatabaseQuestion(err)
@@ -86,17 +86,16 @@ func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId
 	return nil
 }
 
-func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *entity.Question) error {
+func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *entity.Question) (*QuestionResponse, error) {
 	err := u.repo.Create(ctx, nil, question)
 	if err != nil {
 		slog.Error("Fail to create question", "error-message", err)
-		return constant.ErrCreateQuestion(err)
+		return nil, constant.ErrCreateQuestion(err)
 	}
-
-	return nil
+	return u.convertToQuestionResponse(question, nil), nil
 }
 
-func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (interface{}, error) {
+func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (*QuestionResponse, error) {
 	questions, err := u.repo.Find(ctx, nil, map[string]interface{}{
 		"id": questionId,
 	})
@@ -136,7 +135,7 @@ func (u *questionBaseUsecaseImpl) convertToQuestionResponse(question *entity.Que
 	var answer *AnswerResponse
 	if question.Answer != nil {
 		answer = &AnswerResponse{
-			Id: question.Answer.Id.String(),
+			Id:      question.Answer.Id.String(),
 			Content: question.Answer.Content,
 		}
 	}

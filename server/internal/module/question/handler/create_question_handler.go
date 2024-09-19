@@ -15,11 +15,12 @@ func (h *questionHandlerImpl) CreateQuestion(c *gin.Context) {
 		response.ResponseError(c, errors.ErrInvalidInput(err))
 		return
 	}
+	data, err := h.questionUsecase.CreateQuestion(c, req.CreateReqToQuestionModel(&request))
 
-	if err := h.questionUsecase.CreateQuestion(c, req.CreateReqToQuestionModel(&request)); err != nil {
+	if err != nil {
 		response.ResponseError(c, err)
 		return
 	}
 
-	response.ReponseSuccess(c, "success", nil)
+	response.ReponseSuccess(c, "success", data)
 }

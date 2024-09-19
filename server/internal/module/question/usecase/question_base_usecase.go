@@ -3,25 +3,33 @@ package usecase
 import (
 	"context"
 	"cse-question-bank/internal/module/question/constant"
-	"cse-question-bank/internal/module/question/model"
+	"cse-question-bank/internal/module/question/model/entity"
 	"cse-question-bank/internal/module/question/repository"
+	"encoding/json"
 	"log/slog"
-
-	"github.com/goccy/go-json"
 )
 
 type questionBaseUsecaseImpl struct {
 	repo repository.QuestionRepository
 }
 
-func NewQuestionUsecase(repo repository.QuestionRepository) QuestionUsecase {
-	return &questionBaseUsecaseImpl{
-		repo: repo,
-	}
+type QuestionResponse struct {
+	Id        string
+	Content   string
+	Type      string
+	Tag       string
+	Difficult int
+	Question  []*QuestionResponse `json:"sub-questions"`
+	Answer    *AnswerResponse
 }
 
-func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *model.Question) error {
-	err := u.repo.Update(ctx, question)
+type AnswerResponse struct {
+	Id      string
+	Content json.RawMessage
+}
+
+func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {
+	err := u.repo.Update(ctx, nil, question)
 	if err != nil {
 		slog.Error("Fail to update question", "error-message", err)
 		return constant.ErrUpdateQuestion(err)
@@ -31,47 +39,65 @@ func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *mo
 }
 
 func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId string) error {
-	err := u.repo.Delete(ctx, map[string]interface{}{
+	questions, err := u.repo.Find(ctx, nil, map[string]interface{}{
 		"id": questionId,
 	})
+	if err != nil {
+		slog.Error("Fail to get question", "error-message", err)
+		return constant.ErrDeleteQuestion(err)
+	}
+	if len(questions) == 0 {
+		slog.Error("Question is not exist in datbase", "error-message", err)
+		return constant.ErrQuestionNotFound(err)
+	}
 
+	tx, err := u.repo.BeginTx(ctx)
+	if err != nil {
+		slog.Error("Fail to begin transaction in delete", "error-message", err)
+		return constant.ErrDatabaseQuestion(err)
+	}
+	defer u.repo.RollBackTx(tx)
+
+	question := questions[0]
+	if question.IsParent {
+		err := u.repo.Delete(ctx, tx, map[string]interface{}{
+			"parent_id": question.Id,
+		})
+		if err != nil {
+			slog.Error("Error when delete sub questions", "error-message", err)
+			return constant.ErrDeleteQuestion(err)
+		}
+	}
+	
+	err = u.repo.Delete(ctx, tx, map[string]interface{}{
+		"id": questionId,
+	})
 	if err != nil {
 		slog.Error("Fail to delete question", "error-message", err)
 		return constant.ErrDeleteQuestion(err)
 	}
 
+	err = u.repo.CommitTx(tx) 
+	if err != nil {
+		slog.Error("Fail when commit transaction", "error-message", err)
+		return constant.ErrDatabaseQuestion(err)
+	}
+
 	return nil
 }
 
-func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *model.Question) error {
-	if err := u.repo.Create(ctx, question); err != nil {
-		slog.Error("Fail to create question in database", "error-message", err)
+func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *entity.Question) error {
+	err := u.repo.Create(ctx, nil, question)
+	if err != nil {
+		slog.Error("Fail to create question", "error-message", err)
 		return constant.ErrCreateQuestion(err)
 	}
 
 	return nil
 }
 
-type SingleQuestionResponse struct {
-	Id        string
-	Content   string
-	Type      string
-	Tag       string
-	Difficult int
-	Answer    json.RawMessage
-}
-
-type ParentQuestionResponse struct {
-	Id      string
-	Content string
-	// Type      string
-	Tag       string
-	Difficult int
-	Question  []*SingleQuestionResponse
-}
-
 func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (interface{}, error) {
-	questions, err := u.repo.Find(ctx, map[string]interface{}{
+	questions, err := u.repo.Find(ctx, nil, map[string]interface{}{
 		"id": questionId,
 	})
 
@@ -87,8 +113,9 @@ func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId st
 
 	question := questions[0]
 
+	childQuestionsRes := make([]*QuestionResponse, 0)
 	if question.IsParent {
-		childQuestions, err := u.repo.Find(ctx, map[string]interface{}{
+		childQuestions, err := u.repo.Find(ctx, nil, map[string]interface{}{
 			"parent_id": questionId,
 		})
 
@@ -96,38 +123,33 @@ func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId st
 			slog.Error("Fail to get question", "error-message", err)
 			return nil, constant.ErrGetQuestion(err)
 		}
-		// print(childQuestions[0])
-		childQuestionsRes := make([]*SingleQuestionResponse, 0)
+		// need to recursive this for block in block case
 		for _, childQuestion := range childQuestions {
-			childQuestionsRes = append(childQuestionsRes, u.questionModelToSingleQuestion(childQuestion))
+			childQuestionsRes = append(childQuestionsRes, u.convertToQuestionResponse(childQuestion, nil))
 		}
-
-		questionRes := u.questionModelToParentQuestion(question, childQuestionsRes)
-
-		return questionRes, nil
 	}
 
-	return u.questionModelToSingleQuestion(question), nil
-
+	return u.convertToQuestionResponse(question, childQuestionsRes), nil
 }
 
-func (u *questionBaseUsecaseImpl) questionModelToSingleQuestion(question *model.Question) *SingleQuestionResponse {
-	return &SingleQuestionResponse{
+func (u *questionBaseUsecaseImpl) convertToQuestionResponse(question *entity.Question, childQuestion []*QuestionResponse) *QuestionResponse {
+	var answer *AnswerResponse
+	if question.Answer != nil {
+		answer = &AnswerResponse{
+			Id: question.Answer.Id.String(),
+			Content: question.Answer.Content,
+		}
+	}
+
+	return &QuestionResponse{
 		Id:        question.Id.String(),
 		Content:   question.Content,
 		Type:      string(question.Type),
 		Tag:       question.Tag,
 		Difficult: question.Difficult,
-		Answer:    question.Answer.Content,
-	}
-}
-
-func (u *questionBaseUsecaseImpl) questionModelToParentQuestion(question *model.Question, childQuestion []*SingleQuestionResponse) *ParentQuestionResponse {
-	return &ParentQuestionResponse{
-		Id:        question.Id.String(),
-		Content:   question.Content,
-		Tag:       question.Tag,
-		Difficult: question.Difficult,
+		Answer:    answer,
 		Question:  childQuestion,
 	}
 }
+
+// func (u *questionBaseUsecaseImpl)

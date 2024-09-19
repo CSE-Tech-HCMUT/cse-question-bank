@@ -1,9 +1,9 @@
-import { InputBlockQuestion } from "../types/question/inputQuestion";
+import { InputBlockQuestion, InputSimpleQuestion } from "../types/question/inputQuestion";
 import apiInstance from "./apiInstance";
 
 
 export const bankQuestionService = {
-  previewPDFQuestion: (payload: InputBlockQuestion) => apiInstance.post<Blob>('/latex-compile', payload, {
+  previewPDFQuestion: (payload: InputBlockQuestion | InputSimpleQuestion) => apiInstance.post<Blob>('/latex-compile', payload, {
     responseType: 'blob'
   }),
 

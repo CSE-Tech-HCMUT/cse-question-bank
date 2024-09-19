@@ -32,7 +32,6 @@ const getItem = (
 const items: MenuItem[] = [
   getItem('Dashboard', '1', <HomeOutlined />),
   getItem('Question Bank', '2', <FileOutlined />),
-  getItem('Exam Paper', '3', <ContainerOutlined />),
   getItem('Editor Question', '4', <CodeOutlined />, [
     getItem('Simple Question', '5', <CodeOutlined/>),
     getItem('Block Question', '6', <CodeOutlined/>)

@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { InputBlockQuestion } from "../../types/question/inputQuestion";
+import { InputBlockQuestion, InputSimpleQuestion } from "../../types/question/inputQuestion";
 import { bankQuestionService } from "../../services/bankQuestionService";
 
-export const previewPDFFileThunk = createAsyncThunk('manageBankQuestion/previewPDFFileThunk', async (payload: InputBlockQuestion, {rejectWithValue}) => {
+export const previewPDFFileThunk = createAsyncThunk('manageBankQuestion/previewPDFFileThunk', async (payload: InputBlockQuestion | InputSimpleQuestion, {rejectWithValue}) => {
   try {
     const data = await bankQuestionService.previewPDFQuestion(payload);
     return window.URL.createObjectURL(data.data);

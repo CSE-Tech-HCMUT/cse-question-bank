@@ -1,14 +1,17 @@
-import { Button, Col, Form, Row, Switch, Dropdown, Menu } from "antd";
+import { Button, Col, Form, Row, Dropdown, Menu } from "antd";
 import { useCallback, useState } from "react";
 import { SimpleQuestion } from "../../types/question/question";
 import { convertSimpleQuestionToInputSimpleQuestion, extractTextFromHtml } from "../../utils/Utils";
 import { InputSimpleQuestion } from "../../types/question/inputQuestion";
-import MyEditorPlus from "../MyEditorPlus";
-import LatexCompile from "../LatexCompile";
+import MyEditorPlus from "../../components/MyEditorPlus";
+import LatexCompile from "../../components/LatexCompile";
 import { DeleteOutlined, PlusOutlined, EyeOutlined, MenuOutlined, SwapOutlined } from "@ant-design/icons";
 import '../../style/style.scss';
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../../store";
+import { previewPDFFileThunk } from "../../store/question-bank/thunk";
 
-export const QuestionSimple = () => {
+export const QuestionSimpleTemplate = () => {
   const [form] = Form.useForm();
   const [isCKEditor, setIsCKEditor] = useState(true);
   const [simpleQuestion, setSimpleQuestion] = useState<SimpleQuestion>({
@@ -20,6 +23,9 @@ export const QuestionSimple = () => {
     isParent: false,
     answer: [],
   });
+
+  const { urlPDF } = useSelector((state: RootState) => state.manageBankQuestionReducer);
+  const dispatch = useAppDispatch();
 
   const addAnswer = useCallback(() => {
     const updatedQuestion: SimpleQuestion = {
@@ -76,7 +82,8 @@ export const QuestionSimple = () => {
     } : simpleQuestion;
 
     const inputRequest: InputSimpleQuestion = convertSimpleQuestionToInputSimpleQuestion(updatedQuestion);
-    console.log(inputRequest);
+    dispatch(previewPDFFileThunk(inputRequest));
+    
   }, [simpleQuestion, isCKEditor]);
 
   const menu = (
@@ -184,4 +191,4 @@ export const QuestionSimple = () => {
   );
 }
 
-export default QuestionSimple;
+export default QuestionSimpleTemplate;

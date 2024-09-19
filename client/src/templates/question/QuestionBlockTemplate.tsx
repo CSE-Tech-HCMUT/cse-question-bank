@@ -3,11 +3,11 @@ import { useCallback, useMemo, useState } from "react";
 import { BlockQuestion, SimpleQuestion } from "../../types/question/question";
 import { convertBlockQuestionToInputBlockQuestion, extractTextFromHtml } from "../../utils/Utils";
 import { InputBlockQuestion } from "../../types/question/inputQuestion";
-import MyEditorPlus from "../MyEditorPlus";
-import LatexCompile from "../LatexCompile";
+import MyEditorPlus from "../../components/MyEditorPlus";
+import LatexCompile from "../../components/LatexCompile";
 import { DeleteOutlined, EyeOutlined, MenuOutlined, MinusOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
 
-export const QuestionBlock = () => {
+export const QuestionBlockTemplate = () => {
   const [form] = Form.useForm();
   const [isCKEditor, setIsCKEditor] = useState(true);
   const [parentQuestion, setParentQuestion] = useState<BlockQuestion>({
@@ -300,4 +300,4 @@ export const QuestionBlock = () => {
   )
 }
 
-export default QuestionBlock
+export default QuestionBlockTemplate

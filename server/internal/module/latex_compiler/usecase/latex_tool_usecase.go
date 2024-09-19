@@ -33,7 +33,7 @@ func (u *latexCompilerImpl) LatexCompile(question *model.QuestionCompile) ([]byt
 		"-interaction=batchmode",
 		"-shell-escape",
 	}
-	err = pdfLatexCompile(folderPath + "/output.tex", args...)
+	err = pdfLatexCompile(folderPath+"/output.tex", args...)
 	if err != nil {
 		slog.Error("Fail to compile latex", "error-message", err)
 		return nil, constant.ErrCompileLatex(err)

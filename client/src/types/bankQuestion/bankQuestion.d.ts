@@ -1,6 +1,13 @@
 type BankQuestionState = {
-  addModalShow: bool,
+  createModalShow: bool,
+  editModalShow: bool,
+  deleteModalShow: bool,
   urlPDF: string,
+  questionList: Question[],
+}
+
+type Question = {
+  
 }
 
 export default BankQuestionState

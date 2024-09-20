@@ -9,6 +9,7 @@
 
 /* Custom toolbar styles */
 .ql-toolbar {
+  // display: none;
   background-color: #ffffff; /* White background for the toolbar */
   border: 1px solid #ddd; /* Border around the toolbar */
   border-radius: 5px 5px 0 0; /* Rounded top corners */
@@ -33,6 +34,8 @@
   font-family: 'Arial', sans-serif; /* Font family */
   font-size: 16px; /* Font size */
   color: #333; /* Text color */
+  border: 0.2px solid rgb(206, 204, 204);
+  padding: 2px 16px;
 }
 
 .ql-editor p {
@@ -70,4 +73,50 @@
     width: 100%; /* Full width buttons */
     margin-top: 8px; /* Space between buttons */
   }
+}
+
+.pdf-preview-container {
+  max-width: 800px; /* Adjust this based on your design */
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.no-pdf-message {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.page-info {
+  margin: 20px 0;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
+}
+
+.nav-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:disabled {
+  background-color: #ccc; /* Gray color for disabled */
+  cursor: not-allowed;
+}
+
+.nav-button:hover:not(:disabled) {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+th {
+  text-align: center!important;
 }

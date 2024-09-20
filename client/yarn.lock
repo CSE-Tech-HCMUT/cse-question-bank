@@ -2925,11 +2925,6 @@ ckeditor5-collaboration@43.1.0:
   dependencies:
     "@ckeditor/ckeditor5-collaboration-core" "43.1.0"
 
-"ckeditor5-custom-project@file:./ckeditor5", "ckeditor5-custom-project@file:ckeditor5":
-  version "0.0.1"
-  dependencies:
-    ckeditor5-custom-project "file:C:/Users/PC/AppData/Local/Yarn/Cache/v6/npm-ckeditor5-custom-project-0.0.1-e4e89c79-55e6-4896-958c-b5dd4e463aa2-1726644921873/node_modules/ckeditor5-custom-project"
-
 ckeditor5-premium-features@^43.1.0:
   version "43.1.0"
   resolved "https://registry.npmjs.org/ckeditor5-premium-features/-/ckeditor5-premium-features-43.1.0.tgz#9ae41eb7a5664f20c2249235c18a09831ab4c404"
@@ -4795,6 +4790,11 @@ react-dom@^18.3.1:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
+
+react-icons@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.npmjs.org/react-icons/-/react-icons-5.3.0.tgz#ccad07a30aebd40a89f8cfa7d82e466019203f1c"
+  integrity sha512-DnUk8aFbTyQPSkCfF8dbX6kQjXA9DktMeJqfjrg6cK9vwQVMxmcA3BfP4QoiztVmEHtwlTgLFsPuH2NskKT6eg==
 
 react-is@^16.13.1:
   version "16.13.1"

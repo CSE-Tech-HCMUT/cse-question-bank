@@ -3,7 +3,7 @@ import apiInstance from "./apiInstance";
 
 
 export const bankQuestionService = {
-  previewPDFQuestion: (payload: InputBlockQuestion | InputSimpleQuestion) => apiInstance.post<Blob>('/latex-compile', payload, {
+  previewPDFQuestion: (payload: InputBlockQuestion | InputSimpleQuestion | any) => apiInstance.post<Blob>('/latex-compile', payload, {
     responseType: 'blob'
   }),
 

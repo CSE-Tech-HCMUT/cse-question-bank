@@ -1,4 +1,4 @@
-import { Button, Col, Form, Row, Dropdown, Menu } from "antd";
+import { Button, Col, Form, Row, Dropdown, MenuProps } from "antd";
 import { useCallback, useState } from "react";
 import { SimpleQuestion } from "../../types/question/question";
 import { convertSimpleQuestionToInputSimpleQuestion, extractTextFromHtml } from "../../utils/Utils";
@@ -10,6 +10,7 @@ import '../../style/style.scss';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store";
 import { previewPDFFileThunk } from "../../store/question-bank/thunk";
+import PDFPreview from "../../components/PDFPreview";
 
 export const QuestionSimpleTemplate = () => {
   const [form] = Form.useForm();
@@ -71,7 +72,7 @@ export const QuestionSimpleTemplate = () => {
     setSimpleQuestion(updatedQuestion);
   }, [simpleQuestion]);
 
-  const handleSubmit = useCallback(() => {
+  const handlePreviewPDF = useCallback(() => {
     const updatedQuestion: SimpleQuestion = isCKEditor ? {
       ...simpleQuestion,
       content: extractTextFromHtml(simpleQuestion.content),
@@ -82,23 +83,58 @@ export const QuestionSimpleTemplate = () => {
     } : simpleQuestion;
 
     const inputRequest: InputSimpleQuestion = convertSimpleQuestionToInputSimpleQuestion(updatedQuestion);
-    dispatch(previewPDFFileThunk(inputRequest));
+
+    const formatRequest = {
+      "content": inputRequest.content,
+      "type": inputRequest.type,
+      "is-parent": inputRequest.isParent,
+      "answer": inputRequest.answer.map(ans => ({
+        "content": ans.content,
+        "is-correct": ans.isCorrect
+      })) 
+    }
+    
+    dispatch(previewPDFFileThunk(formatRequest));
+  }, [dispatch, simpleQuestion, isCKEditor])
+
+  const handleSubmit = useCallback(() => {
+    // const updatedQuestion: SimpleQuestion = isCKEditor ? {
+    //   ...simpleQuestion,
+    //   content: extractTextFromHtml(simpleQuestion.content),
+    //   answer: simpleQuestion.answer.map(ans => ({
+    //     ...ans,
+    //     content: extractTextFromHtml(ans.content || ''),
+    //   })),
+    // } : simpleQuestion;
     
   }, [simpleQuestion, isCKEditor]);
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="add" onClick={addAnswer}>
-        <PlusOutlined /> Add Answer
-      </Menu.Item>
-      <Menu.Item key="pdf">
-        <EyeOutlined />  Preview PDF
-      </Menu.Item>
-      <Menu.Item key="toggleEditor" onClick={() => setIsCKEditor(!isCKEditor)}>
-        <SwapOutlined /> Change Editor
-      </Menu.Item>
-    </Menu>
-  );
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <div key="add" onClick={addAnswer}>
+          <PlusOutlined /> Add Answer
+        </div>
+      )
+    },
+    {
+      key: '2',
+      label: (
+        <div key="pdf" onClick={handlePreviewPDF}>
+          <EyeOutlined />  Preview PDF
+        </div>
+      )
+    },
+    {
+      key: '3',
+      label: (
+        <div key="toggleEditor" onClick={() => setIsCKEditor(!isCKEditor)}>
+          <SwapOutlined /> Change Editor
+        </div>
+      )
+    }
+  ]
 
   return (
     <Row gutter={[16, 16]} justify="center">
@@ -106,7 +142,7 @@ export const QuestionSimpleTemplate = () => {
         <Col className='header' span={24}>
           <h1 className="text-2xl font-semibold">Create Question</h1>
           <div className="flex items-center">
-            <Dropdown overlay={menu} trigger={['click']}>
+            <Dropdown menu={{items}} trigger={['click']}>
               <Button type='primary' icon={<MenuOutlined />}>
                 Menu
               </Button>
@@ -132,7 +168,7 @@ export const QuestionSimpleTemplate = () => {
             </Form.Item>
 
             {simpleQuestion.answer.map((answer, index) => (
-              <Row key={answer.id} className="answer-row" gutter={[8, 8]}>
+              <Row key={answer.id} className="answer-row" gutter={[16, 16]}>
                 <Col span={20}>
                   <Form.Item label={`Answer ${index + 1}`}>
                     {isCKEditor ? (
@@ -184,7 +220,7 @@ export const QuestionSimpleTemplate = () => {
           <h1 className="text-2xl font-semibold">PDF Preview</h1>
         </Col>
         <Col span={24}>
-          
+          <PDFPreview urlPDF={urlPDF} /> 
         </Col>
       </Col>
     </Row>

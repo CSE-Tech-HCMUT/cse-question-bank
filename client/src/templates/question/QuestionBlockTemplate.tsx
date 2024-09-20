@@ -1,11 +1,15 @@
-import { Button, Col, Dropdown, Form, Menu, Row } from "antd"
+import { Button, Col, Dropdown, Form, Menu, MenuProps, Row } from "antd"
 import { useCallback, useMemo, useState } from "react";
-import { BlockQuestion, SimpleQuestion } from "../../types/question/question";
+import { Answer, BlockQuestion, SimpleQuestion } from "../../types/question/question";
 import { convertBlockQuestionToInputBlockQuestion, extractTextFromHtml } from "../../utils/Utils";
 import { InputBlockQuestion } from "../../types/question/inputQuestion";
 import MyEditorPlus from "../../components/MyEditorPlus";
 import LatexCompile from "../../components/LatexCompile";
 import { DeleteOutlined, EyeOutlined, MenuOutlined, MinusOutlined, PlusOutlined, SwapOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../../store";
+import { previewPDFFileThunk } from "../../store/question-bank/thunk";
+import PDFPreview from "../../components/PDFPreview";
 
 export const QuestionBlockTemplate = () => {
   const [form] = Form.useForm();
@@ -19,6 +23,9 @@ export const QuestionBlockTemplate = () => {
     isParent: true,
     subQuestions: [],
   });
+
+  const { urlPDF } = useSelector((state: RootState) => state.manageBankQuestionReducer);
+  const dispatch = useAppDispatch();
 
   const addSubQuestion = useCallback(() => {
     const updatedQuestion: BlockQuestion = {
@@ -135,7 +142,7 @@ export const QuestionBlockTemplate = () => {
     setParentQuestion(updatedQuestion);
   }, [parentQuestion]);
 
-  const handleSubmit = useCallback(() => {
+  const handlePreviewPDF = useCallback(() => { 
     const updatedQuestion: BlockQuestion = isCKEditor ? {
       ...parentQuestion,
       content: extractTextFromHtml(parentQuestion.content),
@@ -149,7 +156,41 @@ export const QuestionBlockTemplate = () => {
       }))
     } : parentQuestion
     
-    const inputRequest: InputBlockQuestion =  convertBlockQuestionToInputBlockQuestion(updatedQuestion)
+    const inputRequest: InputBlockQuestion =  convertBlockQuestionToInputBlockQuestion(updatedQuestion);
+
+    const formatRequest = {
+      "content": inputRequest.content,
+      "type": inputRequest.type,
+      "is-parent": inputRequest.isParent,
+      "sub-questions": inputRequest.subQuestions.map((sq: SimpleQuestion) => ({
+        "content": sq.content,
+        "type": sq.type,
+        "is-parent": sq.isParent,
+        "answer": sq.answer.map((ans: Answer) => ({
+          "content": ans.content,
+          "is-correct": ans.isCorrect
+        }))
+      })) 
+    }
+    
+    dispatch(previewPDFFileThunk(formatRequest));
+  }, [dispatch, parentQuestion, isCKEditor])
+
+  const handleSubmit = useCallback(() => {
+    // const updatedQuestion: BlockQuestion = isCKEditor ? {
+    //   ...parentQuestion,
+    //   content: extractTextFromHtml(parentQuestion.content),
+    //   subQuestions: parentQuestion.subQuestions.map(sq => ({
+    //     ...sq,
+    //     content: extractTextFromHtml(sq.content),
+    //     answer: sq.answer.map(ans => ({
+    //       ...ans,
+    //       content: extractTextFromHtml(ans.content || '')
+    //     }))
+    //   }))
+    // } : parentQuestion
+    
+    // const inputRequest: InputBlockQuestion =  convertBlockQuestionToInputBlockQuestion(updatedQuestion)
   
     // Additional submit logic
   }, [parentQuestion, isCKEditor]);
@@ -234,19 +275,32 @@ export const QuestionBlockTemplate = () => {
     </div>
   )), [parentQuestion.subQuestions, isCKEditor, handleSubQuestionChange, handleAnswerChange, handleAnswerTrigger, removeAnswer, removeSubQuestion, addAnswer]);
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="add" onClick={addSubQuestion}>
-        <PlusOutlined /> Add Sub Question
-      </Menu.Item>
-      <Menu.Item key="pdf">
-        <EyeOutlined />  Preview PDF
-      </Menu.Item>
-      <Menu.Item key="toggleEditor" onClick={() => setIsCKEditor(!isCKEditor)}>
-        <SwapOutlined /> Change Editor
-      </Menu.Item>
-    </Menu>
-  );
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <div key="add" onClick={addSubQuestion}>
+          <PlusOutlined /> Add Sub Question
+        </div>
+      )
+    },
+    {
+      key: '2',
+      label: (
+        <div key="pdf" onClick={handlePreviewPDF}>
+          <EyeOutlined />  Preview PDF
+        </div>
+      )
+    },
+    {
+      key: '3',
+      label: (
+        <div key="toggleEditor" onClick={() => setIsCKEditor(!isCKEditor)}>
+          <SwapOutlined /> Change Editor
+        </div>
+      )
+    }
+  ]
 
   return (
     <Row gutter={[16, 16]} justify="center">
@@ -254,7 +308,7 @@ export const QuestionBlockTemplate = () => {
         <Col className='header' span={24}>
           <h1 className="text-2xl font-semibold">Create Question</h1>
           <div className="flex items-center">
-            <Dropdown overlay={menu} trigger={['click']}>
+            <Dropdown menu={{items}} trigger={['click']}>
               <Button type='primary' icon={<MenuOutlined />}>
                 Menu
               </Button>
@@ -293,7 +347,7 @@ export const QuestionBlockTemplate = () => {
           <h1 className="text-2xl font-semibold">PDF Preview</h1>
         </Col>
         <Col span={24}>
-          
+          <PDFPreview  urlPDF={urlPDF} />
         </Col>
       </Col>
       </Row>

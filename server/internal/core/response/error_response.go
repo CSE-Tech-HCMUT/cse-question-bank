@@ -8,8 +8,8 @@ import (
 )
 
 type ErrorResponse struct {
-	ErrorKey     string `json:"error_key"`
-	ErrorMessage string `json:"error_message"`
+	ErrorKey     string `json:"errorKey"`
+	ErrorMessage string `json:"errorMessage"`
 }
 
 func ResponseError(c *gin.Context, err error) {

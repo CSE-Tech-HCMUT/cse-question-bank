@@ -8,18 +8,14 @@ import (
 	"github.com/google/uuid"
 )
 
-type CreateAnswerRequest struct {
-	Content json.RawMessage `json:"content" binding:"required"`
-}
-
 type CreateQuestionRequest struct {
-	Content      string                   `json:"content" binding:"required"`
-	Type         string                   `json:"type" binding:"required"`
-	IsParent     bool                     `json:"is-parent"`
-	ParentId     *string                  `json:"parent-id"`
-	Tag          string                   `json:"tag" binding:"required"`
-	Difficult    int                      `json:"difficult" binding:"required"`
-	Answer       *CreateAnswerRequest     `json:"answer"`
+	Content   string          `json:"content" binding:"required"`
+	Type      string          `json:"type" binding:"required"`
+	IsParent  bool            `json:"isParent"`
+	ParentId  *string         `json:"parentId"`
+	Tag       string          `json:"tag" binding:"required"`
+	Difficult int             `json:"difficult" binding:"required"`
+	Answer    json.RawMessage `json:"answer"`
 }
 
 func CreateReqToQuestionModel(req *CreateQuestionRequest) *entity.Question {
@@ -53,7 +49,7 @@ func CreateReqToQuestionModel(req *CreateQuestionRequest) *entity.Question {
 	var answer *entity.Answer
 	if req.Answer != nil {
 		answer = &entity.Answer{
-			Content: req.Answer.Content,
+			Content: req.Answer,
 		}
 	}
 

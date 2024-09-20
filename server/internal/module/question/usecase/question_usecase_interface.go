@@ -7,8 +7,8 @@ import (
 )
 
 type QuestionUsecase interface {
-	GetQuestion(ctx context.Context, questionId string) (interface{}, error)
-	CreateQuestion(ctx context.Context, question *entity.Question) error
+	GetQuestion(ctx context.Context, questionId string) (*QuestionResponse, error)
+	CreateQuestion(ctx context.Context, question *entity.Question) (*QuestionResponse, error)
 	DeleteQuestion(ctx context.Context, questionId string) error
 	EditQuestion(ctx context.Context, question *entity.Question) error
 }

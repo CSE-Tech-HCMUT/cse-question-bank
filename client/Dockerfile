@@ -24,4 +24,4 @@ RUN yarn
 EXPOSE 3000
 
 # Run client
-CMD ["yarn",  "dev"]
+CMD ["yarn",  "dev", "--host"]

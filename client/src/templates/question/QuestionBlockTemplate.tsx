@@ -157,23 +157,7 @@ export const QuestionBlockTemplate = () => {
     } : parentQuestion
     
     const inputRequest: InputBlockQuestion =  convertBlockQuestionToInputBlockQuestion(updatedQuestion);
-
-    const formatRequest = {
-      "content": inputRequest.content,
-      "type": inputRequest.type,
-      "is-parent": inputRequest.isParent,
-      "sub-questions": inputRequest.subQuestions.map((sq: SimpleQuestion) => ({
-        "content": sq.content,
-        "type": sq.type,
-        "is-parent": sq.isParent,
-        "answer": sq.answer.map((ans: Answer) => ({
-          "content": ans.content,
-          "is-correct": ans.isCorrect
-        }))
-      })) 
-    }
-    
-    dispatch(previewPDFFileThunk(formatRequest));
+    dispatch(previewPDFFileThunk(inputRequest));
   }, [dispatch, parentQuestion, isCKEditor])
 
   const handleSubmit = useCallback(() => {

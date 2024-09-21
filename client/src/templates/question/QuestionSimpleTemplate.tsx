@@ -83,18 +83,7 @@ export const QuestionSimpleTemplate = () => {
     } : simpleQuestion;
 
     const inputRequest: InputSimpleQuestion = convertSimpleQuestionToInputSimpleQuestion(updatedQuestion);
-
-    const formatRequest = {
-      "content": inputRequest.content,
-      "type": inputRequest.type,
-      "is-parent": inputRequest.isParent,
-      "answer": inputRequest.answer.map(ans => ({
-        "content": ans.content,
-        "is-correct": ans.isCorrect
-      })) 
-    }
-    
-    dispatch(previewPDFFileThunk(formatRequest));
+    dispatch(previewPDFFileThunk(inputRequest));
   }, [dispatch, simpleQuestion, isCKEditor])
 
   const handleSubmit = useCallback(() => {

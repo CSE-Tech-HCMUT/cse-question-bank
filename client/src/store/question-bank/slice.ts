@@ -6,6 +6,7 @@ const initialState: BankQuestionState = {
   createModalShow: false,
   editModalShow: false,
   deleteModalShow: false,
+  viewModalShow: false,
   questionList: [],
   urlPDF: ""
 }
@@ -22,6 +23,9 @@ export const manageBankQuestionSlice = createSlice({
     },
     setDeleteModalVisibility(state, action: { payload: boolean }){
       state.deleteModalShow = action.payload;
+    },
+    setViewModalVisibility(state, action: { payload: boolean }){
+      state.viewModalShow = action.payload;
     }
   },
   extraReducers: (builder) => {

@@ -1,7 +1,11 @@
+import { Flex, Spin } from "antd"
+
 export const Loading = () => {
   return (
     <>
-      Loading ...
+      <Flex align="center" gap="middle" className="w-full h-[400px] flex justify-center items-center">
+        <Spin size="large" />
+      </Flex>
     </>
   )
 }

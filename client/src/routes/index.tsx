@@ -1,47 +1,44 @@
 import { RouteObject } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
 import { lazy } from 'react';
+import MainLayout from '../layouts/MainLayout';
 import LazyLoad from '../components/LazyLoadProps';
-import QuestionSimple from '../pages/question/QuestionSimple';
-import QuestionBlock from '../pages/question/QuestionBlock';
+import AuthLayout from '../layouts/AuthLayout';
 
 const Dashboard = lazy(() => import('../pages/Dashboard'));
-const QuestionBank = lazy(() => import('../pages/QuestionBank'));
+const QuestionBank = lazy(() => import('../pages/question-bank/QuestionBank'));
+const Login = lazy(() => import('../pages/auth/Login'));
+const Signup = lazy(() => import('../pages/auth/Signup'));
+const TagManagement = lazy(() => import('../pages/tag-management/TagManagement'));
+const SubTag = lazy(() => import('../pages/tag-management/SubTag'));
+const ProgressCreateQuestion = lazy(() => import('../pages/progress-settings/ProgressCreateQuestion'));
+const UserManagement = lazy(() => import('../pages/user-management/UserManagement'));
 
-export const router: RouteObject[] = [
+const routeManagement: RouteObject[] = [
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    children: [
+      { path: 'login', element: <LazyLoad><Login /></LazyLoad> },
+      { path: 'signup', element: <LazyLoad><Signup /></LazyLoad> }
+    ]
+  },
   {
     path: '/',
     element: <MainLayout />,
     children: [
-      { 
-        index: true, 
-        element: <LazyLoad>
-          <Dashboard />
-        </LazyLoad>
-      },
-      { 
-        path: 'question-bank',
-        element: <LazyLoad>
-          <QuestionBank />
-        </LazyLoad>
-      },
+      { index: true, element: <LazyLoad><Dashboard /></LazyLoad> },
+      { path: 'user-management', element: <LazyLoad><UserManagement /></LazyLoad> },
+      { path: 'question-bank', element: <LazyLoad><QuestionBank /></LazyLoad> },
+      { path: 'progress-setting', element: <LazyLoad><ProgressCreateQuestion /></LazyLoad> },
       {
-        path: 'editor-question',
+        path: 'tag-management',
         children: [
-          {
-            path: 'simple-question',
-            element: <LazyLoad>
-              <QuestionSimple />
-            </LazyLoad>
-          },
-          {
-            path: 'block-question',
-            element: <LazyLoad>
-              <QuestionBlock />
-            </LazyLoad>
-          }
+          { index: true, element: <LazyLoad><TagManagement /></LazyLoad> },
+          { path: 'tag-main/:id', element: <LazyLoad><SubTag /></LazyLoad> }
         ]
       }
     ]
   }
 ];
+
+export default routeManagement;

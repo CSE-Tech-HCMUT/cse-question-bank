@@ -16,28 +16,29 @@ interface LatexEditor {
 export const LatexCompile: React.FC<LatexEditor> = ({ content, placeholder, onChange }) => {
   return (
     <AceEditor
-          height="50px"
-          width="100%"
-          placeholder={placeholder}
-          mode="latex"
-          name="blah2"
-          fontSize={14}
-          lineHeight={19}
-          showPrintMargin={true}
-          showGutter={true}
-          highlightActiveLine={true}
-          value={content}
-          setOptions={{
-          enableBasicAutocompletion: false,
-          enableLiveAutocompletion: false,
-          enableSnippets: false,
-          showLineNumbers: true,
-          tabSize: 2,
-          }}
-          onChange={(event) => {
-            onChange(event)
-          }}
-        />
+      height="50px"
+      width="100%"
+      placeholder={placeholder}
+      mode="latex"
+      name="blah2"
+      fontSize={14}
+      lineHeight={19}
+      showPrintMargin={true}
+      showGutter={true}
+      highlightActiveLine={true}
+      value={content}
+      setOptions={{
+      enableBasicAutocompletion: false,
+      enableLiveAutocompletion: false,
+      enableSnippets: false,
+      showLineNumbers: true,
+      tabSize: 2,
+      }}
+      onChange={(event) => {
+        onChange(event)
+      }}
+      style={{ flex: 1, marginRight: 8  }}
+    />
   )
 }
 

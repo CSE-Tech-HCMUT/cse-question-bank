@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import BankQuestionState from "../../types/bankQuestion/bankQuestion";
-import { previewPDFFileThunk } from "./thunk";
+import { createQuestionThunk, previewPDFFileThunk } from "./thunk";
+import { toast } from 'react-toastify';
 
 const initialState: BankQuestionState = {
-  createModalShow: false,
   editModalShow: false,
   deleteModalShow: false,
   viewModalShow: false,
@@ -15,9 +15,6 @@ export const manageBankQuestionSlice = createSlice({
   name: 'manageBankQuestion',
   initialState,
   reducers: {
-    setCreateModalVisibility(state, action: { payload: boolean }){
-      state.createModalShow = action.payload;
-    },
     setEditModalVisibility(state, action: { payload: boolean }){
       state.editModalShow = action.payload;
     },
@@ -29,9 +26,20 @@ export const manageBankQuestionSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(previewPDFFileThunk.fulfilled, (state, {payload}) => {
-      state.urlPDF = payload;
-    })
+    builder
+      .addCase(previewPDFFileThunk.fulfilled, (state, {payload}) => {
+        state.urlPDF = payload;
+      })
+      .addCase(createQuestionThunk.fulfilled, (_state, _) => {
+        toast.success("Create Successed!", {
+          delay: 1000         
+        })
+      })
+      .addCase(createQuestionThunk.rejected, (_state, _) => {
+        toast.error("Create Failed!", {
+          delay: 1000         
+        })
+      })
   }
 })
 

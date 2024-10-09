@@ -1,7 +1,8 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import '../style/style.scss'; 
+import classNames from 'classnames';
 
 interface MyEditorPlusProps {
   content: string;
@@ -17,7 +18,7 @@ const modules = {
     ['bold', 'italic', 'underline', 'strike'],
     [{ list: 'ordered' }, { list: 'bullet' }],
     ['link', 'image'],
-    ['clean'] 
+    ['clean']
   ],
 };
 
@@ -28,16 +29,10 @@ export const MyEditorPlus: React.FC<MyEditorPlusProps> = ({ content, placeholder
   const handleFocus = () => setShowToolbar(true);
   const handleBlur = () => setShowToolbar(false);
 
-  useEffect(() => {
-    if (quillRef.current) {
-      const editor = quillRef.current.getEditor();
-      const toolbar = editor.root.parentNode?.querySelector('.ql-toolbar') as HTMLDivElement;
-
-      if (toolbar) {
-        toolbar.style.display = showToolbar ? 'block' : 'none'; // Use state to manage visibility
-      }
-    }
-  }, [showToolbar]); // Run effect when showToolbar changes
+  const reactQuillClass = classNames({
+    'editor-input': true,
+    'active': showToolbar  
+  })
 
   return (
     <div className="editor-container">
@@ -46,10 +41,10 @@ export const MyEditorPlus: React.FC<MyEditorPlusProps> = ({ content, placeholder
         theme='snow'
         value={content}
         onChange={onChange}
-        className='editor-input'
+        className={reactQuillClass}
         modules={modules}
         placeholder={placeholder}
-        style={{ zIndex: 1, width: '100%' }}
+        style={{ zIndex: 1, width: '100%', flex: 1, marginRight: 8 }}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />

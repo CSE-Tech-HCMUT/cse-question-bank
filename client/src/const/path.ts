@@ -1,9 +1,17 @@
 export const PATH = {
+  AUTH: '/auth',
   LOGIN: '/login',
+  SIGNUP: '/signup',
+
   DASHBOARD: '/',
+
+  USER_MANAGEMENT: '/user-management',
+
   QUESTION_BANK: '/question-bank',
-  LATEX_COMPILER: '/latex-compiler',
-  EDITOR_QUESTION: '/editor-question',
-  SIMPLE_QUESTION: '/editor-question/simple-question',
-  BLOCK_QUESTION: '/editor-question/block-question',
+
+  PROGRESS_SETTINGS: '/progress-setting',
+
+  TAG_MANAGEMENT: '/tag-management',
+  TAG_MAIN: '/tag-main',
+  
 }

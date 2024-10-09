@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import '../style/style.scss'; 
+import { Button } from 'antd';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   'pdfjs-dist/build/pdf.worker.min.mjs',
@@ -33,20 +34,20 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ urlPDF }) => {
         Page {pageNumber} of {numPages}
       </p>
       <div className="navigation-buttons">
-        <button
+        <Button
           onClick={() => setPageNumber(pageNumber - 1)}
           disabled={pageNumber <= 1}
-          className="nav-button"
+          className="nav-button md:text-[14px] text-[10px]"
         >
           Previous
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setPageNumber(pageNumber + 1)}
           disabled={pageNumber >= (numPages ?? 1)}
-          className="nav-button"
+          className="nav-button md:text-[14px] text-[10px]"
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );

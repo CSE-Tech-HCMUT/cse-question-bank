@@ -1,4 +1,4 @@
-import QuestionBankTemplate from "../templates/question-bank/QuestionBankTemplate"
+import QuestionBankTemplate from "../../templates/question-bank/QuestionBankTemplate"
 
 export const QuestionBank = () => {
   return (

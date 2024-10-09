@@ -15,6 +15,8 @@ import QuestionBankEditModal from './QuestionBankEditModal';
 import "../../style/style.scss";
 import QuestionBankViewModal from './QuestionBankViewModal';
 import QuestionBankDeleteModal from './QuestionBankDeleteModal';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '../../const/path';
 
 export const QuestionBankTemplate = () => {
     const [current, setCurrent] = useState<number>(1);
@@ -56,10 +58,12 @@ export const QuestionBankTemplate = () => {
     const [isLoading, _] = useState<boolean>(false);
 
     const { editModalShow, viewModalShow, deleteModalShow } = useSelector((state: RootState) => state.manageBankQuestionReducer);
-    const dispatch = useAppDispatch();
     const [ questionEdit, setQuestionEdit ] = useState<SimpleQuestion>();
     const [ questionView, setQuestionView ] = useState<SimpleQuestion>();
     const [questionDelete, setQuestionDelete ] = useState<SimpleQuestion>();
+
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     
     const handlePagination: TableProps<any>['onChange'] = (pagination, _filters, _sorter, _extra) => {
         if (pagination && pagination.current !== current) {
@@ -98,7 +102,9 @@ export const QuestionBankTemplate = () => {
                           </>
                           }
                           size={'middle'}
-                          // onClick={() => { setopenModalCreateItem(true) }}
+                          onClick={() => { 
+                            navigate(PATH.PROGRESS_SETTINGS)
+                          }}
                       >
                           Create Question
                       </Button>
@@ -251,7 +257,7 @@ export const QuestionBankTemplate = () => {
 
   return (
     <>
-      <div className='mt-n7'>
+      <div className='mt-6'>
         <Row gutter={[20, 20]}>
             <Col span={24}>
                 <Table

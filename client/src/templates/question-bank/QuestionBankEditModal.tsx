@@ -90,7 +90,6 @@ const QuestionBankEditModal: React.FC<QuestionBankEditModalProps> = ({ isModalOp
       loading={isLoading}
       okText={<span style={{ fontSize: '18px' }}>Create</span>} 
       cancelText={<span style={{ fontSize: '18px' }}>Cancel</span>} 
-      
     >
       <Form form={form} name="EditModalQuestion" layout="vertical" autoComplete="off">
         <Row gutter={16}>

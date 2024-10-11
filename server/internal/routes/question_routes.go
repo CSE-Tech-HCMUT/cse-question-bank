@@ -13,9 +13,9 @@ func iniQuestionGroupRoutes(db *gorm.DB, api *gin.RouterGroup) {
 	questionRepository := repository.NewQuestionRepository(db)
 	questionUsecase := usecase.NewQuestionUsecase(questionRepository)
 	questionHandler := handler.NewQuestionHandler(questionUsecase)
-	latexComileRoutes := api.Group("/questions")
+	questionRoutes := api.Group("/questions")
 	{
-		addGroupRoutes(latexComileRoutes, getQuestionRoutes(questionHandler))
+		addGroupRoutes(questionRoutes, getQuestionRoutes(questionHandler))
 	}
 }
 

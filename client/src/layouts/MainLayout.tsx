@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   TagOutlined,
   UsergroupAddOutlined,
+  BankOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -37,6 +38,7 @@ const items: MenuItem[] = [
   getItem("Progress Settings", "3", <SettingOutlined />),
   getItem("Tag Management", "4", <TagOutlined />),
   getItem("User", "5", <UsergroupAddOutlined   />),
+  getItem("Department", "6", <BankOutlined />)
 ];
 
 const MainLayout = React.memo(() => {
@@ -82,6 +84,12 @@ const MainLayout = React.memo(() => {
           navigate(PATH.USER_MANAGEMENT);
           setTitle("User");
           break;
+        case 6:
+          navigate(PATH.DEPARTMENT);
+          setTitle("Department");
+          break;
+
+        // Add more cases as needed for other menu items.
         default:
           setTitle("Dashboard");
           break;

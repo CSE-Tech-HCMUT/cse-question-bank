@@ -9,10 +9,11 @@ import { useSelector } from "react-redux";
 import { SubTag } from "../../../types/tag/tad";
 import { RootState, useAppDispatch } from "../../../store";
 import { manageSubTagActions } from "../../../store/tag-management/sub-tag/slice";
-import SubTagCreateModal from "./SubTagCreateModal";
-import SubTagEditModal from "./SubTagEditModal";
-import SubTagDeleteModal from "./SubTagDeleteModal";
-import SubTagViewModal from "./SubTagViewModal";
+import SubTagCreateModal from "./modal/SubTagCreateModal";
+import SubTagEditModal from "./modal/SubTagEditModal";
+import SubTagDeleteModal from "./modal/SubTagDeleteModal";
+import SubTagViewModal from "./modal/SubTagViewModal";
+
 
 export const SubTagTemplate = () => {
   const [current, setCurrent] = useState<number>(1);
@@ -297,6 +298,7 @@ export const SubTagTemplate = () => {
       <SubTagDeleteModal isModalOpen={deleteModalShow} onClose={onCloseModalDelete} subTag={subTagDelete} />
 
       <SubTagViewModal isModalOpen={viewModalShow} onClose={onCloseModalView} subTag={subTagView} />
+
     </>
   )
 }

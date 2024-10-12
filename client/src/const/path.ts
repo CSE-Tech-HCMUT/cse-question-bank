@@ -7,6 +7,8 @@ export const PATH = {
 
   USER_MANAGEMENT: '/user-management',
 
+  DEPARTMENT: '/department-management',
+
   QUESTION_BANK: '/question-bank',
 
   PROGRESS_SETTINGS: '/progress-setting',

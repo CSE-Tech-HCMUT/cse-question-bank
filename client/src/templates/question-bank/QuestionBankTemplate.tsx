@@ -10,13 +10,13 @@ import { SimpleQuestion } from '../../types/question/question';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../store';
 import { manageBankQuestionActions } from '../../store/question-bank/slice';
-import QuestionBankEditModal from './QuestionBankEditModal';
-
-import "../../style/style.scss";
-import QuestionBankViewModal from './QuestionBankViewModal';
-import QuestionBankDeleteModal from './QuestionBankDeleteModal';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../../const/path';
+
+import "../../style/style.scss";
+import QuestionBankEditModal from './modal/QuestionBankEditModal';
+import QuestionBankViewModal from './modal/QuestionBankViewModal';
+import QuestionBankDeleteModal from './modal/QuestionBankDeleteModal';
 
 export const QuestionBankTemplate = () => {
     const [current, setCurrent] = useState<number>(1);

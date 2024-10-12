@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Modal, Row } from "antd";
-import { SimpleQuestion } from "../../types/question/question";
 import { useEffect, useState } from "react";
+import { SimpleQuestion } from "../../../types/question/question";
 
 interface QuestionBankViewModalProps {
     isModalOpen: boolean;

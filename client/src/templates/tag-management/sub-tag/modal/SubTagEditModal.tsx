@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Modal, Row, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
-import { ModalProps } from "../../../types/modal/modal";
+import { ModalProps } from "../../../../types/modal/modal";
 
 export const SubTagEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, subTag }) => {
   const [form] = useForm();

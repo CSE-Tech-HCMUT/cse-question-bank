@@ -1,4 +1,6 @@
+import { Department } from "../department/department";
 import { MainTag, SubTag } from "../tag/tad";
+import { User } from "../user/user";
 
 export type ModalProps = {
   isModalOpen: boolean,
@@ -6,5 +8,6 @@ export type ModalProps = {
   mainTag?: MainTag | undefined;
   subTag?: SubTag | undefined;
   user?: User | undefined
+  department?: Department | undefined;
 }
 

@@ -1,6 +1,6 @@
 import { Col, Form, Input, Modal, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { ModalProps } from "../../types/modal/modal";
+import { ModalProps } from "../../../types/modal/modal";
 
 export const TagManagementCreateModal: React.FC<ModalProps> = ({ isModalOpen, onClose }) => {
   const [form] = useForm();

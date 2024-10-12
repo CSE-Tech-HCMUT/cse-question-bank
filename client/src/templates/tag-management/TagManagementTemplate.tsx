@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { MainTag } from "../../types/tag/tad";
-import { Button, Col, Row, Space, Tag, Tooltip } from "antd";
+import { Button, Col, Row, Select, Space, Tag, Tooltip } from "antd";
 import { FaPlusCircle } from "react-icons/fa";
 import { AiFillDelete, AiOutlineReload } from "react-icons/ai";
 import Table, { ColumnsType, TableProps } from "antd/es/table";
@@ -9,15 +9,30 @@ import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store";
 import { manageMainTagActions } from "../../store/tag-management/slice";
-import TagManagementCreateModal from "./TagManagementCreateModal";
-import TagManagementEditModal from "./TagManagementEditModal";
-import TagManagementDeleteModal from "./TagManagementDeleteModal";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../const/path";
+import TagManagementCreateModal from "./modal/TagManagementCreateModal";
+import TagManagementEditModal from "./modal/TagManagementEditModal";
+import TagManagementDeleteModal from "./modal/TagManagementDeleteModal";
 
 export const TagManagementTemplate = () => {
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [total, _setTotal] = useState<number>(0);
+  const [isLoading, _] = useState<boolean>(false);
+
+  // const [listOfDepartments, _setListOfDepartments] = useState<Department[]>([
+  //   {
+  //     id: "1",
+  //     name: "Khoa Khoa học và Kỹ thuật Máy tính",
+  //     subjects: [
+  //       "Kỹ thuật lập trình", 
+  //       "Cấu trúc dữ liệu và giải thuật", 
+  //       "Lập trình nâng cao"
+  //     ],
+  //     date: "11/07/2003",
+  //   }
+  // ]);
   const [listMainTags, _setListMainTags] = useState<MainTag[]>([
     {
       id: "1",
@@ -27,11 +42,30 @@ export const TagManagementTemplate = () => {
       status: true
     }
   ]);
-  const [total, _setTotal] = useState<number>(0);
-  const [isLoading, _] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const departmentOptions = [
+    { value: '1', label: 'Khoa Khoa học và Kỹ thuật Máy tính' },
+    { value: '2', label: 'Khoa Quản trị kinh doanh' },
+    { value: '3', label: 'Khoa Công nghệ thông tin' },
+    { value: '4', label: 'Khoa Kinh tế' },
+    { value: '5', label: 'Khoa Kỹ thuật xây dựng' },
+    { value: '6', label: 'Khoa Xây dựng và thiết kế nền tảng' },
+    { value: '7', label: 'Khoa Tài chính và ngân hàng' },
+  ]
+  const courseOptions = [
+    { value: '1', label: 'Cấu trúc dữ liệu và giải thuật' },
+    { value: '2', label: 'Kỹ thuật lập trình' },
+    { value: '3', label: 'Lập trình nâng cao' },
+    { value: '4', label: 'Hệ thống thông tin' },
+    { value: '5', label: 'Thiết kế web' },
+    { value: '6', label: 'Thiết kế ứng dụng mobile' },
+    { value: '7', label: 'Thiết kế game' },
+    { value: '8', label: 'Thiết kế dịch vụ' },
+    { value: '9', label: 'Thiết kế hệ thống mạng' },
+  ]
   
   const { createModalShow, editModalShow, deleteModalShow } = useSelector((state: RootState) => state.manageMainTagReducer);
 
@@ -72,38 +106,51 @@ export const TagManagementTemplate = () => {
   };
 
   const TitleTable = () => (
-    <div className="flex sm:justify-end">
-      <Space wrap>
-        <Button
-          type="primary"
-          icon={<>
-              <span style={{ fontSize: 18, textAlign: "center", alignItems: "center" }}>
-                  <FaPlusCircle />
-              </span>
-          </>
-          }
-          size={'middle'}
-          onClick={() => {
-            handleModalCreateOpen(true);
-          }}
-        >
-          Create Main Tag
-        </Button>
-
-        <Button
-          icon={
-          <>
-            <span style={{ fontSize: 18, textAlign: "center", alignItems: "center" }}>
-                <AiOutlineReload />
-            </span>
-          </>
-          }
-          size={'middle'}
-          // onClick={() => { fetchCategoryChannel() }}
-        >
-        </Button>
-      </Space>
-    </div>
+      <Row gutter={[0, 16]}>
+        <Col md={12} sm={24}>
+          <Row gutter={[8, 16]}>
+            <Col md={12} xs={24}>
+              <Select className="!w-full"  options={departmentOptions} defaultValue={'1'}>
+              </Select>
+            </Col>
+            <Col md={12} xs={24}>
+              <Select className="!w-full" options={courseOptions} defaultValue={'1'}>
+              </Select>
+            </Col>
+          </Row>
+        </Col>
+        <Col md={12} xs={24} className="flex md:justify-end">
+          <Space wrap>
+            <Button
+              type="primary"
+              icon={<>
+                  <span style={{ fontSize: 18, textAlign: "center", alignItems: "center" }}>
+                      <FaPlusCircle />
+                  </span>
+              </>
+              }
+              size={'middle'}
+              onClick={() => {
+                handleModalCreateOpen(true);
+              }}
+            >
+              Create Main Tag
+            </Button>
+            <Button
+              icon={
+              <>
+                <span style={{ fontSize: 18, textAlign: "center", alignItems: "center" }}>
+                    <AiOutlineReload />
+                </span>
+              </>
+              }
+              size={'middle'}
+              // onClick={() => { fetchCategoryChannel() }}
+            >
+            </Button>
+          </Space>
+        </Col>
+      </Row>
   )
 
   const columns: ColumnsType<MainTag> = [

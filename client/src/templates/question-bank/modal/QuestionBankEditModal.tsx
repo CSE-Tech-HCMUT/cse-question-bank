@@ -1,8 +1,8 @@
 import { Button, Col, Form, Input, Modal, Row } from "antd";
-import { SimpleQuestion } from "../../types/question/question";
 import { useCallback, useEffect, useState } from "react";
-import MyEditorPlus from "../../components/MyEditorPlus";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { SimpleQuestion } from "../../../types/question/question";
+import MyEditorPlus from "../../../components/MyEditorPlus";
 
 interface QuestionBankEditModalProps {
     isModalOpen: boolean;

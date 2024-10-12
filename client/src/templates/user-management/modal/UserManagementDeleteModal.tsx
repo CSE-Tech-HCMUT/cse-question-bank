@@ -1,5 +1,5 @@
 import { Modal, Button, Alert } from "antd";
-import { ModalProps } from "../../types/modal/modal";
+import { ModalProps } from "../../../types/modal/modal";
 
 export const UserManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, user }) => {
 

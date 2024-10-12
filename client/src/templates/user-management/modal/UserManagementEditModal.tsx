@@ -1,6 +1,6 @@
 import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { ModalProps } from "../../types/modal/modal";
+import { ModalProps } from "../../../types/modal/modal";
 
 export const UserManagementEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, user }) => {
   const [form] = useForm();

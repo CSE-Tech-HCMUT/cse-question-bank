@@ -1,8 +1,8 @@
-import { Button, Col, Form, Input, Modal, Row, Select } from "antd";
+import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { ModalProps } from "../../types/modal/modal";
+import { ModalProps } from "../../../types/modal/modal";
 
-export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, user }) => {
+export const UserManagementCreateModal: React.FC<ModalProps> = ({ isModalOpen, onClose }) => {
   const [form] = useForm();
   const optionRoles = [
     {
@@ -15,33 +15,38 @@ export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onC
     }
   ]
 
+  const onOk = async () => {
+    try {
+      const values = await form.validateFields(); 
+      console.log(values);
+      onClose(); 
+    } catch (error) {
+      console.error('Validation Failed:', error);
+    }
+  };
+
   return (
     <Modal
       title={
         <h1 className="text-2xl mb-4 md:text-left text-center">
-          Detail User
+          Create User
         </h1>
       }
       open={isModalOpen}
       onCancel={onClose}
+      onOk={onOk}
       width={800}
-      footer={
-        <Button type="primary" onClick={onClose}>
-          Cancel
-        </Button>
-      }
+      okText={<span style={{ fontSize: '18px' }}>Create</span>}
+      cancelText={<span style={{ fontSize: '18px' }}>Cancel</span>}
     >
       <Form
-        name="ViewModalUser"
+        name="CreateModalUser"
         layout="vertical"
-        autoComplete="true"
+        autoComplete="off"
         form={form}
         initialValues={
           {
-            ["username"]: user?.username,
-            ["fullname"]: user?.fullname,
-            ["password"]: user?.password,
-            ["role"]: user?.role 
+            ["role"]: 0
           }
         }
       >
@@ -57,7 +62,7 @@ export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onC
                 },
               ]}
             >
-              <Input disabled/>
+              <Input />
             </Form.Item>
           </Col>
           <Col md={12} xs={24}>
@@ -71,7 +76,7 @@ export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onC
                 },
               ]}
             >
-              <Input disabled/>
+              <Input />
             </Form.Item>
           </Col>
           <Col md={12} xs={24}>
@@ -85,7 +90,21 @@ export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onC
                 },
               ]}
             >
-              <Input.Password disabled/>
+              <Input.Password />
+            </Form.Item>
+          </Col>
+          <Col md={12} xs={24}>
+            <Form.Item
+              name="confirmPassword"
+              label="Confirm Password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm the password name!',
+                },
+              ]}
+            >
+              <Input.Password />
             </Form.Item>
           </Col>
           <Col md={12} xs={24}>
@@ -99,7 +118,7 @@ export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onC
                   },
                 ]}
               >
-                <Select options={optionRoles} disabled/>
+                <Select options={optionRoles} />
               </Form.Item>
           </Col>
         </Row>
@@ -108,4 +127,4 @@ export const UserManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onC
   );
 };
 
-export default UserManagementViewModal;
+export default UserManagementCreateModal;

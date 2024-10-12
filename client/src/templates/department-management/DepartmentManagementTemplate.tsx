@@ -7,25 +7,26 @@ import { FcViewDetails } from "react-icons/fc";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store";
-import { manageUserActions } from "../../store/user-management/slice";
 import { User } from "../../types/user/user";
-import UserManagementCreateModal from "./modal/UserManagementCreateModal";
-import UserManagementEditModal from "./modal/UserManagementEditModal";
-import UserManagementDeleteModal from "./modal/UserManagementDeleteModal";
-import UserManagementViewModal from "./modal/UserManagementViewModal";
+import { Department } from "../../types/department/department";
+import { manageDepartmentActions } from "../../store/department-management/slice";
+import DepartmentManagementCreateModal from "./modal/DepartmentMangementCreateModal";
+import DepartmentManagementEditModal from "./modal/DepartmentManagementEditModal";
+import DepartmentManagementDeleteModal from "./modal/DepartmentMangementDeleteModal";
 
-export const UserManagementTemplate = () => {
+export const DepartmentManagementTemplate = () => {
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [listOfUsers, _setListOfUsers] = useState<User[]>([
+  const [listOfDepartments, _setListOfDepartments] = useState<Department[]>([
     {
       id: "1",
-      username: "nguyensythanh",
-      fullname: "Nguyen Sy Thanh",
-      role: 1,
+      name: "Khoa Khoa học và Kỹ thuật Máy tính",
+      subjects: [
+        "Kỹ thuật lập trình", 
+        "Cấu trúc dữ liệu và giải thuật", 
+        "Lập trình nâng cao"
+      ],
       date: "11/07/2003",
-      password: "123456",
-      confirmPassword: "123456"
     }
   ]);
   const [total, _setTotal] = useState<number>(0);
@@ -33,38 +34,30 @@ export const UserManagementTemplate = () => {
 
   const dispatch = useAppDispatch();
   
-  const { createModalShow, editModalShow, deleteModalShow, viewModalShow } = useSelector((state: RootState) => state.manageUserReducer);
+  const { createModalShow, editModalShow, deleteModalShow } = useSelector((state: RootState) => state.manageDepartmentReducer);
 
   const handleModalCreateOpen = (isOpen: boolean) => { 
-    dispatch(manageUserActions.setCreateModalVisibility(isOpen));
+    dispatch(manageDepartmentActions.setCreateModalVisibility(isOpen));
   }
   const onCloseModalCreate = () => {    
     handleModalCreateOpen(false);
   };
 
   const handleModalEditOpen = (isOpen: boolean) => { 
-    dispatch(manageUserActions.setEditModalVisibility(isOpen));
+    dispatch(manageDepartmentActions.setEditModalVisibility(isOpen));
   }
   const onCloseModalEdit = () => {    
     handleModalEditOpen(false);
   };
-  const [userEdit, setUserEdit] = useState<User>();
+  const [departmentEdit, setDepartmentEdit] = useState<User>();
 
   const handleModalDeleteOpen = (isOpen: boolean) => { 
-    dispatch(manageUserActions.setDeleteModalVisibility(isOpen));
+    dispatch(manageDepartmentActions.setDeleteModalVisibility(isOpen));
   }
   const onCloseModalDelete = () => {    
     handleModalDeleteOpen(false);
   };
-  const [userDelete, setUserDelete] = useState<User>();
-
-  const handleModalViewOpen = (isOpen: boolean) => { 
-    dispatch(manageUserActions.setViewModalVisibility(isOpen));
-  }
-  const onCloseModalView = () => {    
-    handleModalViewOpen(false);
-  };
-  const [userView, setUserView] = useState<User>();
+  const [departmentDelete, setDepartmentDelete] = useState<User>();
 
   const handlePagination: TableProps<any>['onChange'] = (pagination, _filters, _sorter, _extra) => {
     if (pagination && pagination.current !== current) {
@@ -95,7 +88,7 @@ export const UserManagementTemplate = () => {
             handleModalCreateOpen(true);
           }}
         >
-          Create User
+          Create Department
         </Button>
 
         <Button
@@ -114,7 +107,7 @@ export const UserManagementTemplate = () => {
     </div>
   )
 
-  const columns: ColumnsType<User> = [
+  const columns: ColumnsType<Department> = [
     {
       title: 'NO.',
       dataIndex: 'NO.',
@@ -131,15 +124,15 @@ export const UserManagementTemplate = () => {
       }
     },
     {
-      title: 'Username',
-      dataIndex: 'Username',
+      title: 'Name',
+      dataIndex: 'Name',
       width: 300,
       className: "text-center",
       render: (_text, record, _index) => {
         return (
           <>
             <Space>
-              <span className="fw-bold text-gray-800 fs-6" style={{ color: "#181c32" }}>{record.username
+              <span className="fw-bold text-gray-800 fs-6" style={{ color: "#181c32" }}>{record.name
               }</span>
             </Space>
           </>
@@ -147,44 +140,37 @@ export const UserManagementTemplate = () => {
       }
     },
     {
-      title: 'Full Name',
-      dataIndex: 'Full Name',
+      title: 'Subject',
+      dataIndex: 'Subject',
       width: 400,
       className: "text-center",
       render: (_text, record, _index) => {
+        const maxTagsToShow = 3; 
+        const tagsToShow = record.subjects!.slice(0, maxTagsToShow);
+        const isMoreTags = record.subjects!.length > maxTagsToShow;
+    
         return (
-          <>
+          <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
             <Space>
-              <span className="fw-bold text-gray-800 fs-6 text-center! w-full" style={{ color: "#181c32" }}>{record.fullname
-              }</span>
+              {tagsToShow.map((tag, index) => (
+                <Tag key={index}>
+                  <span>{tag}</span>
+                </Tag>
+              ))}
+              {isMoreTags && (
+                <Tooltip title={record.subjects!.join(', ')}>
+                  <Tag>+{record.subjects!.length - maxTagsToShow} more</Tag>
+                </Tooltip>
+              )}
             </Space>
-          </>
-        )
+          </div>
+        );
       }
-    },
-    {
-      title: 'Role',
-      dataIndex: 'Role',
-      width: 150,
-      className: "",
-      render: (_text, record, _index) => {
-        return (
-          <>
-            <Space>
-              {
-                record.role ? 
-                  <Tag color="green">Admin</Tag> :
-                  <Tag color="blue">User</Tag>
-              }
-            </Space>
-          </>
-        )
-      }
-    },
+    },    
     {
       title: 'Date',
       dataIndex: 'Date',
-      width: 100,
+      width: 200,
       className: "text-center",
       render: (_text, record, _index) => {
         return (
@@ -207,8 +193,7 @@ export const UserManagementTemplate = () => {
               <Tooltip title="View Detail">
                 <span style={{ cursor: "pointer", color: "#fcb900", fontSize: 20 }}
                     onClick={() => {
-                      handleModalViewOpen(true);
-                      setUserView(record);
+                      
                     }}
                 >
                     <FcViewDetails />
@@ -219,7 +204,7 @@ export const UserManagementTemplate = () => {
                 <span style={{ cursor: "pointer", color: "#fcb900", fontSize: 18 }}
                     onClick={() => {
                       handleModalEditOpen(true);
-                      setUserEdit(record);
+                      setDepartmentEdit(record);
                     }}
                 >
                     <FiEdit />
@@ -230,7 +215,7 @@ export const UserManagementTemplate = () => {
                 <span style={{ cursor: "pointer", color: "#ff4d4f", fontSize: 18 }} title='Delete Channel'
                   onClick={() => { 
                     handleModalDeleteOpen(true);
-                    setUserDelete(record);
+                    setDepartmentDelete(record);
                   }}
                 >
                     <AiFillDelete />
@@ -251,7 +236,7 @@ export const UserManagementTemplate = () => {
             <Table 
               rowKey="id"
               columns={columns}
-              dataSource={listOfUsers}
+              dataSource={listOfDepartments}
               title={TitleTable}
               loading={isLoading}
               onChange={handlePagination}
@@ -271,17 +256,15 @@ export const UserManagementTemplate = () => {
           </Col>
         </Row>
 
-        <UserManagementCreateModal isModalOpen={createModalShow} onClose={onCloseModalCreate} />
+        <DepartmentManagementCreateModal isModalOpen={createModalShow} onClose={onCloseModalCreate} />
 
-        <UserManagementEditModal isModalOpen={editModalShow} onClose={onCloseModalEdit} user={userEdit} />
+        <DepartmentManagementEditModal isModalOpen={editModalShow} onClose={onCloseModalEdit} department={departmentEdit} />
 
-        <UserManagementDeleteModal isModalOpen={deleteModalShow} onClose={onCloseModalDelete} user={userDelete} />
-
-        <UserManagementViewModal isModalOpen={viewModalShow} onClose={onCloseModalView} user={userView} />
+        <DepartmentManagementDeleteModal isModalOpen={deleteModalShow} onClose={onCloseModalDelete} department={departmentDelete} />
 
       </div>
     </>
   )
 }
 
-export default UserManagementTemplate
+export default DepartmentManagementTemplate

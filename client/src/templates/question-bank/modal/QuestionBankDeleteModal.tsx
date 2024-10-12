@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { SimpleQuestion } from "../../types/question/question";
 import { Modal, Button } from "antd";
+import { SimpleQuestion } from "../../../types/question/question";
 
 interface QuestionBankDeleteModalProps {
   isModalOpen: boolean;

@@ -12,6 +12,7 @@ const TagManagement = lazy(() => import('../pages/tag-management/TagManagement')
 const SubTag = lazy(() => import('../pages/tag-management/SubTag'));
 const ProgressCreateQuestion = lazy(() => import('../pages/progress-settings/ProgressCreateQuestion'));
 const UserManagement = lazy(() => import('../pages/user-management/UserManagement'));
+const DepartmentManagement = lazy(() => import('../pages/department-management/DepartmentManagement'));
 
 const routeManagement: RouteObject[] = [
   {
@@ -30,6 +31,7 @@ const routeManagement: RouteObject[] = [
       { path: 'user-management', element: <LazyLoad><UserManagement /></LazyLoad> },
       { path: 'question-bank', element: <LazyLoad><QuestionBank /></LazyLoad> },
       { path: 'progress-setting', element: <LazyLoad><ProgressCreateQuestion /></LazyLoad> },
+      { path: 'department-management', element: <LazyLoad><DepartmentManagement /></LazyLoad>},
       {
         path: 'tag-management',
         children: [

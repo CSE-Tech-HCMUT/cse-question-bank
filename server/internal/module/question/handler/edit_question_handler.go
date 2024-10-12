@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			EditQuestionRequest	body		req.EditQuestionRequest	true	"EditQuestionReq JSON"
-//	@Success		200	{object}	response.SuccessResponse
+//	@Success		200	{object}	response.SuccessResponse{data=interface{}}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/questions/{id} [put]
 func (h *questionHandlerImpl) EditQuestion(c *gin.Context) {

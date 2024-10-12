@@ -5,11 +5,11 @@ import (
 	"cse-question-bank/internal/module/tag/model/entity"
 )
 
-func (t *tagUsecaseImpl) CreateTag(ctx context.Context, tag entity.Tag) (int, error) {
-	err := t.tagRepository.Create(ctx, nil, &tag)
+func (t *tagUsecaseImpl) CreateTag(ctx context.Context, tag *entity.Tag) (*entity.Tag, error) {
+	err := t.tagRepository.Create(ctx, nil, tag)
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
-	return tag.Id, nil
+	return tag, nil
 }

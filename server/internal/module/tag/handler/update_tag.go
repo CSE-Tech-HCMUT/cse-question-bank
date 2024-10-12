@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			UpdateTagRequest	body		req.CreateTagRequest	true	"UpdateTagRequest JSON"
-//	@Success		200	{object}	response.SuccessResponse
+//	@Success		200	{object}	response.SuccessResponse{data=interface{}}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/tags/{id} [put]
 func (h tagHandlerImpl) UpdateTag(c *gin.Context) {

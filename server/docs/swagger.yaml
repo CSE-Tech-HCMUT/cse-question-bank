@@ -56,6 +56,11 @@ definitions:
       tagId:
         type: integer
     type: object
+  req.CreateTagOptionRequest:
+    properties:
+      name:
+        type: string
+    type: object
   req.CreateTagRequest:
     properties:
       description:
@@ -64,7 +69,7 @@ definitions:
         type: string
       options:
         items:
-          $ref: '#/definitions/req.CreateOptionRequest'
+          $ref: '#/definitions/req.CreateTagOptionRequest'
         type: array
     type: object
   req.EditQuestionRequest:
@@ -250,7 +255,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -336,7 +346,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -390,7 +405,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -424,6 +444,36 @@ paths:
       summary: Show all tags
       tags:
       - Tag
+    post:
+      consumes:
+      - application/json
+      description: Create a tag
+      parameters:
+      - description: CreateTagRequest JSON
+        in: body
+        name: CreateTagRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Tag'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a tag
+      tags:
+      - Tag
   /tags/{id}:
     delete:
       consumes:
@@ -441,7 +491,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
         "400":
           description: Bad Request
           schema:
@@ -478,36 +533,6 @@ paths:
       summary: Show a tag
       tags:
       - Tag
-    post:
-      consumes:
-      - application/json
-      description: Create a tag
-      parameters:
-      - description: CreateTagRequest JSON
-        in: body
-        name: CreateTagRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateTagRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  type: integer
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      summary: Create a tag
-      tags:
-      - Tag
     put:
       consumes:
       - application/json
@@ -525,7 +550,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
         "400":
           description: Bad Request
           schema:

@@ -16,9 +16,9 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			CreateTagRequest	body		req.CreateTagRequest	true	"CreateTagRequest JSON"
-//	@Success		200	{object}	response.SuccessResponse{data=int}
+//	@Success		200	{object}	response.SuccessResponse{data=entity.Tag}
 //	@Failure	400 {object} response.ErrorResponse
-//	@Router			/tags/{id} [post]
+//	@Router			/tags [post]
 func (h tagHandlerImpl) CreateTag(c *gin.Context) {
 	var req request.CreateTagRequest
 
@@ -27,12 +27,12 @@ func (h tagHandlerImpl) CreateTag(c *gin.Context) {
 		return
 	}
 
-	tagId, err := h.tagUsecase.CreateTag(c, *request.CreateTagReqToEntity(req))
+	tag, err := h.tagUsecase.CreateTag(c, request.CreateTagReqToEntity(req))
 	if err != nil {
 		response.ResponseError(c, err)
 		return
 	}
 
-	response.ReponseSuccess(c, "success", tagId)
+	response.ReponseSuccess(c, "success", tag)
 
 }

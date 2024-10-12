@@ -3,12 +3,14 @@ package usecase
 import (
 	"context"
 	tar "cse-question-bank/internal/module/tag_assignment/repository"
+	"cse-question-bank/internal/module/tag_option/model/entity"
 	tor "cse-question-bank/internal/module/tag_option/repository"
 )
 
 type OptionUsecase interface {
 	GetUsedOption(ctx context.Context, optionId int) (int, error)
 	DeleteOption(ctx context.Context, optionId int) error
+	CreateOption(ctx context.Context, option *entity.Option) error
 }
 
 type optionUsecaseImpl struct {

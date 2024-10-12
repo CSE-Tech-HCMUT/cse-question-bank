@@ -1,9 +1,9 @@
 package routes
 
 import (
+	tar "cse-question-bank/internal/module/tag_assignment/repository"
 	"cse-question-bank/internal/module/tag_option/handler"
 	tor "cse-question-bank/internal/module/tag_option/repository"
-	tar "cse-question-bank/internal/module/tag_assignment/repository"
 	"cse-question-bank/internal/module/tag_option/usecase"
 
 	"github.com/gin-gonic/gin"
@@ -25,13 +25,18 @@ func getOptionRoutes(h handler.OptionHandler) []Route {
 	return []Route{
 		{
 			Method:  "GET",
-			Path:    "/:id",
+			Path:    "/:id/get-used",
 			Handler: h.GetUsedOption,
 		},
 		{
-			Method: "DELETE",
-			Path: "/:id",
+			Method:  "DELETE",
+			Path:    "/:id",
 			Handler: h.DeleteOption,
+		},
+		{
+			Method:  "POST",
+			Path:    "",
+			Handler: h.CreateOption,
 		},
 	}
 }

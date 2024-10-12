@@ -9,6 +9,7 @@ import (
 type OptionHandler interface {
 	GetUsedOption(c *gin.Context)
 	DeleteOption(c *gin.Context)
+	CreateOption(c *gin.Context)
 }
 
 type optionHandlerImpl struct {

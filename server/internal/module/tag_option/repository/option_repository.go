@@ -9,6 +9,7 @@ import (
 
 type OptionRepository interface{
 	Delete(ctx context.Context, conditionMap map[string]interface{}) error
+	Create(ctx context.Context, option *entity.Option) error
 }
 
 type optionRepositoryImpl struct {
@@ -23,6 +24,14 @@ func NewOptionRepository(db *gorm.DB) OptionRepository {
 
 func (r optionRepositoryImpl) Delete(ctx context.Context, conditionMap map[string]interface{}) error {
 	if err := r.db.Where(conditionMap).Delete(&entity.Option{}).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r optionRepositoryImpl) Create(ctx context.Context, option *entity.Option) error {
+	if err := r.db.Create(option).Error; err != nil {
 		return err
 	}
 

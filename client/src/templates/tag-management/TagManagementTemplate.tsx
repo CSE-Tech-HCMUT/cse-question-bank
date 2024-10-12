@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { MainTag } from "../../types/tag/tad";
+import { MainTag } from "../../types/tag/tag";
 import { Button, Col, Row, Select, Space, Tag, Tooltip } from "antd";
 import { FaPlusCircle } from "react-icons/fa";
 import { AiFillDelete, AiOutlineReload } from "react-icons/ai";

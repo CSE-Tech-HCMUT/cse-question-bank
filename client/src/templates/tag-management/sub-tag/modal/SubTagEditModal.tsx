@@ -3,10 +3,11 @@ import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { ModalProps } from "../../../../types/modal/modal";
+import { Option } from "../../../../types/option/option";
 
 export const SubTagEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, subTag }) => {
   const [form] = useForm();
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => { 
@@ -33,14 +34,25 @@ export const SubTagEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, su
 
   const addOption = () => {
     const optionValue = form.getFieldValue('option');
-    if (optionValue && !options.includes(optionValue)) {
-      setOptions((prevOptions) => [...prevOptions, optionValue]);
+
+    if (optionValue && !options.some(option => option.name === optionValue)) {
+      const newOption = {
+        id: Date.now(), 
+        name: optionValue,
+        tagID: subTag!.id, 
+      };
+  
+      setOptions((prevOptions) => [...prevOptions, newOption]);
       form.resetFields(['option']); 
+    } else if (!optionValue) {
+      console.error('Option value cannot be empty');
+    } else {
+      console.error('Option already exists');
     }
   };
 
-  const removeOption = (optionToRemove: string) => {
-    setOptions((prevOptions) => prevOptions.filter((option) => option !== optionToRemove)); 
+  const removeOption = (optionToRemove: number) => {
+    setOptions((prevOptions) => prevOptions.filter((option) => option.id !== optionToRemove)); 
   };
 
   return (
@@ -104,10 +116,14 @@ export const SubTagEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, su
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {options.map((option) => (
                 <Tag 
-                  key={option} 
+                  key={option.id} 
                   className="text-[16px] mb-2" 
                   closable 
-                  onClose={() => removeOption(option)} // Use the new remove function
+                  onClose={() => {
+                    if(option.id){
+                      removeOption(option.id)
+                    }
+                  }} // Use the new remove function
                   style={{ 
                     backgroundColor: '#f0f0f0', 
                     color: '#595959', 
@@ -116,7 +132,7 @@ export const SubTagEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, su
                     padding: '4px 10px'
                   }}
                 >
-                  {option}
+                  {option.name}
                 </Tag>
               ))}
             </div>

@@ -1,3 +1,5 @@
+import { Option } from "../option/option";
+
 export type MainTag = {
   id: string;
   name: string;
@@ -7,9 +9,9 @@ export type MainTag = {
 }
 
 export type SubTag = {
-  id: string;
+  id: number;
   name: string;
   description: string;
-  option: string[];
-  date: string;
+  option: Option[];
+  date?: string;
 }

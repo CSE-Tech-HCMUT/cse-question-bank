@@ -1,6 +1,6 @@
 import { Col, Form, Row, Select } from "antd"
 import { useState } from "react"
-import { SubTag } from "../../types/tag/tad";
+import { SubTag } from "../../types/tag/tag";
 
 export const QuestionSettingTemplate = () => {
   const [form] = Form.useForm();

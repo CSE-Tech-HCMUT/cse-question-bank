@@ -6,7 +6,7 @@ import Table, { ColumnsType, TableProps } from "antd/es/table";
 import { FcViewDetails } from "react-icons/fc";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { SubTag } from "../../../types/tag/tad";
+import { SubTag } from "../../../types/tag/tag";
 import { RootState, useAppDispatch } from "../../../store";
 import { manageSubTagActions } from "../../../store/tag-management/sub-tag/slice";
 import SubTagCreateModal from "./modal/SubTagCreateModal";
@@ -20,20 +20,43 @@ export const SubTagTemplate = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [listTags, _setListTags] = useState<SubTag[]>([
     {
-      id: "1",
+      id: 1,
       name: "Difficult",
       description: "Độ khó của môn học",
       option: [
-        "Hard", "Normal", "Easy"
+        {
+          id: 1,
+          name: "Hard",
+          tagID: 1
+        },
+        {
+          id: 2,
+          name: "Normal",
+          tagID: 1
+        },
+        {
+          id: 3,
+          name: "Easy",
+          tagID: 1
+        }
       ],
       date: "11/07/2024",
     },
     {
-      id: "2",
+      id: 2,
       name: "Level",
       description: "Mức đọ của môn học",
       option: [
-        "Thông hiểu", "Vận dụng"
+        {
+          id: 1,
+          name: "Thông hiểu",
+          tagID: 2
+        },
+        {
+          id: 2,
+          name: "Vận dụng",
+          tagID: 2
+        }
       ],
       date: "11/07/2024",
     }
@@ -187,7 +210,7 @@ export const SubTagTemplate = () => {
             <Space>
               {tagsToShow.map((tag, index) => (
                 <Tag key={index}>
-                  <span>{tag}</span>
+                  <span>{tag.name}</span>
                 </Tag>
               ))}
               {isMoreTags && (

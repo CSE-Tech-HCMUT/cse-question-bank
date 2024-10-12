@@ -2,10 +2,11 @@ import { Button, Col, Form, Input, Modal, Row, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { ModalProps } from "../../../../types/modal/modal";
+import { Option } from "../../../../types/option/option";
 
 export const SubTagViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, subTag }) => {
   const [form] = useForm();
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => { 
@@ -65,7 +66,7 @@ export const SubTagViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, su
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {options.map((option) => (
                   <Tag 
-                    key={option} 
+                    key={option.id} 
                     className="text-[16px] mb-2" 
                     style={{ 
                       backgroundColor: '#f0f0f0', 
@@ -75,7 +76,7 @@ export const SubTagViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, su
                       padding: '4px 10px'
                     }}
                   >
-                    {option}
+                    {option.name}
                   </Tag>
                 ))}
               </div>

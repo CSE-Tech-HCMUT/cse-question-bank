@@ -1,5 +1,5 @@
 import { Department } from "../department/department";
-import { MainTag, SubTag } from "../tag/tad";
+import { MainTag, SubTag } from "../tag/tag";
 import { User } from "../user/user";
 
 export type ModalProps = {

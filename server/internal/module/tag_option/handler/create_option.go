@@ -17,7 +17,7 @@ import (
 // @Accept			json
 // @Produce		json
 // @Param			CreateOptionRequest	body		req.CreateOptionRequest	true	"CreateOptionRequest JSON"
-// @Success		200	{object}	response.SuccessResponse
+// @Success		200	{object}	response.SuccessResponse{data=entity.Option}
 // @Failure	400 {object} response.ErrorResponse
 // @Router			/options [post]
 func (h optionHandlerImpl) CreateOption(c *gin.Context) {

@@ -17,14 +17,14 @@ type QuestionResponse struct {
 	Id       string              `json:"id"`
 	Content  string              `json:"content"`
 	Type     string              `json:"type"`
-	Question []*QuestionResponse `json:"subQuestions"`
+	Question []*QuestionResponse `json:"subQuestions" swaggertype:"object"`
 	Answer   *AnswerResponse     `json:"answer"`
 	Tags     []*TagResponse      `json:"tags"`
 }
 
 type AnswerResponse struct {
 	Id      string          `json:"id"`
-	Content json.RawMessage `json:"content"`
+	Content json.RawMessage `json:"content" swaggertype:"object"`
 }
 
 type TagResponse struct {

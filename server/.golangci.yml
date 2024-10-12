@@ -1,0 +1,13 @@
+linters:
+ enable:
+ - govet
+ - predeclared
+ - staticcheck
+ - revive
+linters-settings:
+ govet:
+ check-shadowing: true
+ settings:
+shadow:
+ strict: true
+ enable-all: true

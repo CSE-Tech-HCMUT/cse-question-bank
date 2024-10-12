@@ -4,7 +4,6 @@ import (
 	"cse-question-bank/internal/module/question/handler"
 	"cse-question-bank/internal/module/question/repository"
 	"cse-question-bank/internal/module/question/usecase"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

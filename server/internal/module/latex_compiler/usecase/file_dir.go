@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"cse-question-bank/internal/module/latex_compiler/model"
+	"cse-question-bank/internal/module/latex_compiler/model/req"
 	"encoding/json"
 	"fmt"
 	"log/slog"
@@ -24,7 +24,7 @@ func (u *latexCompilerImpl) createFolder() (string, error) {
 	return folderPath, nil
 }
 
-func (u *latexCompilerImpl) createOuputLatexFile(folderPath string, question *model.QuestionCompile) error {
+func (u *latexCompilerImpl) createOuputLatexFile(folderPath string, question *req.QuestionCompileRequest) error {
 	packageFile, err := os.ReadFile(path + "package.tex")
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ type MultipleChoiceAnswer struct {
 	IsCorrect bool `json:"is-correct"`
 }
 
-func (u *latexCompilerImpl) GenerateQuestionContent(question *model.QuestionCompile) (string, error) {
+func (u *latexCompilerImpl) GenerateQuestionContent(question *req.QuestionCompileRequest) (string, error) {
 	var result string
 	if question.IsParent {
 		subQuestionsCount := len(question.SubQuestions)

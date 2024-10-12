@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"cse-question-bank/internal/module/latex_compiler/constant"
-	"cse-question-bank/internal/module/latex_compiler/model"
+	"cse-question-bank/internal/module/latex_compiler/model/req"
 	"cse-question-bank/pkg/execute"
 	"log/slog"
 	"os"
@@ -15,7 +15,7 @@ import (
 // open file to check then Readfile with os package
 // delete folder
 // return file
-func (u *latexCompilerImpl) LatexCompile(question *model.QuestionCompile) ([]byte, error) {
+func (u *latexCompilerImpl) LatexCompile(question *req.QuestionCompileRequest) ([]byte, error) {
 	folderPath, err := u.createFolder()
 	if err != nil {
 		slog.Error("Fail to create folder", "error-message", err)
@@ -33,7 +33,7 @@ func (u *latexCompilerImpl) LatexCompile(question *model.QuestionCompile) ([]byt
 		"-interaction=batchmode",
 		"-shell-escape",
 	}
-	err = pdfLatexCompile(folderPath + "/output.tex", args...)
+	err = pdfLatexCompile(folderPath+"/output.tex", args...)
 	if err != nil {
 		slog.Error("Fail to compile latex", "error-message", err)
 		return nil, constant.ErrCompileLatex(err)

@@ -17,7 +17,7 @@ type EditQuestionRequest struct {
 	Id      string             `json:"id"`
 	Content string             `json:"content"`
 	Type    string             `json:"type"`
-	Answer  *EditAnswerRequest `json:"answer"`
+	Answer  *EditAnswerRequest `json:"answer" swaggertype:"object"`
 
 	TagAssignmentsReq []req.UpdateTagAssignmentRequest `json:"tagAssignments"`
 }

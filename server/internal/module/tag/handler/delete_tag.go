@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//	DeleteTag godoc
+//
+//	@Summary		Delete a tag
+//	@Description	Delete a tag
+//	@Tags			Tag
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int	true	"Id int"
+//	@Success		200	{object}	response.SuccessResponse
+//	@Failure	400 {object} response.ErrorResponse
+//	@Router			/tags/{id} [delete]
 func (h tagHandlerImpl) DeleteTag(c *gin.Context) {
 	paramId := c.Param("id")
 

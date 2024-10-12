@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// DeleteOption godoc
+//
+// @Summary		Delete a option
+// @Description	Delete a option
+// @Tags			Option
+// @Accept			json
+// @Produce		json
+// @Param			id	path		int	true	"Id int"
+// @Success		200	{object}	response.SuccessResponse
+// @Failure	400 {object} response.ErrorResponse
+// @Router			/options/{id} [post]
 func (h optionHandlerImpl) DeleteOption(c *gin.Context) {
 	param := c.Param("id")
 	optionId, err := strconv.Atoi(param)

@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetUsedOption godoc
+//
+// @Summary		Check option is used or not
+// @Description	Check option is used or not
+// @Tags			Option
+// @Accept			json
+// @Produce		json
+// @Param			Id	path		int	true	"Id int"
+// @Success		200	{object}	response.SuccessResponse{data=int}
+// @Failure	400 {object} response.ErrorResponse
+// @Router			/options/{id}/get-used [post]
 func (h optionHandlerImpl) GetUsedOption(c *gin.Context) {
 	param := c.Param("id")
 

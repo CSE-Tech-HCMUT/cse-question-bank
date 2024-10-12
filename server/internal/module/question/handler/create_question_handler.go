@@ -4,10 +4,22 @@ import (
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
 	"cse-question-bank/internal/module/question/model/req"
+	_ "cse-question-bank/internal/module/question/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
+//	CreateQuestion godoc
+//
+//	@Summary		Create a question
+//	@Description	Create a question
+//	@Tags			Question
+//	@Accept			json
+//	@Produce		json
+//	@Param			CreateQuestionRequest	body		req.CreateQuestionRequest	true	"CreateQuestionRequest JSON"
+//	@Success		200	{object}	response.SuccessResponse{data=usecase.QuestionResponse}
+//	@Failure	400 {object} response.ErrorResponse
+//	@Router			/questions [post]
 func (h *questionHandlerImpl) CreateQuestion(c *gin.Context) {
 	var request req.CreateQuestionRequest
 

@@ -5,6 +5,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "cse-question-bank/docs"
 	"gorm.io/gorm"
 )
 
@@ -17,6 +20,8 @@ type Route struct {
 func RegisterRoutes(db *gorm.DB) http.Handler {
 	r := gin.Default()
 
+	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	
 	// domainName := os.Getenv("DOMAIN_NAME")
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
@@ -25,7 +30,7 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-
+	
 	api := r.Group("/api")
 	{
 		initLatexCompileGroupRoutes(db, api)
@@ -33,6 +38,8 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		initTagGroupRoutes(db, api)
 		iniTagOptionGroupRoutes(db, api)
 	}
+	
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//	CreateTag godoc
+//
+//	@Summary		Create a tag
+//	@Description	Create a tag
+//	@Tags			Tag
+//	@Accept			json
+//	@Produce		json
+//	@Param			CreateTagRequest	body		req.CreateTagRequest	true	"CreateTagRequest JSON"
+//	@Success		200	{object}	response.SuccessResponse{data=int}
+//	@Failure	400 {object} response.ErrorResponse
+//	@Router			/tags/{id} [post]
 func (h tagHandlerImpl) CreateTag(c *gin.Context) {
 	var req request.CreateTagRequest
 

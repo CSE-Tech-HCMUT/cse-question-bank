@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//	EditQuestion godoc
+//
+//	@Summary		Edit a question
+//	@Description	Edit a question
+//	@Tags			Question
+//	@Accept			json
+//	@Produce		json
+//	@Param			EditQuestionRequest	body		req.EditQuestionRequest	true	"EditQuestionReq JSON"
+//	@Success		200	{object}	response.SuccessResponse
+//	@Failure	400 {object} response.ErrorResponse
+//	@Router			/questions/{id} [put]
 func (h *questionHandlerImpl) EditQuestion(c *gin.Context) {
 	var request req.EditQuestionRequest
 	if err := c.ShouldBind(&request); err != nil {

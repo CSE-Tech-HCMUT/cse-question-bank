@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		int	true	"Id int"
-//	@Success		200	{object}	response.SuccessResponse
+//	@Success		200	{object}	response.SuccessResponse{data=interface{}}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/tags/{id} [delete]
 func (h tagHandlerImpl) DeleteTag(c *gin.Context) {

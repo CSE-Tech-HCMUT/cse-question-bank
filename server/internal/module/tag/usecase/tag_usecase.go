@@ -11,7 +11,7 @@ type TagUsecase interface {
 	GetAllTag(ctx context.Context) ([]*entity.Tag, error)
 	UpdateTag(ctx context.Context, tag entity.Tag) error
 	DeleteTag(ctx context.Context, tagId int) error
-	CreateTag(ctx context.Context, tag entity.Tag) (int, error)
+	CreateTag(ctx context.Context, tag *entity.Tag) (*entity.Tag, error)
 }
 
 type tagUsecaseImpl struct {

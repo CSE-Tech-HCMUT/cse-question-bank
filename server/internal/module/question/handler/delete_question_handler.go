@@ -14,7 +14,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"Question ID"
-//	@Success		200	{object}	response.SuccessResponse
+//	@Success		200	{object}	response.SuccessResponse{data=interface{}}
 //	@Failure		400 {object} 	response.ErrorResponse
 //	@Router			/questions/{id} [delete]
 func (h *questionHandlerImpl) DeleteQuestion(c *gin.Context) {

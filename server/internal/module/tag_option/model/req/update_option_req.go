@@ -1,0 +1,21 @@
+package req
+
+import "cse-question-bank/internal/module/tag_option/model/entity"
+
+type UpdateOptionRequest struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+func UpdateOptionReqToEntity(optionsReq []UpdateOptionRequest) []entity.Option {
+	optionsList := make([]entity.Option, 0)
+	for _, optionReq := range optionsReq {
+		option := entity.Option{
+			Id:   optionReq.Id,
+			Name: optionReq.Name,
+		}
+		optionsList = append(optionsList, option)
+	}
+
+	return optionsList
+}

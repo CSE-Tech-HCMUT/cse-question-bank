@@ -14,21 +14,33 @@ type questionBaseUsecaseImpl struct {
 }
 
 type QuestionResponse struct {
-	Id        string              `json:"id"`
-	Content   string              `json:"content"`
-	Type      string              `json:"type"`
-	Tag       string              `json:"tag"`
-	Difficult int                 `json:"difficult"`
-	Question  []*QuestionResponse `json:"subQuestions"`
-	Answer    *AnswerResponse     `json:"answer"`
+	Id       string              `json:"id"`
+	Content  string              `json:"content"`
+	Type     string              `json:"type"`
+	Question []*QuestionResponse `json:"subQuestions" swaggertype:"object"`
+	Answer   *AnswerResponse     `json:"answer"`
+	Tags     []*TagResponse      `json:"tags"`
 }
 
 type AnswerResponse struct {
 	Id      string          `json:"id"`
-	Content json.RawMessage `json:"content"`
+	Content json.RawMessage `json:"content" swaggertype:"object"`
+}
+
+type TagResponse struct {
+	Id          int             `json:"id"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	Option      *OptionResponse `json:"option"`
+}
+
+type OptionResponse struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {
+	// TODO check valid option is from tag or not in tagAssignment
 	err := u.repo.Update(ctx, nil, question)
 	if err != nil {
 		slog.Error("Fail to update question", "error-message", err)
@@ -87,6 +99,7 @@ func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId
 }
 
 func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *entity.Question) (*QuestionResponse, error) {
+	// TODO check valid option is from tag or not in tagAssignment
 	err := u.repo.Create(ctx, nil, question)
 	if err != nil {
 		slog.Error("Fail to create question", "error-message", err)
@@ -140,14 +153,30 @@ func (u *questionBaseUsecaseImpl) convertToQuestionResponse(question *entity.Que
 		}
 	}
 
+	tagsListRes := make([]*TagResponse, 0)
+	for _, tagAssignment := range question.TagAssignments {
+		optionRes := &OptionResponse{
+			Id:   tagAssignment.OptionId,
+			Name: tagAssignment.Option.Name,
+		}
+
+		tagRes := &TagResponse{
+			Id:          tagAssignment.TagId,
+			Name:        tagAssignment.Tag.Name,
+			Description: tagAssignment.Tag.Description,
+			Option:      optionRes,
+		}
+
+		tagsListRes = append(tagsListRes, tagRes)
+	}
+
 	return &QuestionResponse{
-		Id:        question.Id.String(),
-		Content:   question.Content,
-		Type:      string(question.Type),
-		Tag:       question.Tag,
-		Difficult: question.Difficult,
-		Answer:    answer,
-		Question:  childQuestion,
+		Id:       question.Id.String(),
+		Content:  question.Content,
+		Type:     string(question.Type),
+		Answer:   answer,
+		Question: childQuestion,
+		Tags:     tagsListRes,
 	}
 }
 

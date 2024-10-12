@@ -1,6 +1,6 @@
 package usecase
 
-import "cse-question-bank/internal/module/latex_compiler/model"
+import "cse-question-bank/internal/module/latex_compiler/model/req"
 
 // flow
 // get request -> get latex content
@@ -13,7 +13,7 @@ import "cse-question-bank/internal/module/latex_compiler/model"
 // -> delete pdf file, delete latex folder
 
 type LatexCompilerUsecase interface {
-	LatexCompile(question *model.QuestionCompile) ([]byte, error)
+	LatexCompile(question *req.QuestionCompileRequest) ([]byte, error)
 }
 
 type latexCompilerImpl struct {

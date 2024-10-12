@@ -67,7 +67,7 @@ func (r *questionRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, condit
 func (r *questionRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Question, error) {
 	var questions []*entity.Question
 	tx := r.getDB(ctx, db)
-	if err := tx.Preload("Answer").Where(conditionMap).Find(&questions).Error; err != nil {
+	if err := tx.Preload("Answer").Preload("TagAssignments.Tag").Preload("TagAssignments.Option").Where(conditionMap).Find(&questions).Error; err != nil {
 		return nil, err
 	}
 	return questions, nil

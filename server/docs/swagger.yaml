@@ -1,0 +1,532 @@
+basePath: /api
+definitions:
+  entity.Option:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      tagID:
+        type: integer
+    type: object
+  entity.Tag:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      options:
+        items:
+          $ref: '#/definitions/entity.Option'
+        type: array
+    type: object
+  req.CreateOptionRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  req.CreateQuestionRequest:
+    properties:
+      answer:
+        type: object
+      content:
+        type: string
+      isParent:
+        type: boolean
+      parentId:
+        type: string
+      tagAssignments:
+        items:
+          $ref: '#/definitions/req.CreateTagAssignmentRequest'
+        type: array
+      type:
+        type: string
+    required:
+    - content
+    - type
+    type: object
+  req.CreateTagAssignmentRequest:
+    properties:
+      optionId:
+        type: integer
+      tagId:
+        type: integer
+    type: object
+  req.CreateTagRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      options:
+        items:
+          $ref: '#/definitions/req.CreateOptionRequest'
+        type: array
+    type: object
+  req.EditQuestionRequest:
+    properties:
+      answer:
+        type: object
+      content:
+        type: string
+      id:
+        type: string
+      tagAssignments:
+        items:
+          $ref: '#/definitions/req.UpdateTagAssignmentRequest'
+        type: array
+      type:
+        type: string
+    type: object
+  req.QuestionCompileRequest:
+    properties:
+      answer:
+        type: object
+      content:
+        type: string
+      isParent:
+        type: boolean
+      subQuestions:
+        items:
+          type: object
+        type: array
+    type: object
+  req.UpdateTagAssignmentRequest:
+    properties:
+      id:
+        type: integer
+      optionId:
+        type: integer
+      tagId:
+        type: integer
+    type: object
+  response.ErrorResponse:
+    properties:
+      errorKey:
+        type: string
+      errorMessage:
+        type: string
+    type: object
+  response.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  usecase.AnswerResponse:
+    properties:
+      content:
+        type: object
+      id:
+        type: string
+    type: object
+  usecase.OptionResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  usecase.QuestionResponse:
+    properties:
+      answer:
+        $ref: '#/definitions/usecase.AnswerResponse'
+      content:
+        type: string
+      id:
+        type: string
+      subQuestions:
+        type: object
+      tags:
+        items:
+          $ref: '#/definitions/usecase.TagResponse'
+        type: array
+      type:
+        type: string
+    type: object
+  usecase.TagResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      option:
+        $ref: '#/definitions/usecase.OptionResponse'
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /latex-compile:
+    post:
+      consumes:
+      - application/json
+      description: Compile Latex to PDF
+      parameters:
+      - description: QuestionCompileRequest JSON
+        in: body
+        name: QuestionCompileRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.QuestionCompileRequest'
+      produces:
+      - application/pdf
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Compile Latex to PDF
+      tags:
+      - Latex Compile
+  /options:
+    post:
+      consumes:
+      - application/json
+      description: Create a option
+      parameters:
+      - description: CreateOptionRequest JSON
+        in: body
+        name: CreateOptionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateOptionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a option
+      tags:
+      - Option
+  /options/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Delete a option
+      parameters:
+      - description: Id int
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete a option
+      tags:
+      - Option
+  /options/{id}/get-used:
+    post:
+      consumes:
+      - application/json
+      description: Check option is used or not
+      parameters:
+      - description: Id int
+        in: path
+        name: Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Check option is used or not
+      tags:
+      - Option
+  /questions:
+    post:
+      consumes:
+      - application/json
+      description: Create a question
+      parameters:
+      - description: CreateQuestionRequest JSON
+        in: body
+        name: CreateQuestionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/usecase.QuestionResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a question
+      tags:
+      - Question
+  /questions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a question
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete a question
+      tags:
+      - Question
+    get:
+      consumes:
+      - application/json
+      description: Show a question
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/usecase.QuestionResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show a question
+      tags:
+      - Question
+    put:
+      consumes:
+      - application/json
+      description: Edit a question
+      parameters:
+      - description: EditQuestionReq JSON
+        in: body
+        name: EditQuestionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.EditQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Edit a question
+      tags:
+      - Question
+  /tags:
+    get:
+      consumes:
+      - application/json
+      description: Show all tags
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Tag'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show all tags
+      tags:
+      - Tag
+  /tags/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a tag
+      parameters:
+      - description: Id int
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete a tag
+      tags:
+      - Tag
+    get:
+      consumes:
+      - application/json
+      description: Show a tag
+      parameters:
+      - description: Id int
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Tag'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show a tag
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      description: Create a tag
+      parameters:
+      - description: CreateTagRequest JSON
+        in: body
+        name: CreateTagRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a tag
+      tags:
+      - Tag
+    put:
+      consumes:
+      - application/json
+      description: Edit a tag
+      parameters:
+      - description: UpdateTagRequest JSON
+        in: body
+        name: UpdateTagRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Edit a tag
+      tags:
+      - Tag
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

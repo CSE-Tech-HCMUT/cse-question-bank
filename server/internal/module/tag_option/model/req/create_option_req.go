@@ -4,6 +4,7 @@ import "cse-question-bank/internal/module/tag_option/model/entity"
 
 type CreateOptionRequest struct {
 	Name string
+	TagId int
 }
 
 func CreateOptionReqToEntity(optionsReq []CreateOptionRequest) []entity.Option {
@@ -11,6 +12,7 @@ func CreateOptionReqToEntity(optionsReq []CreateOptionRequest) []entity.Option {
 	for _, optionReq := range optionsReq {
 		option := entity.Option{
 			Name: optionReq.Name,
+			TagID: optionReq.TagId,
 		}
 		optionsList = append(optionsList, option)
 	}

@@ -627,6 +627,9 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "tagId": {
+                    "type": "integer"
                 }
             }
         },

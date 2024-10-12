@@ -26,6 +26,8 @@ definitions:
     properties:
       name:
         type: string
+      tagId:
+        type: integer
     type: object
   req.CreateQuestionRequest:
     properties:

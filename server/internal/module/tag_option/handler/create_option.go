@@ -27,11 +27,11 @@ func (h optionHandlerImpl) CreateOption(c *gin.Context) {
 		return
 	}
 
-	err := h.optionUsecase.CreateOption(c, &entity.Option{Name: request.Name})
+	option, err := h.optionUsecase.CreateOption(c, &entity.Option{Name: request.Name, TagID: request.TagId})
 	if err != nil {
 		response.ResponseError(c, err)
 		return
 	}
 
-	response.ReponseSuccess(c, "success", nil)
+	response.ReponseSuccess(c, "success", option)
 }

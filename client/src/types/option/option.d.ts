@@ -1,5 +1,5 @@
 export type Option = {
   id?: number;
-  name: string;
-  tagID: number;
+  name?: string;
+  tagID?: number;
 }

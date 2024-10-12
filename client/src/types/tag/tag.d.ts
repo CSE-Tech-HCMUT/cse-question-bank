@@ -1,17 +1,9 @@
 import { Option } from "../option/option";
 
-export type MainTag = {
-  id: string;
-  name: string;
-  createdUser: string;
-  status: boolean;
-  date: string;
-}
-
-export type SubTag = {
-  id: number;
+export type TagManagement = {
+  id?: number;
   name: string;
   description: string;
-  option: Option[];
+  options: Option[];
   date?: string;
 }

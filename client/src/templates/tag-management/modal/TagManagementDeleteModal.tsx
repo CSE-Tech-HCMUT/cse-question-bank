@@ -1,10 +1,10 @@
 import { Modal, Button, Alert } from "antd";
 import { ModalProps } from "../../../types/modal/modal";
 
-export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, mainTag }) => {
+export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, subTag }) => {
 
   const handleDelete = () => {
-    if (mainTag) {
+    if (subTag) {
       
     }
     onClose(); 
@@ -14,7 +14,7 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
     <Modal
       title={
         <h1 className="text-2xl mb-4">
-          Delete Main Tag
+          Delete Sub Tag
         </h1>
       }
       open={isModalOpen}
@@ -28,7 +28,7 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
         </Button>,
       ]}
     >
-      <p>Are you sure you want to delete <span className="font-semibold"> {mainTag?.name} </span> ?</p>
+      <p>Are you sure you want to delete <span className="font-semibold"> {subTag?.name} </span> ?</p>
 
       <Alert
         message="Warning"

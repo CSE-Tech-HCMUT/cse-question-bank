@@ -1,12 +1,9 @@
-export type MainTagState = {
-  createModalShow: boolean
-  editModalShow: boolean,
-  deleteModalShow: boolean,
-}
+import { TagManagement } from "./tag"
 
-export type SubTagState = {
+export type TagManagementState = {
   createModalShow: boolean
   editModalShow: boolean,
   deleteModalShow: boolean,
-  viewModalShow: boolean
+  viewModalShow: boolean,
+  listOfTags: TagManagement[]
 }

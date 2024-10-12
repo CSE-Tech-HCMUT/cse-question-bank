@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { InputBlockQuestion, InputSimpleQuestion } from "../../types/question/inputQuestion";
 import { bankQuestionService } from "../../services/bankQuestionService";
-import { Question, QuestionInput } from "../../types/bankQuestion/bankQuestion";
+import { QuestionInput } from "../../types/bankQuestion/bankQuestion";
 
 export const previewPDFFileThunk = createAsyncThunk('manageBankQuestion/previewPDFFileThunk', async (payload: InputBlockQuestion | InputSimpleQuestion | any, {rejectWithValue}) => {
   try {

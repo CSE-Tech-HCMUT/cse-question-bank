@@ -1,10 +1,10 @@
 import { Button, Col, Form, Input, Modal, Row, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
-import { ModalProps } from "../../../../types/modal/modal";
-import { Option } from "../../../../types/option/option";
+import { ModalProps } from "../../../types/modal/modal";
+import { Option } from "../../../types/option/option";
 
-export const SubTagViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, subTag }) => {
+export const TagManagementViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, subTag }) => {
   const [form] = useForm();
   const [options, setOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -88,4 +88,4 @@ export const SubTagViewModal: React.FC<ModalProps> = ({ isModalOpen, onClose, su
   );
 };
 
-export default SubTagViewModal;
+export default TagManagementViewModal;

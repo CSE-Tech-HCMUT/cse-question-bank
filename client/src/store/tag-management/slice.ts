@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { MainTagState } from "../../types/tag/tagRedux";
+import { TagManagementState } from "../../types/tag/tagRedux";
+import { createTagThunk } from "./thunk";
+import { toast } from "react-toastify";
 
-const initialState: MainTagState = {
+const initialState: TagManagementState = {
   createModalShow: false,
   deleteModalShow: false,
   editModalShow: false,
+  viewModalShow: false,
+  listOfTags: []
 };
 
-export const manageMainTagSlice = createSlice({
-  name: 'manageMainTag',
+export const manageTagSlice = createSlice({
+  name: 'manageTag',
   initialState,
   reducers: {
     setCreateModalVisibility(state, action: { payload: boolean }){      
@@ -20,9 +24,20 @@ export const manageMainTagSlice = createSlice({
     setDeleteModalVisibility(state, action: { payload: boolean }){
       state.deleteModalShow = action.payload;
     },
+    setViewModalVisibility(state, action: { payload: boolean }){
+      state.viewModalShow = action.payload;
+    },
   },
-  extraReducers: (_builder) => {}
+  extraReducers: (builder) => {
+    builder
+      .addCase(createTagThunk.fulfilled, (state, {payload}) => {
+        toast.success("Create Successed!")
+      })
+      .addCase(createTagThunk.rejected, (_state, _) => {
+        toast.error("Create Failed!")
+      })
+  }
 
 })
 
-export const { reducer: manageMainTagReducer, actions: manageMainTagActions } = manageMainTagSlice;
+export const { reducer: manageTagReducer, actions: manageTagActions } = manageTagSlice;

@@ -26,6 +26,8 @@ definitions:
     properties:
       name:
         type: string
+      tagId:
+        type: integer
     type: object
   req.CreateQuestionRequest:
     properties:
@@ -218,7 +220,12 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/response.SuccessResponse'
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Option'
+              type: object
         "400":
           description: Bad Request
           schema:

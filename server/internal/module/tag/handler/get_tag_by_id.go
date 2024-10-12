@@ -3,7 +3,6 @@ package handler
 import (
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
-	_ "cse-question-bank/internal/module/tag/model/entity"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

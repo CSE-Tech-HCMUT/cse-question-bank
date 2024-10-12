@@ -10,7 +10,7 @@ import (
 type OptionUsecase interface {
 	GetUsedOption(ctx context.Context, optionId int) (int, error)
 	DeleteOption(ctx context.Context, optionId int) error
-	CreateOption(ctx context.Context, option *entity.Option) error
+	CreateOption(ctx context.Context, option *entity.Option) (*entity.Option, error)
 }
 
 type optionUsecaseImpl struct {

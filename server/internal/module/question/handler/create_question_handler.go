@@ -4,7 +4,6 @@ import (
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
 	"cse-question-bank/internal/module/question/model/req"
-	_ "cse-question-bank/internal/module/question/usecase"
 
 	"github.com/gin-gonic/gin"
 )

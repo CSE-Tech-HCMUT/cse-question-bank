@@ -2,7 +2,6 @@ package handler
 
 import (
 	"cse-question-bank/internal/core/response"
-	_ "cse-question-bank/internal/module/question/usecase"
 
 	"github.com/gin-gonic/gin"
 )

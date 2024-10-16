@@ -16,7 +16,6 @@ export const TagManagementCreateModal: React.FC<ModalProps> = ({ isModalOpen, on
   const onOk = async () => {
     try {
       const values = await form.validateFields(); 
-      console.log({ ...values, options }); 
 
       dispatch(createTagThunk({
         ... values,
@@ -53,7 +52,7 @@ export const TagManagementCreateModal: React.FC<ModalProps> = ({ isModalOpen, on
       cancelText={<span style={{ fontSize: '18px' }}>Cancel</span>}
     >
       <Form
-        name="CreateModalSubTag"
+        name="CreateModalTag"
         layout="vertical"
         autoComplete="off"
         form={form}

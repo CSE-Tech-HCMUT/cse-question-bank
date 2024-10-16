@@ -1,23 +1,20 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Button, Col, Row, Select, Space, Tag, Tooltip } from "antd";
 import { FaPlusCircle } from "react-icons/fa";
 import { AiFillDelete, AiOutlineReload } from "react-icons/ai";
 import Table, { ColumnsType, TableProps } from "antd/es/table";
-import { FcViewDetails } from "react-icons/fc";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { TagManagementCreateModal } from "./modal/TagManagementCreateModal";
-import { TagManagementEditModal } from "./modal/TagManagementEditModal";
-import { TagManagementDeleteModal } from "./modal/TagManagementDeleteModal";
 import { RootState, useAppDispatch } from "../../store";
-import { TagManagement } from "../../types/tag/tag";
-import { manageTagActions } from "../../store/tag-management/slice";
-import { getAllTagsThunk } from "../../store/tag-management/thunk";
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../../const/path";
+import { manageQuestionActions } from "../../store/question-management/slice";
+import { Question } from "../../types/question/question";
+import QuestionManagementDeleteModal from "./modal/QuestionManagementDeleteModal";
+import QuestionManagementEditModal from "./modal/QuestionManagementEditModal";
 
 
-export const TagManagementTemplate = () => {
+export const QuestionManagementTemplate = () => {
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const departmentOptions = [
@@ -46,34 +43,78 @@ export const TagManagementTemplate = () => {
 
   const dispatch = useAppDispatch();
   const { 
-    listOfTags,
-    createModalShow, 
     editModalShow, 
     deleteModalShow
-  } = useSelector((state: RootState) => state.manageTagReducer);
-
-  const handleModalCreateOpen = (isOpen: boolean) => { 
-    dispatch(manageTagActions.setCreateModalVisibility(isOpen));
-  }
-  const onCloseModalCreate = () => {    
-    handleModalCreateOpen(false);
-  };
+  } = useSelector((state: RootState) => state.manageQuestionReducer);
+  const listOfQuestion: Question[] = [
+    {
+      content: 'Question 1',
+      answer: [
+        { id: '1', content: 'Answer 1', isCorrect: true },
+        { id: '2', content: 'Answer 2', isCorrect: false },
+        { id: '3', content: 'Answer 3', isCorrect: false },
+      ],
+      id: String(Date.now()),
+      tags: [
+        {
+          id: 1,
+          name: 'Difficult',
+          description: 'Độ khó của câu hỏi',
+          option: 
+            [
+              {
+                id: 1,
+                name: 'Easy',
+                tagID: 1
+              }
+            ]
+        },
+        {
+          id: 2,
+          name: 'Topic',
+          description: 'Chủ đề của môn học',
+          option: 
+            [
+              {
+                id: 2,
+                name: 'Stack',
+                tagID: 2
+              }
+            ]
+        }
+      ],
+      type: 'Multiple choice',
+      isParent: false,
+      userPreview: [
+        {
+          id: '1',
+          fullname: 'Nguyen Sy Thanh',
+          avatarUrl: 'https://gravatar.com/avatar/38d8f4f73679bca7740b6b80c2f8765b?s=400&d=robohash&r=x'
+        },
+        {
+          id: '2',
+          fullname: 'Nguyen Thanh Nhat',
+          avatarUrl: 'https://gravatar.com/avatar/38d8f4f73679bca7740b6b80c2f8765b?s=400&d=monsterid&r=x'
+        }
+      ]
+    }
+  ]
 
   const handleModalEditOpen = (isOpen: boolean) => { 
-    dispatch(manageTagActions.setEditModalVisibility(isOpen));
+    dispatch(manageQuestionActions.setEditModalVisibility(isOpen));
   }
   const onCloseModalEdit = () => {    
     handleModalEditOpen(false);
   };
-  const [TagEdit, setTagEdit] = useState<TagManagement>();
+  const [questionEdit, setQuestionEdit] = useState<Question>();
 
   const handleModalDeleteOpen = (isOpen: boolean) => { 
-    dispatch(manageTagActions.setDeleteModalVisibility(isOpen));
+    dispatch(manageQuestionActions.setDeleteModalVisibility(isOpen));
   }
   const onCloseModalDelete = () => {    
     handleModalDeleteOpen(false);
   };
-  const [TagDelete, setTagDelete] = useState<TagManagement>();
+  const [questionDelete, setQuestionDelete] = useState<Question>();
 
   const handlePagination: TableProps<any>['onChange'] = (pagination, _filters, _sorter, _extra) => {
     if (pagination && pagination.current !== current) {
@@ -87,10 +128,6 @@ export const TagManagementTemplate = () => {
         setCurrent(1);
     }
   };
-
-  useEffect(() => { 
-    dispatch(getAllTagsThunk());
-  }, [])
 
   const TitleTable = () => (
     <Row gutter={[0, 16]}>
@@ -118,10 +155,10 @@ export const TagManagementTemplate = () => {
             }
             size={'middle'}
             onClick={() => {
-              handleModalCreateOpen(true);
+              navigate(PATH.QUESTION_CREATION);
             }}
           >
-            Create Tag
+            Create Question
           </Button>
           <Button
             icon={
@@ -140,7 +177,7 @@ export const TagManagementTemplate = () => {
     </Row>
 )
 
-  const columns: ColumnsType<TagManagement> = [
+  const columns: ColumnsType<Question> = [
     {
       title: 'NO.',
       dataIndex: 'ID',
@@ -157,31 +194,15 @@ export const TagManagementTemplate = () => {
       }
     },
     {
-      title: 'NAME',
-      dataIndex: 'Name',
-      width: 150,
-      className: "text-center",
-      render: (_text, record, _index) => {
-        return (
-          <>
-            <Space>
-              <span className="fw-bold text-gray-800 fs-6" style={{ color: "#181c32" }}>{record.name
-              }</span>
-            </Space>
-          </>
-        )
-      }
-    },
-    {
-      title: 'DESCRIPTION',
-      dataIndex: 'Description',
+      title: 'CONTENT',
+      dataIndex: 'Content',
       width: 300,
       className: "text-center",
       render: (_text, record, _index) => {
         return (
           <>
             <Space>
-              <span className="fw-bold text-gray-800 fs-6" style={{ color: "#181c32" }}>{record.description
+              <span className="fw-bold text-gray-800 fs-6" style={{ color: "#181c32" }}>{record.content
               }</span>
             </Space>
           </>
@@ -189,14 +210,30 @@ export const TagManagementTemplate = () => {
       }
     },
     {
-      title: 'OPTION',
-      dataIndex: 'Option',
-      width: 400,
+      title: 'TYPE',
+      dataIndex: 'Type',
+      width: 150,
+      className: "text-center",
+      render: (_text, record, _index) => {
+        return (
+          <>
+            <Space>
+              <span className="fw-bold text-gray-800 fs-6" style={{ color: "#181c32" }}>{record.type
+              }</span>
+            </Space>
+          </>
+        )
+      }
+    },
+    {
+      title: 'TAG',
+      dataIndex: 'Tag',
+      width: 200,
       className: "text-center",
       render: (_text, record, _index) => {
         const maxTagsToShow = 3; 
-        const tagsToShow = record.options.slice(0, maxTagsToShow);
-        const isMoreTags = record.options.length > maxTagsToShow;
+        const tagsToShow = record.tags.slice(0, maxTagsToShow);
+        const isMoreTags = record.tags.length > maxTagsToShow;
     
         return (
           <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
@@ -207,8 +244,8 @@ export const TagManagementTemplate = () => {
                 </Tag>
               ))}
               {isMoreTags && (
-                <Tooltip title={record.options.join(', ')}>
-                  <Tag>+{record.options.length - maxTagsToShow} more</Tag>
+                <Tooltip title={record.tags.join(', ')}>
+                  <Tag>+{record.tags.length - maxTagsToShow} more</Tag>
                 </Tooltip>
               )}
             </Space>
@@ -217,9 +254,46 @@ export const TagManagementTemplate = () => {
       }
     },    
     {
+      title: 'PREVIEW',
+      dataIndex: 'Preview',
+      width: 200,
+      className: "text-center",
+      render: (_text, record, _index) => {
+        const maxUserToShow = 3; 
+        const userToShow = record.userPreview.slice(0, maxUserToShow);
+        const isMoreUser = record.userPreview.length > maxUserToShow;
+    
+        return (
+          <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+            <Space>
+              {userToShow.map((user, index) => (
+                <Tooltip key={index} title={user.fullname}>
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.username}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: '50%',
+                      marginRight: 5,
+                    }}
+                  />
+                </Tooltip>
+              ))}
+              {isMoreUser && (
+                <Tooltip title={record.userPreview.join(', ')}>
+                  <Tag>+{record.userPreview.length - maxUserToShow} more</Tag>
+                </Tooltip>
+              )}
+            </Space>
+          </div>
+        );
+      }
+    },
+    {
       title: 'DATE',
       dataIndex: 'Date',
-      width: 100,
+      width: 150,
       className: "text-center",
       render: (_text, record, _index) => {
         return (
@@ -239,21 +313,11 @@ export const TagManagementTemplate = () => {
         return (
           <>
             <Space wrap className='d-flex justify-content-center'>
-              <Tooltip title="View Detail">
-                <span style={{ cursor: "pointer", color: "#fcb900", fontSize: 20 }}
-                    onClick={() => {
-                      navigate(PATH.OPTION + `/${record.id}`)
-                    }}
-                >
-                    <FcViewDetails />
-                </span>
-              </Tooltip>
-
               <Tooltip title="Update">
                 <span style={{ cursor: "pointer", color: "#fcb900", fontSize: 18 }}
                     onClick={() => {
                       handleModalEditOpen(true);
-                      setTagEdit(record);
+                      setQuestionEdit(record);
                     }}
                 >
                     <FiEdit />
@@ -264,7 +328,7 @@ export const TagManagementTemplate = () => {
                 <span style={{ cursor: "pointer", color: "#ff4d4f", fontSize: 18 }} title='Delete Channel'
                   onClick={() => { 
                     handleModalDeleteOpen(true);
-                    setTagDelete(record);
+                    setQuestionDelete(record);
                   }}
                 >
                     <AiFillDelete />
@@ -285,7 +349,7 @@ export const TagManagementTemplate = () => {
             <Table 
               rowKey="id"
               columns={columns}
-              dataSource={listOfTags}
+              dataSource={listOfQuestion}
               title={TitleTable}
               loading={isLoading}
               onChange={handlePagination}
@@ -306,14 +370,12 @@ export const TagManagementTemplate = () => {
         </Row>
       </div>
 
-      <TagManagementCreateModal isModalOpen={createModalShow} onClose={onCloseModalCreate} />
+      <QuestionManagementEditModal isModalOpen={editModalShow} onClose={onCloseModalEdit} question={questionEdit} />
 
-      <TagManagementEditModal isModalOpen={editModalShow} onClose={onCloseModalEdit} tag={TagEdit} />
-
-      <TagManagementDeleteModal isModalOpen={deleteModalShow} onClose={onCloseModalDelete} tag={TagDelete} />
+      <QuestionManagementDeleteModal isModalOpen={deleteModalShow} onClose={onCloseModalDelete} question={questionDelete} />
 
     </>
   )
 }
 
-export default TagManagementTemplate
+export default QuestionManagementTemplate

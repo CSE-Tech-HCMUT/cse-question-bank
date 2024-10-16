@@ -10,3 +10,12 @@ export const createOptionThunk = createAsyncThunk('manageOption/createOptionThun
     return rejectWithValue(error);
   }
 })
+
+export const checkOptionUsed = createAsyncThunk('manageOption/checkOptionUsed', async (payload: number, {rejectWithValue}) => {
+  try {
+    const respone = await optionService.checkOptionUsed(payload);
+    return respone.data;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+})

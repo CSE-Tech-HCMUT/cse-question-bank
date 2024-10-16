@@ -1,18 +1,18 @@
 import { Avatar, MenuProps, Drawer, Button } from "antd";
 import React, { useCallback, useState, useEffect } from "react";
 import {
-  FileOutlined,
   HomeOutlined,
   UserOutlined,
-  SettingOutlined,
-  TagOutlined,
   UsergroupAddOutlined,
-  BankOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { Outlet, useNavigate } from "react-router-dom";
 import { PATH } from "../const/path";
 import '../style/style.scss'
+import { FaRegBuilding } from "react-icons/fa";
+import { LuFileQuestion } from "react-icons/lu";
+import { IoPricetagsOutline } from "react-icons/io5";
+import { PiSealQuestionLight } from "react-icons/pi";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -34,11 +34,12 @@ const getItem = (
 
 const items: MenuItem[] = [
   getItem("Dashboard", "1", <HomeOutlined />),
-  getItem("Question Bank", "2", <FileOutlined />),
-  getItem("Progress Settings", "3", <SettingOutlined />),
-  getItem("Tag Management", "4", <TagOutlined />),
-  getItem("User", "5", <UsergroupAddOutlined   />),
-  getItem("Department", "6", <BankOutlined />)
+  getItem("User", "2", <UsergroupAddOutlined   />),
+  getItem("Department", "3", <FaRegBuilding />),
+  getItem("Question Bank", "4", <LuFileQuestion />, [
+    getItem("Question Management", "4-1", <PiSealQuestionLight />), 
+    getItem("Tag Management", "4-2", <IoPricetagsOutline />)
+  ]),
 ];
 
 const MainLayout = React.memo(() => {
@@ -63,41 +64,36 @@ const MainLayout = React.memo(() => {
 
   const handleMenuClick = useCallback(
     (event: { key: React.Key }) => {
-      switch (Number(event.key)) {
-        case 1:
+      switch (event.key) {
+        case "1":
           navigate(PATH.DASHBOARD);
           setTitle("Dashboard");
           break;
-        case 2:
-          navigate(PATH.QUESTION_BANK);
-          setTitle("Question Bank");
-          break;
-        case 3:
-          navigate(PATH.PROGRESS_SETTINGS);
-          setTitle("Progress Settings");
-          break;
-        case 4:
-          navigate(PATH.TAG_MANAGEMENT);
-          setTitle("Tag Management");
-          break;
-        case 5:
+        case "2":
           navigate(PATH.USER_MANAGEMENT);
-          setTitle("User");
+          setTitle("User Management");
           break;
-        case 6:
+        case "3":
           navigate(PATH.DEPARTMENT);
           setTitle("Department");
           break;
-
-        // Add more cases as needed for other menu items.
+        case "4-1":
+          navigate(PATH.QUESTION_BANK); 
+          setTitle("Question Bank / Question Management");
+          break;
+        case "4-2":
+          navigate(PATH.TAG_MANAGEMENT); 
+          setTitle("Question Bank / Tag Management");
+          break;
         default:
           setTitle("Dashboard");
           break;
       }
-      setDrawerVisible(false); // Close drawer on menu item click
+      setDrawerVisible(false); 
     },
     [navigate]
   );
+  
 
   return (
     <Layout className="MainLayout" style={{ minHeight: "100vh", width: isSmallScreen ? '100vw' : 'auto' }}>
@@ -105,7 +101,7 @@ const MainLayout = React.memo(() => {
       {!isSmallScreen && (
         <Sider className="!bg-[#6674BB]" collapsible collapsed={collapsed} onCollapse={setCollapsed} >
           <div 
-            className="title text-center text-[white] my-6 font-bold" 
+            className="title text-center !text-[white] my-6 font-bold" 
             style={{
               fontSize: "30px",
               marginBottom: collapsed ? "85px" : "40px" 
@@ -120,12 +116,11 @@ const MainLayout = React.memo(() => {
             }
           </div>
           <Menu
-            theme="dark"
             defaultSelectedKeys={['1']}
             mode="inline"
             items={items}
             onClick={handleMenuClick}
-            className="bg-[#6674BB]"
+            className="bg-[#6674BB] text-white"
           />
         </Sider>
       )}
@@ -146,10 +141,21 @@ const MainLayout = React.memo(() => {
         </Header>
 
         <Content style={{ margin: "16px" }}>
-          <Breadcrumb
-            style={{ margin: "16px 0" }}
-            items={[{ title: "User" }, { title }]}
-          />
+          <Breadcrumb style={{ margin: "16px 0" }}>
+            {title.includes("Question Bank") ? (
+              <>
+                <Breadcrumb.Item>Question Bank</Breadcrumb.Item>
+                <Breadcrumb.Item>{title.split(" / ")[1]}</Breadcrumb.Item>
+              </>
+            ) : title.includes("Tag") ? (
+              <>
+                <Breadcrumb.Item>Tag</Breadcrumb.Item>
+                <Breadcrumb.Item>Tag Management</Breadcrumb.Item>
+              </>
+            ) : (
+              <Breadcrumb.Item>{title}</Breadcrumb.Item>
+            )}
+          </Breadcrumb>
           <div
             style={{
               padding: 24,
@@ -161,6 +167,8 @@ const MainLayout = React.memo(() => {
             <Outlet />
           </div>
         </Content>
+
+
         <Footer style={{ textAlign: "center", backgroundColor: "#E5EAFF" }}>
           Question Bank ©{new Date().getFullYear()} Created by TCT Team
         </Footer>

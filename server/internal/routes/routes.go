@@ -3,11 +3,12 @@ package routes
 import (
 	"net/http"
 
+	_ "cse-question-bank/docs"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "cse-question-bank/docs"
 	"gorm.io/gorm"
 )
 
@@ -20,17 +21,16 @@ type Route struct {
 func RegisterRoutes(db *gorm.DB) http.Handler {
 	r := gin.Default()
 
-	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	
-	// domainName := os.Getenv("DOMAIN_NAME")
+	// CORS configuration
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowOrigins:     []string{"*"}, // Adjust as needed
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	
+
+	// Group API routes
 	api := r.Group("/api")
 	{
 		initLatexCompileGroupRoutes(db, api)
@@ -38,8 +38,17 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		initTagGroupRoutes(db, api)
 		iniTagOptionGroupRoutes(db, api)
 	}
-	
+
+	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Handle OPTIONS requests for CORS preflight
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Status(http.StatusNoContent) // Respond with 204 No Content
+	})
 
 	return r
 }

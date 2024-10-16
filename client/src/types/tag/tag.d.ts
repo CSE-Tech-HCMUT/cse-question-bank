@@ -4,6 +4,6 @@ export type TagManagement = {
   id?: number;
   name: string;
   description: string;
-  options: Option[];
+  option?: Option[];
   date?: string;
 }

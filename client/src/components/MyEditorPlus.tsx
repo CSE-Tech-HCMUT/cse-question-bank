@@ -5,9 +5,9 @@ import '../style/style.scss';
 import classNames from 'classnames';
 
 interface MyEditorPlusProps {
-  content: string;
-  placeholder: string;
-  onChange: (content: string) => void;
+  content?: string;
+  placeholder?: string;
+  onChange?: (content: string) => void;
 }
 
 const modules = {

@@ -1,36 +1,25 @@
 import { Col, Form, Input, Modal, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
-import { ModalProps } from "../../../types/modal/modal";
-import { Option } from "../../../types/option/option";
-import { useAppDispatch } from "../../../store";
-import { updateTagByIdThunk } from "../../../store/tag-management/thunk";
+import { ModalProps } from "../../../../types/modal/modal";
 
-export const TagManagementEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, tag }) => {
+export const OptionManagementEditModal: React.FC<ModalProps> = ({ isModalOpen, onClose, option }) => {
   const [form] = useForm();
-  const [options, setOptions] = useState<Option[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const dispatch = useAppDispatch();
-
   useEffect(() => { 
-    if (tag) {
+    if (option) {
       form.setFieldsValue({
-        name: tag.name,
-        description: tag.description,
-        options: '', 
+        name: option.name,
       });
-      setOptions(tag.options || []); 
       setIsLoading(false);
     }
-  }, [tag, form]);
+  }, [option, form]);
 
   const onOk = async () => {
     try {
-      const values = await form.validateFields(); 
-      console.log({ ...values, options }); 
+      const values = await form.validateFields();  
 
-      dispatch(updateTagByIdThunk({ ...values, options}))
       onClose(); 
     } catch (error) {
       console.error('Validation Failed:', error);
@@ -64,19 +53,10 @@ export const TagManagementEditModal: React.FC<ModalProps> = ({ isModalOpen, onCl
               <Input />
             </Form.Item>
           </Col>
-          <Col span={24}>
-            <Form.Item
-              name="description"
-              label="Description"
-              rules={[{ required: true, message: 'Please input the description!' }]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
         </Row>
       </Form>
     </Modal>
   );
 };
 
-export default TagManagementEditModal;
+export default OptionManagementEditModal;

@@ -6,4 +6,5 @@ export type User = {
   date?: string;
   password?: string;
   confirmPassword?: string;
+  avatarUrl?: string;
 }

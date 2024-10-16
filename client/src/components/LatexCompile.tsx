@@ -8,9 +8,9 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/mode-text";
 
 interface LatexEditor {
-  content: string;
-  placeholder: string;
-  onChange: (content: string) => void;
+  content?: string;
+  placeholder?: string;
+  onChange?: (content: string) => void;
 }
 
 export const LatexCompile: React.FC<LatexEditor> = ({ content, placeholder, onChange }) => {
@@ -35,7 +35,9 @@ export const LatexCompile: React.FC<LatexEditor> = ({ content, placeholder, onCh
       tabSize: 2,
       }}
       onChange={(event) => {
-        onChange(event)
+        if(onChange){
+          onChange(event)
+        }
       }}
       style={{ flex: 1, marginRight: 8  }}
     />

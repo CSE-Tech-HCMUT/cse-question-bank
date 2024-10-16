@@ -4,26 +4,41 @@ import { createOptionThunk } from "./thunk";
 import { toast } from "react-toastify";
 
 const initialState: OptionState = {
-  data: []
+  createModalShow: false,
+  editModalShow: false,
+  deleteModalShow: false,
+  viewModalShow: false,
+  listOfOptions: []
 } 
 
 export const manageOptionSlice = createSlice({
   name: 'manageOption',
   initialState,
-  reducers: {},
+  reducers: {
+    setCreateModalVisibility(state, action: { payload: boolean }){      
+      state.createModalShow = action.payload;
+    },
+    setEditModalVisibility(state, action: { payload: boolean }){
+      state.editModalShow = action.payload;
+    },
+    setDeleteModalVisibility(state, action: { payload: boolean }){
+      state.deleteModalShow = action.payload;
+    },
+    setViewModalVisibility(state, action: { payload: boolean }){
+      state.viewModalShow = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
+      // create option
       .addCase(createOptionThunk.fulfilled, (state, {payload}) => { 
-        state.data = [ ...state.data, payload ];
-        toast.success("Create Option Successed!", {
-          delay: 1000         
-        })
+        state.listOfOptions.push(payload);
+        toast.success("Create Option Successed!")
       })
       .addCase(createOptionThunk.rejected, (_state, _) => {
-        toast.error("Create Option Failed!", {
-          delay: 1000         
-        })
+        toast.error("Create Option Failed!")
       })
+
   }
 })
 

@@ -1,13 +1,16 @@
 import { Department } from "../department/department";
-import { MainTag, SubTag } from "../tag/tag";
+import { Option } from "../option/option";
+import { Question } from "../question/question";
+import { TagManagement } from "../tag/tag";
 import { User } from "../user/user";
 
 export type ModalProps = {
-  isModalOpen: boolean,
-  onClose: () => void,
-  mainTag?: MainTag | undefined;
-  subTag?: SubTag | undefined;
+  isModalOpen: boolean
+  onClose: () => void
+  tag?: TagManagement | undefined
   user?: User | undefined
-  department?: Department | undefined;
+  department?: Department | undefined
+  option?: Option | undefined
+  question?: Question
 }
 

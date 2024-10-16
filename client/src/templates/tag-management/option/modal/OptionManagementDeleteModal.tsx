@@ -1,14 +1,13 @@
 import { Modal, Button, Alert } from "antd";
-import { ModalProps } from "../../../types/modal/modal";
-import { useAppDispatch } from "../../../store";
-import { deleteTagByIdThunk } from "../../../store/tag-management/thunk";
+import { useAppDispatch } from "../../../../store";
+import { ModalProps } from "../../../../types/modal/modal";
 
-export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, tag }) => {
+export const OptionManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, option }) => {
   const dispatch = useAppDispatch();
 
   const handleDelete = () => {
-    if (tag && tag.id) {
-      dispatch(deleteTagByIdThunk(tag.id))
+    if (option && option.id) {
+      // dispatch(deleteTagByIdThunk(tag.id))
     }
     onClose(); 
   };
@@ -17,7 +16,7 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
     <Modal
       title={
         <h1 className="text-2xl mb-4">
-          Delete Sub Tag
+          Delete Option
         </h1>
       }
       open={isModalOpen}
@@ -31,7 +30,7 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
         </Button>,
       ]}
     >
-      <p>Are you sure you want to delete <span className="font-semibold"> {tag?.name} </span> ?</p>
+      <p>Are you sure you want to delete <span className="font-semibold"> {option?.name} </span> ?</p>
 
       <Alert
         message="Warning"
@@ -44,4 +43,4 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
   );
 };
 
-export default TagManagementDeleteModal;
+export default OptionManagementDeleteModal;

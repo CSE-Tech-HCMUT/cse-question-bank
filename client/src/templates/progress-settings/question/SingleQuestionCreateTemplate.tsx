@@ -7,9 +7,10 @@ import { DeleteOutlined, PlusOutlined, EyeOutlined, MenuOutlined, SwapOutlined }
 import '../../../style/style.scss';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../../store";
-import { createQuestionThunk, previewPDFFileThunk } from "../../../store/question-bank/thunk";
+import { createQuestionThunk, previewPDFFileThunk } from "../../../store/question-management/thunk";
 import PDFPreview from "../../../components/PDFPreview";
-import { Question } from "../../../types/bankQuestion/bankQuestion";
+import { Question } from "../../../types/question/question";
+
 
 export const SingleQuestionCreateTemplate = () => {
   const [form] = Form.useForm();
@@ -18,21 +19,20 @@ export const SingleQuestionCreateTemplate = () => {
     id: String(Date.now()),
     content: '',
     type: 'multiple-choice',
-    tag: '',
-    difficult: 0,
-    isParent: false,
-    parentId: '',
     answer: [],
+    isParent: false,
+    tags: [],
+    userPreview: []
   });
 
-  const { urlPDF } = useSelector((state: RootState) => state.manageBankQuestionReducer);
+  const { urlPDF } = useSelector((state: RootState) => state.manageQuestionReducer);
   const dispatch = useAppDispatch();
 
   const addAnswer = useCallback(() => {
     const updatedQuestion: Question = {
       ...question,
       answer: [
-        ...question.answer,
+        ...question!.answer,
         { id: String(Date.now()), content: '', isCorrect: false },
       ]
     };
@@ -67,7 +67,7 @@ export const SingleQuestionCreateTemplate = () => {
   const removeAnswer = useCallback((answerId: string) => {
     const updatedQuestion: Question = {
       ...question,
-      answer: question.answer.filter(ans => ans.id !== answerId)
+      answer: question?.answer.filter(ans => ans.id !== answerId)
     };
     setQuestion(updatedQuestion);
   }, [question]);
@@ -96,7 +96,7 @@ export const SingleQuestionCreateTemplate = () => {
   const handleSubmit = useCallback(() => {
     const updatedQuestion: Question = isCKEditor ? {
       ...question,
-      content: extractTextFromHtml(question.content),
+      content: extractTextFromHtml(question.content!),
       answer: question.answer.map(ans => ({
         ...ans,
         content: extractTextFromHtml(ans.content || ''),
@@ -107,8 +107,7 @@ export const SingleQuestionCreateTemplate = () => {
       content: updatedQuestion.content,
       type: updatedQuestion.type,
       isParent: updatedQuestion.isParent,
-      difficult: updatedQuestion.difficult,
-      tag: updatedQuestion.tag,
+      tags: updatedQuestion.tags,
       answer: updatedQuestion.answer.map(ans => ({
         id: ans.id,
         content: ans.content,
@@ -160,13 +159,13 @@ export const SingleQuestionCreateTemplate = () => {
             >
               {isCKEditor ? (
                 <MyEditorPlus
-                  content={question.content}
+                  content={question?.content}
                   placeholder='Please Enter Question'
                   onChange={handleQuestionChange}
                 />
               ) : (
                 <LatexCompile
-                  content={question.content}
+                  content={question?.content}
                   placeholder='Please Enter Question'
                   onChange={handleQuestionChange}
                 />
@@ -174,7 +173,7 @@ export const SingleQuestionCreateTemplate = () => {
             </Form.Item>
             
             <h2 className="md:text-[14px] text-[10px] font-semibold mb-2"> Answer </h2>
-            {question.answer.map((answer) => (
+            {question?.answer.map((answer) => (
               <Row key={answer.id} className="answer-row" gutter={[16, 16]} align="middle">
                 <Col md={20} xs={16}>
                   <Form.Item>

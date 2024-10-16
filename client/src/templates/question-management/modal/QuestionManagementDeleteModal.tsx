@@ -1,14 +1,11 @@
 import { Modal, Button, Alert } from "antd";
 import { ModalProps } from "../../../types/modal/modal";
-import { useAppDispatch } from "../../../store";
-import { deleteTagByIdThunk } from "../../../store/tag-management/thunk";
 
-export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, tag }) => {
-  const dispatch = useAppDispatch();
+export const QuestionManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, onClose, question }) => {
 
   const handleDelete = () => {
-    if (tag && tag.id) {
-      dispatch(deleteTagByIdThunk(tag.id))
+    if (question && question.id) {
+      
     }
     onClose(); 
   };
@@ -17,7 +14,7 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
     <Modal
       title={
         <h1 className="text-2xl mb-4">
-          Delete Sub Tag
+          Delete Question
         </h1>
       }
       open={isModalOpen}
@@ -31,11 +28,11 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
         </Button>,
       ]}
     >
-      <p>Are you sure you want to delete <span className="font-semibold"> {tag?.name} </span> ?</p>
+      <p>Are you sure you want to delete <span className="font-semibold"> {question?.content} </span> ?</p>
 
       <Alert
         message="Warning"
-        description="By Deleteing this tag, you won’t be able to access the system."
+        description="By Deleteing this question, you won’t be able to access the system."
         type="error"
         showIcon
         className="my-6"
@@ -44,4 +41,4 @@ export const TagManagementDeleteModal: React.FC<ModalProps> = ({ isModalOpen, on
   );
 };
 
-export default TagManagementDeleteModal;
+export default QuestionManagementDeleteModal;

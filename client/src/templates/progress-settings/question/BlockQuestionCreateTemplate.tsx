@@ -7,7 +7,7 @@ import { DeleteOutlined, PlusOutlined, EyeOutlined, MenuOutlined, SwapOutlined }
 import '../../../style/style.scss';
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../../store";
-import { previewPDFFileThunk } from "../../../store/question-bank/thunk";
+import { previewPDFFileThunk } from "../../../store/question-management/thunk";
 import PDFPreview from "../../../components/PDFPreview";
 import { BlockQuestion, SimpleQuestion } from "../../../types/question/question";
 import { InputBlockQuestion } from "../../../types/question/inputQuestion";

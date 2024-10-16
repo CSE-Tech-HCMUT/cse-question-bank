@@ -9,11 +9,8 @@ export const PATH = {
 
   DEPARTMENT: '/department-management',
 
-  QUESTION_BANK: '/question-bank',
-
-  PROGRESS_SETTINGS: '/progress-setting',
-
-  TAG_MANAGEMENT: '/tag-management',
-  TAG_MAIN: '/tag-main',
-  
+  QUESTION_BANK: '/question-bank/question-management',
+  QUESTION_CREATION: '/question-bank/question-management/question-creation',
+  TAG_MANAGEMENT: '/question-bank/tag-management',  
+  OPTION: '/question-bank/tag-management/option',
 }

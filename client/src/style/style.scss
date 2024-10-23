@@ -1,10 +1,8 @@
 .editor-container {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  background-color: #f9f9f9; /* Light background */
+  border-radius: 10px;
+  padding: 0px!important;
   transition: all 0.3s ease;
+  width: 100%; /* Full width */
 }
 
 /* Custom toolbar styles */
@@ -12,16 +10,26 @@
   background-color: #ffffff; /* White background for the toolbar */
   border: 1px solid #ddd; /* Border around the toolbar */
   border-radius: 5px 5px 0 0; /* Rounded top corners */
-  margin-bottom: -1px; /* Overlap with the editor for seamless look */
+  margin-bottom: -1px; /* Overlap with the editor */
+  display: none;
 }
 
-/* Custom styling for buttons in the toolbar */
+.editor-input.active {
+  .ql-toolbar {
+    display: block;
+  }
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow  {
+  border-top: 1px solid #ccc!important;
+}
+
+/* Custom button styles */
 .ql-toolbar button {
   background-color: transparent; /* Transparent button background */
   border: none; /* Remove border */
-  padding: 8px; /* Add padding */
   cursor: pointer; /* Pointer cursor */
-  transition: background-color 0.3s ease; /* Smooth background transition */
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 .ql-toolbar button:hover {
@@ -31,13 +39,26 @@
 /* Add custom styles for the editor content */
 .ql-editor {
   font-family: 'Arial', sans-serif; /* Font family */
-  font-size: 16px; /* Font size */
+  font-size: 1rem; /* Responsive font size */
   color: #333; /* Text color */
+  padding: 3px 14px!important; 
+  border-radius: 0 0 5px 5px!important;
 }
 
 .ql-editor p {
   margin: 0; /* Remove default margin */
-  line-height: 1.6; /* Improve line height for readability */
+  line-height: 1.6; /* Improve readability */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .ql-editor {
+    font-size: 0.875rem; /* Smaller font size on mobile */
+  }
+
+  .ql-toolbar {
+    padding: 5px; /* Adjust toolbar padding */
+  }
 }
 
 .header {
@@ -54,14 +75,9 @@
 .answer-row {
   display: flex;
   align-items: center;
-  margin-bottom: 16px; /* Space between answers */
 }
 
 @media (max-width: 768px) {
-  .answer-row {
-    flex-direction: column; /* Stack items vertically on smaller screens */
-  }
-
   .answer-row .ant-col {
     width: 100%; /* Full width for each item */
   }
@@ -70,4 +86,92 @@
     width: 100%; /* Full width buttons */
     margin-top: 8px; /* Space between buttons */
   }
+}
+
+.pdf-preview-container {
+  max-width: 800px; /* Adjust this based on your design */
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.no-pdf-message {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.page-info {
+  margin: 20px 0;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between buttons */
+}
+
+.nav-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:disabled {
+  background-color: #ccc; /* Gray color for disabled */
+  cursor: not-allowed;
+}
+
+.nav-button:hover:not(:disabled) {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+th, td {
+  text-align: center!important;
+}
+
+li.ant-menu-item-active {
+  background-color: rgba(234, 234, 234, 0.5)!important; 
+  color: white
+}
+
+li.ant-menu-item-selected {
+  background-color: rgba(234, 234, 234, 0.5)!important; 
+  color: white
+}
+
+li.ant-menu-item {
+  color: white!important;
+}
+
+.ant-layout-sider-trigger {
+  background-color: #2e409d!important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  svg {
+    font-weight: 700;
+    color: white;
+    font-size: 20px;
+  }
+}
+
+.ant-layout {
+  background-color: #E5EAFF;
+}
+
+.ant-checkbox-inner, .ant-checkbox-input {
+  transform: scale(2)
+}
+
+:where(.css-dev-only-do-not-override-1nmp25z).ant-checkbox .ant-checkbox-inner:after {
+  inset-inline-start: 20%!important;
+}
+
+.ant-menu-submenu-title {
+  color: white!important;
 }

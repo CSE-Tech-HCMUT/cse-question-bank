@@ -1,8 +1,14 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { compileLatexReducer } from "./latex-compiler/slice";
-import { manageBankQuestionReducer } from "./question-bank/slice";
+import { manageUserReducer } from "./user-management/slice";
+import { manageDepartmentReducer } from "./department-management/slice";
+import { manageOptionReducer } from "./tag-management/option/slice";
+import { manageTagReducer } from "./tag-management/slice";
+import { manageQuestionReducer } from "./question-management/slice";
 
 export const rootReducer = combineReducers({
-  compileLatexReducer,
-  manageBankQuestionReducer
+  manageQuestionReducer,
+  manageTagReducer,
+  manageUserReducer,
+  manageDepartmentReducer,
+  manageOptionReducer
 })

@@ -1,9 +1,16 @@
 export const PATH = {
+  AUTH: '/auth',
   LOGIN: '/login',
+  SIGNUP: '/signup',
+
   DASHBOARD: '/',
-  QUESTION_BANK: '/question-bank',
-  LATEX_COMPILER: '/latex-compiler',
-  EDITOR_QUESTION: '/editor-question',
-  SIMPLE_QUESTION: '/editor-question/simple-question',
-  BLOCK_QUESTION: '/editor-question/block-question',
+
+  USER_MANAGEMENT: '/user-management',
+
+  DEPARTMENT: '/department-management',
+
+  QUESTION_BANK: '/question-bank/question-management',
+  QUESTION_CREATION: '/question-bank/question-management/question-creation',
+  TAG_MANAGEMENT: '/question-bank/tag-management',  
+  OPTION: '/question-bank/tag-management/option',
 }

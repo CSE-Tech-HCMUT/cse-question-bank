@@ -43,7 +43,7 @@ func getTagRoutes(h handler.TagHandler) []Route {
 		},
 		{
 			Method: "GET",
-			Path: "/",
+			Path: "",
 			Handler: h.GetAllTags,
 		},
 	}

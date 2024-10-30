@@ -299,6 +299,31 @@ paths:
       tags:
       - Option
   /questions:
+    get:
+      consumes:
+      - application/json
+      description: Edit a question
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/usecase.QuestionResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Edit a question
+      tags:
+      - Question
     post:
       consumes:
       - application/json

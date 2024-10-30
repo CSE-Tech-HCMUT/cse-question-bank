@@ -4,39 +4,16 @@ import (
 	"context"
 	"cse-question-bank/internal/module/question/constant"
 	"cse-question-bank/internal/module/question/model/entity"
+	"cse-question-bank/internal/module/question/model/req"
+	"cse-question-bank/internal/module/question/model/res"
 	"cse-question-bank/internal/module/question/repository"
-	"encoding/json"
 	"log/slog"
+
+	"github.com/google/uuid"
 )
 
 type questionBaseUsecaseImpl struct {
 	repo repository.QuestionRepository
-}
-
-type QuestionResponse struct {
-	Id       string              `json:"id"`
-	Content  string              `json:"content"`
-	Type     string              `json:"type"`
-	Question []*QuestionResponse `json:"subQuestions" swaggertype:"object"`
-	Answer   *AnswerResponse     `json:"answer"`
-	Tags     []*TagResponse      `json:"tags"`
-}
-
-type AnswerResponse struct {
-	Id      string          `json:"id"`
-	Content json.RawMessage `json:"content" swaggertype:"object"`
-}
-
-type TagResponse struct {
-	Id          int             `json:"id"`
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	Option      *OptionResponse `json:"option"`
-}
-
-type OptionResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {
@@ -98,17 +75,17 @@ func (u *questionBaseUsecaseImpl) DeleteQuestion(ctx context.Context, questionId
 	return nil
 }
 
-func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *entity.Question) (*QuestionResponse, error) {
+func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *entity.Question) (*res.QuestionResponse, error) {
 	// TODO check valid option is from tag or not in tagAssignment
 	err := u.repo.Create(ctx, nil, question)
 	if err != nil {
 		slog.Error("Fail to create question", "error-message", err)
 		return nil, constant.ErrCreateQuestion(err)
 	}
-	return u.convertToQuestionResponse(question, nil), nil
+	return res.EntityToResponse(question, nil), nil
 }
 
-func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (*QuestionResponse, error) {
+func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId string) (*res.QuestionResponse, error) {
 	questions, err := u.repo.Find(ctx, nil, map[string]interface{}{
 		"id": questionId,
 	})
@@ -125,7 +102,7 @@ func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId st
 
 	question := questions[0]
 
-	childQuestionsRes := make([]*QuestionResponse, 0)
+	childQuestionsRes := make([]*res.QuestionResponse, 0)
 	if question.IsParent {
 		childQuestions, err := u.repo.Find(ctx, nil, map[string]interface{}{
 			"parent_id": questionId,
@@ -137,47 +114,34 @@ func (u *questionBaseUsecaseImpl) GetQuestion(ctx context.Context, questionId st
 		}
 		// need to recursive this for block in block case
 		for _, childQuestion := range childQuestions {
-			childQuestionsRes = append(childQuestionsRes, u.convertToQuestionResponse(childQuestion, nil))
+			childQuestionsRes = append(childQuestionsRes, res.EntityToResponse(childQuestion, nil))
 		}
 	}
 
-	return u.convertToQuestionResponse(question, childQuestionsRes), nil
+	return res.EntityToResponse(question, childQuestionsRes), nil
 }
 
-func (u *questionBaseUsecaseImpl) convertToQuestionResponse(question *entity.Question, childQuestion []*QuestionResponse) *QuestionResponse {
-	var answer *AnswerResponse
-	if question.Answer != nil {
-		answer = &AnswerResponse{
-			Id:      question.Answer.Id.String(),
-			Content: question.Answer.Content,
-		}
+func (u *questionBaseUsecaseImpl) GetAllQuestions(ctx context.Context) ([]*res.QuestionResponse, error) {
+	questionsEntity, err := u.repo.Find(ctx, nil, map[string]interface{}{
+		"parent_id": uuid.Nil,
+	})
+	if err != nil {
+		return nil, nil
 	}
 
-	tagsListRes := make([]*TagResponse, 0)
-	for _, tagAssignment := range question.TagAssignments {
-		optionRes := &OptionResponse{
-			Id:   tagAssignment.OptionId,
-			Name: tagAssignment.Option.Name,
-		}
-
-		tagRes := &TagResponse{
-			Id:          tagAssignment.TagId,
-			Name:        tagAssignment.Tag.Name,
-			Description: tagAssignment.Tag.Description,
-			Option:      optionRes,
-		}
-
-		tagsListRes = append(tagsListRes, tagRes)
+	questionsRes := make([]*res.QuestionResponse, 0)
+	for _, questionEntity := range questionsEntity {
+		questionsRes = append(questionsRes, res.EntityToResponse(questionEntity, nil))
 	}
 
-	return &QuestionResponse{
-		Id:       question.Id.String(),
-		Content:  question.Content,
-		Type:     string(question.Type),
-		Answer:   answer,
-		Question: childQuestion,
-		Tags:     tagsListRes,
-	}
+	return questionsRes, nil
 }
 
-// func (u *questionBaseUsecaseImpl)
+// Because of this function break the req->entity logic.
+// TODO change all parameter in usecase to req, than we will handle convert type to entity in usecase.
+func (u *questionBaseUsecaseImpl) GetQuestionByFilter(ctx context.Context, questionFilter req.QuestionFilter) {
+	// return list question base on filter
+
+	// TODO:
+	// Add pagination.
+}

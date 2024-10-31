@@ -35,6 +35,10 @@ func getExamRoutes(h handler.ExamHandler) []Route {
 			Path:    "/:id/get-filtered-questions",
 			Handler: h.GetExamFilteredQuestionsList,
 		},
-		
+		{
+			Method:  "POST",
+			Path:    "",
+			Handler: h.CreateExam,
+		},
 	}
 }

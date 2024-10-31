@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
-	"cse-question-bank/internal/module/question/model/res"
 	"math/rand"
 
 	"github.com/google/uuid"
@@ -29,7 +28,7 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 	if err != nil {
 		return nil, err
 	}
-	questionsResponse := make([]*res.QuestionResponse, 0)
+
 	for _, questionsList := range questionsLists {
 		i := 0
 		len := len(questionsLists)
@@ -50,7 +49,6 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 
 			exam.Questions = append(exam.Questions, questionEntity[0])
 
-			questionsResponse = append(questionsResponse, questionsList.Questions[randomIndex].QuestionResponse)
 			i++
 		}
 	}
@@ -62,11 +60,7 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 
 	// TODO: rollbakc
 
-	return &exam_res.ExamResponse{
-		NumberQuestions: exam.NumberQuestion,
-		Subject:         exam.Subject,
-		Questions:       questionsResponse,
-	}, nil
+	return exam_res.EntityToResponse(exam), nil
 }
 
 // func (u *examUsecaseImpl) verifyFilterTags(

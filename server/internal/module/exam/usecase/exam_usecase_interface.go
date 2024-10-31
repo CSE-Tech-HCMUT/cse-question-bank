@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"cse-question-bank/internal/module/exam/model/req"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
 	er "cse-question-bank/internal/module/exam/repository"
 	qr "cse-question-bank/internal/module/question/repository"
@@ -11,6 +12,7 @@ import (
 )
 
 type ExamUsecase interface {
+	CreateExam(ctx context.Context, request req.CreateExamRequest) (*exam_res.ExamResponse, error)
 	GenerateExamAuto(ctx context.Context, examId uuid.UUID) (*exam_res.ExamResponse, error)
 	GetExamFilteredQuestionsList(ctx context.Context, examId uuid.UUID) ([]*exam_res.FilterQuestionsList, error)
 }

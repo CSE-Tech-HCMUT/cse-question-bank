@@ -5,6 +5,7 @@ import (
 	"cse-question-bank/internal/module/exam/model/entity"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type ExamRepository interface {
@@ -67,7 +68,10 @@ func (r *examRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, conditionM
 func (r *examRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Exam, error) {
 	var exams []*entity.Exam
 	tx := r.getDB(ctx, db)
-	if err := tx.Preload("Answer").Preload("TagAssignments.Tag").Preload("TagAssignments.Option").Where(conditionMap).Find(&exams).Error; err != nil {
+	if err := tx.Preload(clause.Associations).
+	Preload("Questions.TagAssignments." + clause.Associations).
+	Preload("FilterTags.TagAssignments." + clause.Associations).
+	Where(conditionMap).Find(&exams).Error; err != nil {
 		return nil, err
 	}
 	return exams, nil

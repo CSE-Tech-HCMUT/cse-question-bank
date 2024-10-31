@@ -9,6 +9,7 @@ import (
 type ExamHandler interface {
 	GenerateExamAuto(c *gin.Context)
 	GetExamFilteredQuestionsList(c *gin.Context)
+	CreateExam(c *gin.Context)
 }
 
 type examHandlerImpl struct {

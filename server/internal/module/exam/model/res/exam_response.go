@@ -13,16 +13,17 @@ import (
 type ExamResponse struct {
 	Id             uuid.UUID
 	Questions      []*res.QuestionResponse
-	NumberQuestion int
+	TotalQuestion int
 	Semester       string
 	Subject        string
-	FilterTags     []*FilterTag
+	FilterConditions     []*FilterCondition
 }
 
-type FilterTag struct {
+type FilterCondition struct {
 	Id              int
-	NumberQuestions int
+	ExpectedCount int
 	TagAssignments  []*TagAssignment
+	Questions []*res.QuestionResponse
 }
 
 type TagAssignment struct {
@@ -34,11 +35,10 @@ type TagAssignment struct {
 func EntityToResponse(exam *entity.Exam) *ExamResponse {
 	return &ExamResponse{
 		Id:             exam.Id,
-		Questions:      convertQuestions(exam.Questions),
-		NumberQuestion: exam.NumberQuestion,
+		TotalQuestion: exam.TotalQuestion,
 		Semester:       exam.Semester,
 		Subject:        exam.Subject,
-		FilterTags:     convertFilterTags(exam.FilterTags),
+		FilterConditions:     convertFilterTags(exam.FilterConditions),
 	}
 }
 
@@ -50,16 +50,16 @@ func convertQuestions(questions []*qe.Question) []*res.QuestionResponse {
 	return questionResponses
 }
 
-func convertFilterTags(filterTags []*entity.FilterTag) []*FilterTag {
-	filterTagResponses := make([]*FilterTag, 0)
-	for _, filterTag := range filterTags {
-		filterTagResponses = append(filterTagResponses, &FilterTag{
-			Id:              filterTag.Id,
-			NumberQuestions: filterTag.NumberQuestions,
-			TagAssignments:  convertTagAssignments(filterTag.TagAssignments),
+func convertFilterTags(filterConditions []*entity.FilterCondition) []*FilterCondition {
+	filterConditionListRes := make([]*FilterCondition, 0)
+	for _, filterCondition := range filterConditions {
+		filterConditionListRes = append(filterConditionListRes, &FilterCondition{
+			Id:              filterCondition.Id,
+			ExpectedCount: filterCondition.ExpectedCount,
+			TagAssignments:  convertTagAssignments(filterCondition.TagAssignments),
 		})
 	}
-	return filterTagResponses
+	return filterConditionListRes
 }
 
 func convertTagAssignments(tagAssignments []*entity.TagAssignment) []*TagAssignment {

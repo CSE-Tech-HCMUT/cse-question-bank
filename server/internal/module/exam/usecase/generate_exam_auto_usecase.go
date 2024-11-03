@@ -4,6 +4,7 @@ import (
 	"context"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
 	"math/rand"
+	"strconv"
 
 	"github.com/google/uuid"
 )
@@ -18,38 +19,52 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 	}
 
 	exam := exams[0]
-	checkQuestion := make(map[string]struct{})
-	for _, question := range exam.Questions {
-		// TODO: convert all uuid to string or string to uuid
-		checkQuestion[question.Id.String()] = struct{}{}
+	checkQuestion := make(map[uuid.UUID]struct{})
+	for _, filterCondition := range exam.FilterConditions {
+		for _, question := range filterCondition.Questions {
+			// TODO: convert all uuid to string or string to uuid
+			checkQuestion[question.Id] = struct{}{}
+		}
 	}
 	// call question usecase to get question by filtertag => handle it with groutine?
-	questionsLists, err := u.GetExamFilteredQuestionsList(ctx, examId)
-	if err != nil {
-		return nil, err
-	}
+	// questionsLists, err := u.GetExamFilteredQuestionsList(ctx, examId)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	for _, questionsList := range questionsLists {
-		i := 0
-		len := len(questionsLists)
-		for i < questionsList.NumberQuestions {
-			randomIndex := rand.Intn(len)
+	for _, filterCondition := range exam.FilterConditions {
+		currentCount := len(filterCondition.Questions)
 
-			questionId := questionsList.Questions[randomIndex].Id
-			if _, exists := checkQuestion[questionId]; exists {
-				continue
-			}
+		if currentCount >= filterCondition.ExpectedCount {
+			continue
+		}
 
-			questionEntity, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
-				"id": questionId,
+		for _, tagAssignment := range filterCondition.TagAssignments {
+			questions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
+				"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
+				"tag_assignment.option_id": strconv.Itoa(tagAssignment.OptionId),
 			})
+
 			if err != nil {
 				return nil, err
 			}
 
-			exam.Questions = append(exam.Questions, questionEntity[0])
+			rand.Shuffle(len(questions), func(i, j int) {
+				questions[i], questions[j] = questions[j], questions[i]
+			})
 
-			i++
+			for _, question := range questions {
+				if currentCount >= filterCondition.ExpectedCount {
+					break
+				}
+
+				if _, exists := checkQuestion[question.Id]; exists {
+					continue
+				}
+
+				filterCondition.Questions = append(filterCondition.Questions, question)
+				currentCount++
+			}
 		}
 	}
 

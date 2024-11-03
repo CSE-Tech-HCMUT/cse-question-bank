@@ -20,7 +20,7 @@ func DataMigrate(db *gorm.DB) error {
 	if err != nil {
 		return err
 	}
-	err = db.AutoMigrate(ee.Exam{}, ee.FilterTag{}, ee.TagAssignment{})
+	err = db.AutoMigrate(ee.Exam{}, ee.FilterCondition{}, ee.TagAssignment{})
 
 	// TODO:
 	// seperate function to error handling

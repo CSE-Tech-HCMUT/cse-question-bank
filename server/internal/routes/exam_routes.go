@@ -40,5 +40,20 @@ func getExamRoutes(h handler.ExamHandler) []Route {
 			Path:    "",
 			Handler: h.CreateExam,
 		},
+		{
+			Method: "GET",
+			Path: "/:id",
+			Handler: h.GetExam,
+		},
+		{
+			Method: "PUT",
+			Path: "/:id",
+			Handler: h.UpdateExam,
+		},
+		{
+			Method: "DELETE",
+			Path: "/:id",
+			Handler: h.DeleteExam,
+		},
 	}
 }

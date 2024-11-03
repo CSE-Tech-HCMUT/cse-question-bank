@@ -15,6 +15,9 @@ type ExamUsecase interface {
 	CreateExam(ctx context.Context, request req.CreateExamRequest) (*exam_res.ExamResponse, error)
 	GenerateExamAuto(ctx context.Context, examId uuid.UUID) (*exam_res.ExamResponse, error)
 	GetExamFilteredQuestionsList(ctx context.Context, examId uuid.UUID) ([]*exam_res.FilterQuestionsList, error)
+	GetExam(ctx context.Context, examId uuid.UUID) (*exam_res.ExamResponse, error)
+	DeleteExam(ctx context.Context, examId uuid.UUID) error
+	UpdateExam(ctx context.Context, request *req.UpdateExamRequest) (*exam_res.ExamResponse, error)
 }
 
 type examUsecaseImpl struct {

@@ -20,14 +20,15 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 	exam := examList[0]
 
 	existingQuestions := make(map[uuid.UUID]struct{})
-	for _, question := range exam.Questions {
-		existingQuestions[question.Id] = struct{}{}
+	for _, filterCondition := range exam.FilterConditions {
+		for _, question := range filterCondition.Questions {
+			existingQuestions[question.Id] = struct{}{}
+		}
 	}
 
-	filterTags := exam.FilterTags
 	filteredQuestionsList := make([]*exam_res.FilterQuestionsList, 0)
-	for _, filterTag := range filterTags {
-		for _, tagAssignment := range filterTag.TagAssignments {
+	for _, filterCondition := range exam.FilterConditions {
+		for _, tagAssignment := range filterCondition.TagAssignments {
 			questions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
 				"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
 				"tag_assignment.option_id": strconv.Itoa(tagAssignment.OptionId),
@@ -41,18 +42,18 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 				if _, exists := existingQuestions[question.Id]; exists {
 					isUsed = true
 				}
-	
+
 				questionResponses = append(questionResponses, &exam_res.QuestionFilterExam{
 					QuestionResponse: res.EntityToResponse(question, nil),
 					IsUsed:           isUsed,
 				})
 			}
-	
+
 			filteredQuestionsList = append(filteredQuestionsList, &exam_res.FilterQuestionsList{
-				NumberQuestions: filterTag.NumberQuestions,
-				Questions:       questionResponses,
+				ExpectedCount: filterCondition.ExpectedCount,
+				Questions:     questionResponses,
 			})
-			
+
 		}
 	}
 

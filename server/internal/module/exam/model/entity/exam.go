@@ -11,24 +11,24 @@ import (
 )
 
 type Exam struct {
-	Id             uuid.UUID      `gorm:"type:uuid;primaryKey"`
-	Questions      []*qe.Question `gorm:"many2many:exam_questions;constraint:OnDelete:CASCADE;"`
-	NumberQuestion int
-	Semester       string
-	Subject        string
-	FilterTags     []*FilterTag `gorm:"foreignKey:ExamID;constraint:OnDelete:CASCADE;"`
+	Id               uuid.UUID `gorm:"type:uuid;primaryKey"`
+	Semester         string
+	Subject          string
+	TotalQuestion    int
+	FilterConditions []*FilterCondition `gorm:"foreignKey:ExamID;constraint:OnDelete:CASCADE;"`
 }
 
-type FilterTag struct {
-	Id              int       `gorm:"primaryKey"`
-	ExamID          uuid.UUID `gorm:"type:uuid"` // Khóa ngoại liên kết với Exam
-	NumberQuestions int
-	TagAssignments  []*TagAssignment `gorm:"foreignKey:FilterTagID;constraint:OnDelete:CASCADE;"`
+type FilterCondition struct {
+	Id             int       `gorm:"primaryKey"`
+	ExamID         uuid.UUID `gorm:"type:uuid"`
+	ExpectedCount  int
+	TagAssignments []*TagAssignment `gorm:"foreignKey:FilterConditionID;constraint:OnDelete:CASCADE;"`
+	Questions      []*qe.Question   `gorm:"many2many:filter_condition_questions;constraint:OnDelete:CASCADE;"`
 }
 
 type TagAssignment struct {
 	Id          int `gorm:"primaryKey"`
-	FilterTagID int // Khóa ngoại liên kết với FilterTag
+	FilterConditionID int
 	TagId       int
 	Tag         te.Tag `gorm:"foreignKey:TagId;constraint:OnDelete:CASCADE;"`
 	OptionId    int

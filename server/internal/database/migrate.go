@@ -1,24 +1,26 @@
 package database
 
 import (
-	"cse-question-bank/internal/module/question/model"
-	tag_entity "cse-question-bank/internal/module/tag/model/entity"
+	ee "cse-question-bank/internal/module/exam/model/entity"
+	qe "cse-question-bank/internal/module/question/model/entity"
+	te "cse-question-bank/internal/module/tag/model/entity"
 	tae "cse-question-bank/internal/module/tag_assignment/model/entity"
-	option_entity "cse-question-bank/internal/module/tag_option/model/entity"
+	oe "cse-question-bank/internal/module/tag_option/model/entity"
 
 	"gorm.io/gorm"
 )
 
 func DataMigrate(db *gorm.DB) error {
 	// migrate for question
-	err := db.AutoMigrate(model.Question{}, model.Answer{})
+	err := db.AutoMigrate(qe.Question{}, qe.Answer{})
 	if err != nil {
 		return err
 	}
-	err = db.AutoMigrate(tag_entity.Tag{}, option_entity.Option{}, tae.TagAssignment{})
+	err = db.AutoMigrate(te.Tag{}, oe.Option{}, tae.TagAssignment{})
 	if err != nil {
 		return err
 	}
+	err = db.AutoMigrate(ee.Exam{}, ee.FilterCondition{}, ee.TagAssignment{})
 
 	// TODO:
 	// seperate function to error handling

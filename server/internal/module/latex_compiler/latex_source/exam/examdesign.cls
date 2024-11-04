@@ -75,7 +75,7 @@
 
 \RequirePackage{enumerate}
 \RequirePackage{multicol}
-\RequirePackage{./internal/module/latex_compiler/latex_source/shortlst}
+\RequirePackage{./internal/module/latex_compiler/latex_source/exam/shortlst}
 \RequirePackage{keyval}
 \newcount\randomi % the random number seed (while executing)
 \global\randomi\catcode`\@  % scratch variable during definitions

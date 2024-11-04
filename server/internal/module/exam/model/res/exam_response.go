@@ -56,13 +56,14 @@ func convertFilterTags(filterConditions []*entity.FilterCondition) []*FilterCond
 		filterConditionListRes = append(filterConditionListRes, &FilterCondition{
 			Id:              filterCondition.Id,
 			ExpectedCount: filterCondition.ExpectedCount,
-			TagAssignments:  convertTagAssignments(filterCondition.TagAssignments),
+			TagAssignments:  convertTagAssignments(filterCondition.FilterTagAssignments),
+			Questions: convertQuestions(filterCondition.Questions),
 		})
 	}
 	return filterConditionListRes
 }
 
-func convertTagAssignments(tagAssignments []*entity.TagAssignment) []*TagAssignment {
+func convertTagAssignments(tagAssignments []*entity.FilterTagAssignment) []*TagAssignment {
 	tagAssignmentResponses := make([]*TagAssignment, 0)
 	for _, tagAssignment := range tagAssignments {
 		tagAssignmentResponses = append(tagAssignmentResponses, &TagAssignment{

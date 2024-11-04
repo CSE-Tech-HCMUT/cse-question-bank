@@ -1,6 +1,12 @@
 package usecase
 
-import "cse-question-bank/internal/module/latex_compiler/model/req"
+import (
+	"context"
+	er "cse-question-bank/internal/module/exam/repository"
+	qr "cse-question-bank/internal/module/question/repository"
+
+	"github.com/google/uuid"
+)
 
 // flow
 // get request -> get latex content
@@ -13,12 +19,21 @@ import "cse-question-bank/internal/module/latex_compiler/model/req"
 // -> delete pdf file, delete latex folder
 
 type LatexCompilerUsecase interface {
-	LatexCompile(question *req.QuestionCompileRequest) ([]byte, error)
+	CompileQuestionLatex(ctx context.Context, questionId uuid.UUID) ([]byte, error)
+	CompileExamLatex(ctx context.Context, examId uuid.UUID) ([]byte, error)
 }
 
 type latexCompilerImpl struct {
+	examRepository     er.ExamRepository
+	questionRepository qr.QuestionRepository
 }
 
-func NewLatexCompiler() LatexCompilerUsecase {
-	return &latexCompilerImpl{}
+func NewLatexCompiler(
+	examRepository er.ExamRepository,
+	questionRepository qr.QuestionRepository,
+) LatexCompilerUsecase {
+	return &latexCompilerImpl{
+		examRepository: examRepository,
+		questionRepository: questionRepository,
+	}
 }

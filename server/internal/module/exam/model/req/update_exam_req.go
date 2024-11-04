@@ -16,9 +16,9 @@ type UpdateExamRequest struct {
 func (req UpdateExamRequest) ToEntity() *entity.Exam {
 	filterConditionsList := make([]*entity.FilterCondition, 0)
 	for _, filterCondition := range req.FilterConditions {
-		tagAssignmentList := make([]*entity.TagAssignment, 0)
+		tagAssignmentList := make([]*entity.FilterTagAssignment, 0)
 		for _, tagAssignment := range filterCondition.TagAssignments {
-			tagAssignmentList = append(tagAssignmentList, &entity.TagAssignment{
+			tagAssignmentList = append(tagAssignmentList, &entity.FilterTagAssignment{
 				Id: tagAssignment.Id,
 				TagId:    tagAssignment.TagId,
 				OptionId: tagAssignment.OptionId,
@@ -28,7 +28,7 @@ func (req UpdateExamRequest) ToEntity() *entity.Exam {
 		filterConditionsList = append(filterConditionsList, &entity.FilterCondition{
 			Id: filterCondition.Id,
 			ExpectedCount: filterCondition.ExpectedCount,
-			TagAssignments:  tagAssignmentList,
+			FilterTagAssignments:  tagAssignmentList,
 		})
 	}
 

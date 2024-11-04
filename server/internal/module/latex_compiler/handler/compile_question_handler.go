@@ -1,11 +1,12 @@
 package handler
 
 import (
+	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
-	"cse-question-bank/internal/module/latex_compiler/model/req"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 // CompileHandler godoc
@@ -19,14 +20,14 @@ import (
 // @Success      200  {file}  file
 // @Failure      400  {object}  response.ErrorResponse
 // @Router       /latex-compile [post]
-func (h *latexCompilerHandlerImpl) CompileHandler(c *gin.Context) {
-	var questionCompileReq req.QuestionCompileRequest
-	if err := c.ShouldBindJSON(&questionCompileReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "fail to get request"})
-		return
+func (h *latexCompilerHandlerImpl) CompileQuestion(c *gin.Context) {
+	questionId := c.Param("id")
+	questionUUID, err := uuid.Parse(questionId)
+	if err != nil {
+		response.ResponseError(c, errors.ErrInvalidInput(err))
 	}
 
-	pdfFile, err := h.latexCompilerUsecase.LatexCompile(&questionCompileReq)
+	pdfFile, err := h.latexCompilerUsecase.CompileQuestionLatex(c, questionUUID)
 	if err != nil {
 		response.ResponseError(c, err)
 		return

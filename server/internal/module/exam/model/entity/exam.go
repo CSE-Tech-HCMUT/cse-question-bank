@@ -22,11 +22,11 @@ type FilterCondition struct {
 	Id             int       `gorm:"primaryKey"`
 	ExamID         uuid.UUID `gorm:"type:uuid"`
 	ExpectedCount  int
-	TagAssignments []*TagAssignment `gorm:"foreignKey:FilterConditionID;constraint:OnDelete:CASCADE;"`
+	FilterTagAssignments []*FilterTagAssignment `gorm:"foreignKey:FilterConditionID;constraint:OnDelete:CASCADE;"`
 	Questions      []*qe.Question   `gorm:"many2many:filter_condition_questions;constraint:OnDelete:CASCADE;"`
 }
 
-type TagAssignment struct {
+type FilterTagAssignment struct {
 	Id          int `gorm:"primaryKey"`
 	FilterConditionID int
 	TagId       int

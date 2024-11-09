@@ -11,7 +11,7 @@ type QuestionResponse struct {
 	Type     string              `json:"type"`
 	Question []*QuestionResponse `json:"subQuestions" swaggertype:"object"`
 	Answer   *AnswerResponse     `json:"answer"`
-	Tags     []*TagResponse      `json:"tags"`
+	TagAssignments     []*TagAssignmentResponse      `json:"tagAssignments"`
 }
 
 type AnswerResponse struct {
@@ -19,11 +19,16 @@ type AnswerResponse struct {
 	Content json.RawMessage `json:"content" swaggertype:"object"`
 }
 
+type TagAssignmentResponse struct {
+	Id int
+	Tag *TagResponse
+	Option *OptionResponse
+}
+
 type TagResponse struct {
 	Id          int             `json:"id"`
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
-	Option      *OptionResponse `json:"option"`
 }
 
 type OptionResponse struct {
@@ -40,7 +45,7 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 		}
 	}
 
-	tagsListRes := make([]*TagResponse, 0)
+	tagsAssginmentsList := make([]*TagAssignmentResponse, 0)
 	for _, tagAssignment := range question.TagAssignments {
 		optionRes := &OptionResponse{
 			Id:   tagAssignment.OptionId,
@@ -51,10 +56,13 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 			Id:          tagAssignment.TagId,
 			Name:        tagAssignment.Tag.Name,
 			Description: tagAssignment.Tag.Description,
-			Option:      optionRes,
 		}
 
-		tagsListRes = append(tagsListRes, tagRes)
+		tagsAssginmentsList = append(tagsAssginmentsList, &TagAssignmentResponse{
+			Id: tagAssignment.Id,
+			Tag: tagRes,
+			Option: optionRes,
+		})
 	}
 
 	return &QuestionResponse{
@@ -63,6 +71,6 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 		Type:     string(question.Type),
 		Answer:   answer,
 		Question: childQuestion,
-		Tags:     tagsListRes,
+		TagAssignments: tagsAssginmentsList,
 	}
 }

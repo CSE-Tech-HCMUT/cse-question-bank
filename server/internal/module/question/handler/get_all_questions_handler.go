@@ -13,7 +13,7 @@ import (
 //	@Tags			Question
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	response.SuccessResponse{data=[]usecase.QuestionResponse}
+//	@Success		200	{object}	response.SuccessResponse{data=[]res.QuestionResponse}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/questions [get]
 func (h questionHandlerImpl) GetAllQuestions(c *gin.Context) {

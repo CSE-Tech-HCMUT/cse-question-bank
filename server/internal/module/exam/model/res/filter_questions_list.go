@@ -6,6 +6,7 @@ import "cse-question-bank/internal/module/question/model/res"
 type FilterQuestionsList struct {
 	ExpectedCount int
 	Questions       []*QuestionFilterExam
+	TagAssignments  []*TagAssignment
 }
 
 type QuestionFilterExam struct {

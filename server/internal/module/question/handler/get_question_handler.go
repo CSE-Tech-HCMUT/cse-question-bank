@@ -14,7 +14,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		string	true	"Question ID"
-//	@Success		200	{object}	response.SuccessResponse{data=usecase.QuestionResponse}
+//	@Success		200	{object}	response.SuccessResponse{data=res.QuestionResponse}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/questions/{id} [get]
 func (h *questionHandlerImpl) GetQuestion(c *gin.Context) {

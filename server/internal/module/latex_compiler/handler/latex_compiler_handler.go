@@ -7,7 +7,8 @@ import (
 )
 
 type LatexCompilerHandler interface {
-	CompileHandler(c *gin.Context)
+	CompileQuestion(c *gin.Context)
+	CompileExam(c *gin.Context)
 }
 
 type latexCompilerHandlerImpl struct {

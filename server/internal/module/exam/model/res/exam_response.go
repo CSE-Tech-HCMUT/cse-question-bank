@@ -11,19 +11,19 @@ import (
 )
 
 type ExamResponse struct {
-	Id             uuid.UUID
-	Questions      []*res.QuestionResponse
-	TotalQuestion int
-	Semester       string
-	Subject        string
-	FilterConditions     []*FilterCondition
+	Id               uuid.UUID
+	Questions        []*res.QuestionResponse
+	TotalQuestion    int
+	Semester         string
+	Subject          string
+	FilterConditions []*FilterCondition
 }
 
 type FilterCondition struct {
-	Id              int
-	ExpectedCount int
-	TagAssignments  []*TagAssignment
-	Questions []*res.QuestionResponse
+	Id             int
+	ExpectedCount  int
+	TagAssignments []*TagAssignment
+	Questions      []*res.QuestionResponse
 }
 
 type TagAssignment struct {
@@ -34,11 +34,11 @@ type TagAssignment struct {
 
 func EntityToResponse(exam *entity.Exam) *ExamResponse {
 	return &ExamResponse{
-		Id:             exam.Id,
-		TotalQuestion: exam.TotalQuestion,
-		Semester:       exam.Semester,
-		Subject:        exam.Subject,
-		FilterConditions:     convertFilterTags(exam.FilterConditions),
+		Id:               exam.Id,
+		TotalQuestion:    exam.TotalQuestion,
+		Semester:         exam.Semester,
+		Subject:          exam.Subject,
+		FilterConditions: convertFilterTags(exam.FilterConditions),
 	}
 }
 
@@ -54,15 +54,16 @@ func convertFilterTags(filterConditions []*entity.FilterCondition) []*FilterCond
 	filterConditionListRes := make([]*FilterCondition, 0)
 	for _, filterCondition := range filterConditions {
 		filterConditionListRes = append(filterConditionListRes, &FilterCondition{
-			Id:              filterCondition.Id,
-			ExpectedCount: filterCondition.ExpectedCount,
-			TagAssignments:  convertTagAssignments(filterCondition.TagAssignments),
+			Id:             filterCondition.Id,
+			ExpectedCount:  filterCondition.ExpectedCount,
+			TagAssignments: convertTagAssignments(filterCondition.FilterTagAssignments),
+			Questions:      convertQuestions(filterCondition.Questions),
 		})
 	}
 	return filterConditionListRes
 }
 
-func convertTagAssignments(tagAssignments []*entity.TagAssignment) []*TagAssignment {
+func convertTagAssignments(tagAssignments []*entity.FilterTagAssignment) []*TagAssignment {
 	tagAssignmentResponses := make([]*TagAssignment, 0)
 	for _, tagAssignment := range tagAssignments {
 		tagAssignmentResponses = append(tagAssignmentResponses, &TagAssignment{
@@ -71,10 +72,6 @@ func convertTagAssignments(tagAssignments []*entity.TagAssignment) []*TagAssignm
 				Id:          tagAssignment.TagId,
 				Name:        tagAssignment.Tag.Name,
 				Description: tagAssignment.Tag.Description,
-				Option: &res.OptionResponse{
-					Id:   tagAssignment.OptionId,
-					Name: tagAssignment.Option.Name,
-				},
 			},
 			Option: res.OptionResponse{
 				Id:   tagAssignment.OptionId,

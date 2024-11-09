@@ -19,20 +19,21 @@ type Exam struct {
 }
 
 type FilterCondition struct {
-	Id             int       `gorm:"primaryKey"`
-	ExamID         uuid.UUID `gorm:"type:uuid"`
-	ExpectedCount  int
+	Id                   int       `gorm:"primaryKey"`
+	ExamID               uuid.UUID `gorm:"type:uuid"`
+	ExpectedCount        int
 	FilterTagAssignments []*FilterTagAssignment `gorm:"foreignKey:FilterConditionID;constraint:OnDelete:CASCADE;"`
-	Questions      []*qe.Question   `gorm:"many2many:filter_condition_questions;constraint:OnDelete:CASCADE;"`
+	Questions            []	*qe.Question         `gorm:"many2many:filter_condition_questions;constraint:OnDelete:CASCADE;"`
+	Note                 string
 }
 
 type FilterTagAssignment struct {
-	Id          int `gorm:"primaryKey"`
+	Id                int `gorm:"primaryKey"`
 	FilterConditionID int
-	TagId       int
-	Tag         te.Tag `gorm:"foreignKey:TagId;constraint:OnDelete:CASCADE;"`
-	OptionId    int
-	Option      oe.Option `gorm:"foreignKey:OptionId"`
+	TagId             int
+	Tag               te.Tag `gorm:"foreignKey:TagId;constraint:OnDelete:CASCADE;"`
+	OptionId          int
+	Option            oe.Option `gorm:"foreignKey:OptionId"`
 }
 
 func (e *Exam) BeforeCreate(tx *gorm.DB) (err error) {

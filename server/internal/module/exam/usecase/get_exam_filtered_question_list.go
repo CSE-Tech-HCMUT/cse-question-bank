@@ -28,6 +28,8 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 
 	filteredQuestionsList := make([]*exam_res.FilterQuestionsList, 0)
 	for _, filterCondition := range exam.FilterConditions {
+		tagAssignmentRes := make([]*exam_res.TagAssignment, 0)
+
 		for _, tagAssignment := range filterCondition.FilterTagAssignments {
 			questions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
 				"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
@@ -48,6 +50,20 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 					IsUsed:           isUsed,
 				})
 			}
+
+			tagAssignmentRes = append(tagAssignmentRes, &exam_res.TagAssignment{
+				Id: tagAssignment.Id,
+				Tag: res.TagResponse{
+					Id: tagAssignment.TagId,
+					Name: tagAssignment.Tag.Name,
+					Description: tagAssignment.Tag.Description,
+				},
+				Option: res.OptionResponse{
+					Id: tagAssignment.OptionId,
+					Name: tagAssignment.Option.Name,
+				},
+			})
+
 
 			filteredQuestionsList = append(filteredQuestionsList, &exam_res.FilterQuestionsList{
 				ExpectedCount: filterCondition.ExpectedCount,

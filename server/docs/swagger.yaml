@@ -21,6 +21,95 @@ definitions:
         items:
           $ref: '#/definitions/entity.Option'
         type: array
+      subject:
+        description: 'TODO: Add table subject -> model subject'
+        type: string
+    type: object
+  exam_res.ExamResponse:
+    properties:
+      filterConditions:
+        items:
+          $ref: '#/definitions/exam_res.FilterCondition'
+        type: array
+      id:
+        type: string
+      questions:
+        items:
+          $ref: '#/definitions/res.QuestionResponse'
+        type: array
+      semester:
+        type: string
+      subject:
+        type: string
+      totalQuestion:
+        type: integer
+    type: object
+  exam_res.FilterCondition:
+    properties:
+      expectedCount:
+        type: integer
+      id:
+        type: integer
+      questions:
+        items:
+          $ref: '#/definitions/res.QuestionResponse'
+        type: array
+      tagAssignments:
+        items:
+          $ref: '#/definitions/exam_res.TagAssignment'
+        type: array
+    type: object
+  exam_res.FilterQuestionsList:
+    properties:
+      expectedCount:
+        type: integer
+      questions:
+        items:
+          $ref: '#/definitions/exam_res.QuestionFilterExam'
+        type: array
+      tagAssignments:
+        items:
+          $ref: '#/definitions/exam_res.TagAssignment'
+        type: array
+    type: object
+  exam_res.QuestionFilterExam:
+    properties:
+      answer:
+        $ref: '#/definitions/res.AnswerResponse'
+      content:
+        type: string
+      id:
+        type: string
+      isUsed:
+        type: boolean
+      subQuestions:
+        type: object
+      tagAssignments:
+        items:
+          $ref: '#/definitions/res.TagAssignmentResponse'
+        type: array
+      type:
+        type: string
+    type: object
+  exam_res.TagAssignment:
+    properties:
+      id:
+        type: integer
+      option:
+        $ref: '#/definitions/res.OptionResponse'
+      tag:
+        $ref: '#/definitions/res.TagResponse'
+    type: object
+  req.CreateExamRequest:
+    properties:
+      filterTags:
+        items:
+          $ref: '#/definitions/req.FilterCondition'
+        type: array
+      numberQuestion:
+        type: integer
+      subject:
+        type: string
     type: object
   req.CreateOptionRequest:
     properties:
@@ -87,6 +176,17 @@ definitions:
       type:
         type: string
     type: object
+  req.FilterCondition:
+    properties:
+      id:
+        type: integer
+      numberQuestion:
+        type: integer
+      tagAssignments:
+        items:
+          $ref: '#/definitions/req.TagAssignment'
+        type: array
+    type: object
   req.QuestionCompileRequest:
     properties:
       answer:
@@ -100,6 +200,28 @@ definitions:
           type: object
         type: array
     type: object
+  req.TagAssignment:
+    properties:
+      id:
+        type: integer
+      optionId:
+        type: integer
+      tagId:
+        type: integer
+    type: object
+  req.UpdateExamRequest:
+    properties:
+      filterTags:
+        items:
+          $ref: '#/definitions/req.FilterCondition'
+        type: array
+      id:
+        type: string
+      numberQuestion:
+        type: integer
+      subject:
+        type: string
+    type: object
   req.UpdateTagAssignmentRequest:
     properties:
       id:
@@ -108,6 +230,55 @@ definitions:
         type: integer
       tagId:
         type: integer
+    type: object
+  res.AnswerResponse:
+    properties:
+      content:
+        type: object
+      id:
+        type: string
+    type: object
+  res.OptionResponse:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  res.QuestionResponse:
+    properties:
+      answer:
+        $ref: '#/definitions/res.AnswerResponse'
+      content:
+        type: string
+      id:
+        type: string
+      subQuestions:
+        type: object
+      tagAssignments:
+        items:
+          $ref: '#/definitions/res.TagAssignmentResponse'
+        type: array
+      type:
+        type: string
+    type: object
+  res.TagAssignmentResponse:
+    properties:
+      id:
+        type: integer
+      option:
+        $ref: '#/definitions/res.OptionResponse'
+      tag:
+        $ref: '#/definitions/res.TagResponse'
+    type: object
+  res.TagResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   response.ErrorResponse:
     properties:
@@ -121,48 +292,6 @@ definitions:
       data: {}
       message:
         type: string
-    type: object
-  usecase.AnswerResponse:
-    properties:
-      content:
-        type: object
-      id:
-        type: string
-    type: object
-  usecase.OptionResponse:
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-    type: object
-  usecase.QuestionResponse:
-    properties:
-      answer:
-        $ref: '#/definitions/usecase.AnswerResponse'
-      content:
-        type: string
-      id:
-        type: string
-      subQuestions:
-        type: object
-      tags:
-        items:
-          $ref: '#/definitions/usecase.TagResponse'
-        type: array
-      type:
-        type: string
-    type: object
-  usecase.TagResponse:
-    properties:
-      description:
-        type: string
-      id:
-        type: integer
-      name:
-        type: string
-      option:
-        $ref: '#/definitions/usecase.OptionResponse'
     type: object
 externalDocs:
   description: OpenAPI
@@ -181,6 +310,190 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /exam:
+    post:
+      consumes:
+      - application/json
+      description: Create a exam
+      parameters:
+      - description: CreateExamRequest JSON
+        in: body
+        name: CreateExamRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateExamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/exam_res.ExamResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a exam
+      tags:
+      - Exam
+  /exams/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a exam
+      parameters:
+      - description: Exam Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Delete a exam
+      tags:
+      - Exam
+    get:
+      consumes:
+      - application/json
+      description: Get exam
+      parameters:
+      - description: Exam Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/exam_res.FilterQuestionsList'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get exam
+      tags:
+      - Exam
+    put:
+      consumes:
+      - application/json
+      description: Update a exam
+      parameters:
+      - description: UpdateExamRequest JSON
+        in: body
+        name: UpdateExamRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.UpdateExamRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/exam_res.ExamResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Update a exam
+      tags:
+      - Exam
+  /exams/{id}/generate-auto:
+    post:
+      consumes:
+      - application/json
+      description: Generate exam auto
+      parameters:
+      - description: Exam Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/exam_res.ExamResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Generate exam auto
+      tags:
+      - Exam
+  /exams/{id}/get-filter-list:
+    get:
+      consumes:
+      - application/json
+      description: Get exam filter questions list
+      parameters:
+      - description: Exam Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/exam_res.FilterQuestionsList'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get exam filter questions list
+      tags:
+      - Exam
   /latex-compile:
     post:
       consumes:
@@ -302,7 +615,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Edit a question
+      description: Get all questions
       produces:
       - application/json
       responses:
@@ -314,14 +627,14 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/usecase.QuestionResponse'
+                    $ref: '#/definitions/res.QuestionResponse'
                   type: array
               type: object
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/response.ErrorResponse'
-      summary: Edit a question
+      summary: Get all questions
       tags:
       - Question
     post:
@@ -345,7 +658,7 @@ paths:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/usecase.QuestionResponse'
+                  $ref: '#/definitions/res.QuestionResponse'
               type: object
         "400":
           description: Bad Request
@@ -404,7 +717,7 @@ paths:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/usecase.QuestionResponse'
+                  $ref: '#/definitions/res.QuestionResponse'
               type: object
         "400":
           description: Bad Request

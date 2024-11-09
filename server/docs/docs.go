@@ -24,6 +24,312 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/exam": {
+            "post": {
+                "description": "Create a exam",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Create a exam",
+                "parameters": [
+                    {
+                        "description": "CreateExamRequest JSON",
+                        "name": "CreateExamRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.CreateExamRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/exam_res.ExamResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/{id}": {
+            "get": {
+                "description": "Get exam",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Get exam",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/exam_res.FilterQuestionsList"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a exam",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Update a exam",
+                "parameters": [
+                    {
+                        "description": "UpdateExamRequest JSON",
+                        "name": "UpdateExamRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.UpdateExamRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/exam_res.ExamResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a exam",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Delete a exam",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/{id}/generate-auto": {
+            "post": {
+                "description": "Generate exam auto",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Generate exam auto",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/exam_res.ExamResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/{id}/get-filter-list": {
+            "get": {
+                "description": "Get exam filter questions list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Get exam filter questions list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exam Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/exam_res.FilterQuestionsList"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/latex-compile": {
             "post": {
                 "description": "Compile Latex to PDF",
@@ -218,7 +524,7 @@ const docTemplate = `{
         },
         "/questions": {
             "get": {
-                "description": "Edit a question",
+                "description": "Get all questions",
                 "consumes": [
                     "application/json"
                 ],
@@ -228,7 +534,7 @@ const docTemplate = `{
                 "tags": [
                     "Question"
                 ],
-                "summary": "Edit a question",
+                "summary": "Get all questions",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -243,7 +549,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/usecase.QuestionResponse"
+                                                "$ref": "#/definitions/res.QuestionResponse"
                                             }
                                         }
                                     }
@@ -294,7 +600,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/usecase.QuestionResponse"
+                                            "$ref": "#/definitions/res.QuestionResponse"
                                         }
                                     }
                                 }
@@ -344,7 +650,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/usecase.QuestionResponse"
+                                            "$ref": "#/definitions/res.QuestionResponse"
                                         }
                                     }
                                 }
@@ -733,6 +1039,142 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/entity.Option"
                     }
+                },
+                "subject": {
+                    "description": "TODO: Add table subject -\u003e model subject",
+                    "type": "string"
+                }
+            }
+        },
+        "exam_res.ExamResponse": {
+            "type": "object",
+            "properties": {
+                "filterConditions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/exam_res.FilterCondition"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/res.QuestionResponse"
+                    }
+                },
+                "semester": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "totalQuestion": {
+                    "type": "integer"
+                }
+            }
+        },
+        "exam_res.FilterCondition": {
+            "type": "object",
+            "properties": {
+                "expectedCount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/res.QuestionResponse"
+                    }
+                },
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/exam_res.TagAssignment"
+                    }
+                }
+            }
+        },
+        "exam_res.FilterQuestionsList": {
+            "type": "object",
+            "properties": {
+                "expectedCount": {
+                    "type": "integer"
+                },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/exam_res.QuestionFilterExam"
+                    }
+                },
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/exam_res.TagAssignment"
+                    }
+                }
+            }
+        },
+        "exam_res.QuestionFilterExam": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "$ref": "#/definitions/res.AnswerResponse"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "isUsed": {
+                    "type": "boolean"
+                },
+                "subQuestions": {
+                    "type": "object"
+                },
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/res.TagAssignmentResponse"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "exam_res.TagAssignment": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "option": {
+                    "$ref": "#/definitions/res.OptionResponse"
+                },
+                "tag": {
+                    "$ref": "#/definitions/res.TagResponse"
+                }
+            }
+        },
+        "req.CreateExamRequest": {
+            "type": "object",
+            "properties": {
+                "filterTags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/req.FilterCondition"
+                    }
+                },
+                "numberQuestion": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "type": "string"
                 }
             }
         },
@@ -836,6 +1278,23 @@ const docTemplate = `{
                 }
             }
         },
+        "req.FilterCondition": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "numberQuestion": {
+                    "type": "integer"
+                },
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/req.TagAssignment"
+                    }
+                }
+            }
+        },
         "req.QuestionCompileRequest": {
             "type": "object",
             "properties": {
@@ -856,6 +1315,40 @@ const docTemplate = `{
                 }
             }
         },
+        "req.TagAssignment": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "optionId": {
+                    "type": "integer"
+                },
+                "tagId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "req.UpdateExamRequest": {
+            "type": "object",
+            "properties": {
+                "filterTags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/req.FilterCondition"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "numberQuestion": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
         "req.UpdateTagAssignmentRequest": {
             "type": "object",
             "properties": {
@@ -867,6 +1360,82 @@ const docTemplate = `{
                 },
                 "tagId": {
                     "type": "integer"
+                }
+            }
+        },
+        "res.AnswerResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "object"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "res.OptionResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "res.QuestionResponse": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "$ref": "#/definitions/res.AnswerResponse"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subQuestions": {
+                    "type": "object"
+                },
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/res.TagAssignmentResponse"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "res.TagAssignmentResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "option": {
+                    "$ref": "#/definitions/res.OptionResponse"
+                },
+                "tag": {
+                    "$ref": "#/definitions/res.TagResponse"
+                }
+            }
+        },
+        "res.TagResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -887,71 +1456,6 @@ const docTemplate = `{
                 "data": {},
                 "message": {
                     "type": "string"
-                }
-            }
-        },
-        "usecase.AnswerResponse": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "object"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "usecase.OptionResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "usecase.QuestionResponse": {
-            "type": "object",
-            "properties": {
-                "answer": {
-                    "$ref": "#/definitions/usecase.AnswerResponse"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "subQuestions": {
-                    "type": "object"
-                },
-                "tags": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/usecase.TagResponse"
-                    }
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "usecase.TagResponse": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "option": {
-                    "$ref": "#/definitions/usecase.OptionResponse"
                 }
             }
         }

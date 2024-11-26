@@ -2,11 +2,10 @@ package jwt
 
 import (
 	"errors"
-	"os"
-	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 )
 
 var (
@@ -15,24 +14,21 @@ var (
 
 type UserClaims struct {
 	jwt.StandardClaims
-	UserID string
+	UserID uuid.UUID
 	Role   string
 }
 
-func Generate(userID, role string) (string, error) {
-	jwtSecretKey := os.Getenv("JWT_SECRET_KEY")
-	tokenDuration, _ := strconv.Atoi((os.Getenv("TOKEN_DURATION")))
-	
+func GenerateToken(secret string, expiry int, userID uuid.UUID, role string) (string, error) {
 	claims := UserClaims{
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Duration(tokenDuration)).Unix(),
+			ExpiresAt: time.Now().Add(time.Duration(expiry)).Unix(),
 		},
 		UserID: userID,
 		Role:   role,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
-	tokenString, err := token.SignedString(jwtSecretKey)
+	tokenString, err := token.SignedString(secret)
 	if err != nil {
 		return "", err
 	}
@@ -40,14 +36,12 @@ func Generate(userID, role string) (string, error) {
 	return tokenString, nil
 }
 
-func Verify(accessToken string) (*UserClaims, error) {
-	jwtSecretKey := os.Getenv("JWT_SECRET_KEY")
-
+func VerifyToken(tokenString string, secret string) (*UserClaims, error) {
 	token, err := jwt.ParseWithClaims(
-		accessToken,
+		tokenString,
 		&UserClaims{},
 		func(t *jwt.Token) (interface{}, error) {
-			return []byte(jwtSecretKey), nil
+			return []byte(secret), nil
 		},
 	)
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	te "cse-question-bank/internal/module/tag/model/entity"
 	tae "cse-question-bank/internal/module/tag_assignment/model/entity"
 	oe "cse-question-bank/internal/module/tag_option/model/entity"
+	ue "cse-question-bank/internal/module/user/model/entity"
 
 	"gorm.io/gorm"
 )
@@ -21,6 +22,8 @@ func DataMigrate(db *gorm.DB) error {
 		return err
 	}
 	err = db.AutoMigrate(ee.Exam{}, ee.FilterCondition{}, ee.FilterTagAssignment{})
+
+	err = db.AutoMigrate(ue.User{})
 
 	// TODO:
 	// seperate function to error handling

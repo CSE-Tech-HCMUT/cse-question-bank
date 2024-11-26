@@ -17,5 +17,6 @@ func NewExecutor(timeout time.Duration) Executor {
 }
 
 func (ce *CommanExecutor) RunCommand(name string, args ...string) error {
+	print("A")
 	return StartProcess(name, ce.timeout, args...)
 }

@@ -3,7 +3,7 @@ package handler
 import (
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
-	"cse-question-bank/internal/module/tag_option/model/entity"
+	"cse-question-bank/internal/database/entity"
 	"cse-question-bank/internal/module/tag_option/model/req"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +26,7 @@ func (h optionHandlerImpl) CreateOption(c *gin.Context) {
 		response.ResponseError(c, errors.ErrInvalidInput(err))
 		return
 	}
-
+	// TODO: change to request option
 	option, err := h.optionUsecase.CreateOption(c, &entity.Option{Name: request.Name, TagID: request.TagId})
 	if err != nil {
 		response.ResponseError(c, err)

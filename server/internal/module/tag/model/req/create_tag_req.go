@@ -1,8 +1,7 @@
 package req
 
 import (
-	tag_entity "cse-question-bank/internal/module/tag/model/entity"
-	"cse-question-bank/internal/module/tag_option/model/entity"
+	"cse-question-bank/internal/database/entity"
 )
 
 type CreateTagRequest struct {
@@ -27,8 +26,8 @@ func createOptoinTagReqToEntity(optionsReq []CreateTagOptionRequest) []entity.Op
 	return optionsList
 }
 
-func CreateTagReqToEntity(tag CreateTagRequest) *tag_entity.Tag {
-	return &tag_entity.Tag{
+func CreateTagReqToEntity(tag CreateTagRequest) *entity.Tag {
+	return &entity.Tag{
 		Name:        tag.Name,
 		Description: tag.Description,
 		Options:     createOptoinTagReqToEntity(tag.Options),

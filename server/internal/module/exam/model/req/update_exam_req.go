@@ -1,7 +1,7 @@
 package req
 
 import (
-	"cse-question-bank/internal/module/exam/model/entity"
+	"cse-question-bank/internal/database/entity"
 
 	"github.com/google/uuid"
 )

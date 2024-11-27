@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/tag_option/model/entity"
+	"cse-question-bank/internal/database/entity"
 )
 
 func (u optionUsecaseImpl) CreateOption(ctx context.Context, option *entity.Option) (*entity.Option, error) {
@@ -10,6 +10,6 @@ func (u optionUsecaseImpl) CreateOption(ctx context.Context, option *entity.Opti
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return option, nil
 }

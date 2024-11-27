@@ -1,6 +1,6 @@
 package req
 
-import "cse-question-bank/internal/module/exam/model/entity"
+import "cse-question-bank/internal/database/entity"
 
 type CreateExamRequest struct {
 	TotalQuestion int          `json:"numberQuestion"`

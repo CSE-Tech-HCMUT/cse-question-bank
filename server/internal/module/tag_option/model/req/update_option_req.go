@@ -1,6 +1,6 @@
 package req
 
-import "cse-question-bank/internal/module/tag_option/model/entity"
+import "cse-question-bank/internal/database/entity"
 
 type UpdateOptionRequest struct {
 	Id   int    `json:"id"`

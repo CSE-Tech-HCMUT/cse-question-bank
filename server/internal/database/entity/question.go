@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"cse-question-bank/internal/module/tag_assignment/model/entity"
 	"cse-question-bank/internal/util"
 
 	"github.com/google/uuid"
@@ -28,7 +27,7 @@ type Question struct {
 	TopicId   uuid.UUID    `gorm:"type:uuid"`
 	Answer    *Answer      `gorm:"foreignKey:QuestionId;constraint:OnDelete:CASCADE"` // One-to-many relationship
 
-	TagAssignments []entity.TagAssignment `gorm:"foreignKey:QuestionId;constraint:Ondelete:CASCADE"`
+	TagAssignments []TagAssignment `gorm:"foreignKey:QuestionId;constraint:Ondelete:CASCADE"`
 }
 
 func (q *Question) BeforeCreate(tx *gorm.DB) (err error) {

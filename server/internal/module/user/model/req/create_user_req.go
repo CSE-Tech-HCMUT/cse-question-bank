@@ -1,6 +1,6 @@
 package req
 
-import "cse-question-bank/internal/module/user/model/entity"
+import "cse-question-bank/internal/database/entity"
 
 type CreateUserRequest struct {
 	Mail       string

@@ -1,7 +1,9 @@
 package entity
 
-type Department string
+import "github.com/google/uuid"
 
-var (
-	CSE Department = "cse"
-)
+type Department struct {
+	Id   uuid.UUID
+	Name string
+	Code string
+}

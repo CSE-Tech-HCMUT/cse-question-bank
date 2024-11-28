@@ -24,8 +24,11 @@ type Question struct {
 	RelateId  *uuid.UUID   `gorm:"type:uuid;default:null"` // Nullable foreign key
 	Type      QuestionType `gorm:"type:varchar(20)"`
 	Difficult int          `gorm:"type:int"`
-	TopicId   uuid.UUID    `gorm:"type:uuid"`
-	Answer    *Answer      `gorm:"foreignKey:QuestionId;constraint:OnDelete:CASCADE"` // One-to-many relationship
+
+	SubjectId uuid.UUID `gorm:"type:uuid"` // Foreign key to Subject
+	Subject   Subject   `gorm:"foreignKey:SubjectId"`
+
+	Answer *Answer `gorm:"foreignKey:QuestionId;constraint:OnDelete:CASCADE"` // One-to-many relationship
 
 	TagAssignments []TagAssignment `gorm:"foreignKey:QuestionId;constraint:Ondelete:CASCADE"`
 }

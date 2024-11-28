@@ -18,7 +18,7 @@ func DataMigrate(db *gorm.DB) error {
 	}
 	err = db.AutoMigrate(entity.Exam{}, entity.FilterCondition{}, entity.FilterTagAssignment{})
 
-	err = db.AutoMigrate(entity.User{})
+	err = db.AutoMigrate(entity.User{}, entity.Department{}, entity.Subject{})
 
 	// TODO:
 	// seperate function to error handling

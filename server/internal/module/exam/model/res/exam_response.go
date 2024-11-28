@@ -3,9 +3,7 @@ package exam_res
 import (
 	"cse-question-bank/internal/module/question/model/res"
 
-	"cse-question-bank/internal/module/exam/model/entity"
-
-	qe "cse-question-bank/internal/module/question/model/entity"
+	"cse-question-bank/internal/database/entity"
 
 	"github.com/google/uuid"
 )
@@ -42,7 +40,7 @@ func EntityToResponse(exam *entity.Exam) *ExamResponse {
 	}
 }
 
-func convertQuestions(questions []*qe.Question) []*res.QuestionResponse {
+func convertQuestions(questions []*entity.Question) []*res.QuestionResponse {
 	questionResponses := make([]*res.QuestionResponse, 0)
 	for _, question := range questions {
 		questionResponses = append(questionResponses, res.EntityToResponse(question, nil))

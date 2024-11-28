@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"cse-question-bank/internal/module/user/model/entity"
+	"cse-question-bank/internal/database/entity"
 
 	"gorm.io/gorm"
 )

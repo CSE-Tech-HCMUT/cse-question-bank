@@ -1,7 +1,7 @@
 package req
 
 import (
-	tag_entity "cse-question-bank/internal/module/tag/model/entity"
+	"cse-question-bank/internal/database/entity"
 	option_req "cse-question-bank/internal/module/tag_option/model/req"
 )
 
@@ -12,8 +12,8 @@ type UpdateTagRequest struct {
 	Options     []option_req.UpdateOptionRequest `json:"options"`
 }
 
-func UpdateTagReqToEntity(tag UpdateTagRequest) *tag_entity.Tag {
-	return &tag_entity.Tag{
+func UpdateTagReqToEntity(tag UpdateTagRequest) *entity.Tag {
+	return &entity.Tag{
 		Id:          tag.Id,
 		Name:        tag.Name,
 		Description: tag.Description,

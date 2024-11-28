@@ -1,8 +1,7 @@
 package req
 
 import (
-	qe "cse-question-bank/internal/module/question/model/entity"
-	tae "cse-question-bank/internal/module/tag_assignment/model/entity"
+	"cse-question-bank/internal/database/entity"
 	"cse-question-bank/internal/module/tag_assignment/model/req"
 	"cse-question-bank/internal/util"
 	"encoding/json"
@@ -11,19 +10,19 @@ import (
 )
 
 type CreateQuestionRequest struct {
-	Content   string          `json:"content" binding:"required"`
-	Type      string          `json:"type" binding:"required"`
-	IsParent  bool            `json:"isParent"`
-	ParentId  *string         `json:"parentId"`
-	Answer    json.RawMessage `json:"answer" swaggertype:"object"`
+	Content  string          `json:"content" binding:"required"`
+	Type     string          `json:"type" binding:"required"`
+	IsParent bool            `json:"isParent"`
+	ParentId *string         `json:"parentId"`
+	Answer   json.RawMessage `json:"answer" swaggertype:"object"`
 
 	TagAssignmentsReq []*req.CreateTagAssignmentRequest `json:"tagAssignments"`
 }
 
-func CreateReqToQuestionModel(req *CreateQuestionRequest) *qe.Question {
-	var answer *qe.Answer
+func CreateReqToQuestionModel(req *CreateQuestionRequest) *entity.Question {
+	var answer *entity.Answer
 	if req.Answer != nil {
-		answer = &qe.Answer{
+		answer = &entity.Answer{
 			Content: req.Answer,
 		}
 	}
@@ -35,9 +34,9 @@ func CreateReqToQuestionModel(req *CreateQuestionRequest) *qe.Question {
 		parentUUID = uuid.Nil
 	}
 
-	tagAssignments := make([]tae.TagAssignment, 0)
+	tagAssignments := make([]entity.TagAssignment, 0)
 	for _, tagAssignmentReq := range req.TagAssignmentsReq {
-		tagAssignment := tae.TagAssignment{
+		tagAssignment := entity.TagAssignment{
 			TagId:    tagAssignmentReq.TagId,
 			OptionId: tagAssignmentReq.OptionId,
 		}
@@ -45,11 +44,11 @@ func CreateReqToQuestionModel(req *CreateQuestionRequest) *qe.Question {
 		tagAssignments = append(tagAssignments, tagAssignment)
 	}
 
-	return &qe.Question{
+	return &entity.Question{
 		Content:        req.Content,
 		IsParent:       req.IsParent,
 		ParentId:       &parentUUID,
-		Type:           qe.QuestionType(req.Type),
+		Type:           entity.QuestionType(req.Type),
 		Answer:         answer,
 		TagAssignments: tagAssignments,
 	}

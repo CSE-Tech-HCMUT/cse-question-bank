@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	tar "cse-question-bank/internal/module/tag_assignment/repository"
-	"cse-question-bank/internal/module/tag_option/model/entity"
+	"cse-question-bank/internal/database/entity"
 	tor "cse-question-bank/internal/module/tag_option/repository"
 )
 

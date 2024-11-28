@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/tag/model/entity"
+	"cse-question-bank/internal/database/entity"
 )
 
 func (t *tagUsecaseImpl) CreateTag(ctx context.Context, tag *entity.Tag) (*entity.Tag, error) {

@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/question/model/entity"
+	"cse-question-bank/internal/database/entity"
 )
 
 type multipleChoiceEngine struct {

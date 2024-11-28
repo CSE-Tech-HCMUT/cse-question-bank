@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"cse-question-bank/internal/module/question/model/entity"
+	"cse-question-bank/internal/database/entity"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -68,10 +68,6 @@ func (r *questionRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, condit
 func (r *questionRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Question, error) {
 	var questions []*entity.Question
 	tx := r.getDB(ctx, db)
-
-	tx = tx.Joins("JOIN tag_assignment ON tag_assignment.question_id = question.id").
-		Preload("Answer").
-		Preload("TagAssignments")
 
 	if err := tx.Preload("Answer").Preload("TagAssignments." + clause.Associations).Where(conditionMap).Find(&questions).Error; err != nil {
 		return nil, err

@@ -1,7 +1,7 @@
 package res
 
 import (
-	"cse-question-bank/internal/module/question/model/entity"
+	"cse-question-bank/internal/database/entity"
 	"encoding/json"
 )
 

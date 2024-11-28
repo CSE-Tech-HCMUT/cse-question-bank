@@ -2,12 +2,12 @@ package repository
 
 import (
 	"context"
-	"cse-question-bank/internal/module/tag_option/model/entity"
+	"cse-question-bank/internal/database/entity"
 
 	"gorm.io/gorm"
 )
 
-type OptionRepository interface{
+type OptionRepository interface {
 	Delete(ctx context.Context, conditionMap map[string]interface{}) error
 	Create(ctx context.Context, option *entity.Option) error
 }

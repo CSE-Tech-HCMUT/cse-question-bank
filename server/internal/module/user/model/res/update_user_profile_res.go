@@ -1,7 +1,7 @@
 package res
 
 import (
-	"cse-question-bank/internal/module/user/model/entity"
+	"cse-question-bank/internal/database/entity"
 
 	"github.com/google/uuid"
 )

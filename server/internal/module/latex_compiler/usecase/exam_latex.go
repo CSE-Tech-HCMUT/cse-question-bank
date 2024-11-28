@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"cse-question-bank/internal/module/exam/model/entity"
+	"cse-question-bank/internal/database/entity"
 	"log/slog"
 	"os"
 	"strings"

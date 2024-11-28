@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"cse-question-bank/internal/module/question/model/entity"
+	"cse-question-bank/internal/database/entity"
 	"encoding/json"
 	"fmt"
 	"log/slog"
@@ -36,7 +36,7 @@ func (u *latexCompilerImpl) createQuestionLatexFile(folderPath string, question 
 
 	// Tên file .tex
 	fileName := folderPath + "/output.tex"
-	print(fileName)
+
 	// Tạo và mở file .tex
 	file, err := os.Create(fileName)
 	if err != nil {
@@ -67,8 +67,8 @@ func deleteFolder(folderPath string) error {
 }
 
 type MultipleChoiceAnswer struct {
-	Content   string
-	IsCorrect bool
+	Content   string `json:"content"`
+	IsCorrect bool	`json:"is-correct"`
 }
 
 func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (string, error) {
@@ -97,9 +97,10 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (
 
 		result += "\\end{block}"
 	} else {
+		question.Content = strings.ReplaceAll(question.Content, "\\n", "\n")
+		
 		result += "\\begin{question}\n" + question.Content + "\n"
-		print(question.Answer.Content)
-		print(123)
+		
 		answerContent, err := u.GenerateAnswerContent(question.Answer.Content)
 		if err != nil {
 			return "", err
@@ -111,18 +112,19 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (
 }
 
 func (u *latexCompilerImpl) GenerateAnswerContent(answerContent json.RawMessage) (string, error) {
-	print("12")
 	var answers []MultipleChoiceAnswer
-	print("!@3")
+
 	err := json.Unmarshal(answerContent, &answers)
-	print("123321")
+
 	if err != nil {
 		return "", err
 	}
 
-	result := "\\datcot\n\\bonpa"
+	result := "\\datcot\n\\bonpa\n"
 
 	for _, answer := range answers {
+		answer.Content = strings.ReplaceAll(answer.Content, "\\n", "\n")
+
 		var correctString string
 		if answer.IsCorrect {
 			correctString = "dung"

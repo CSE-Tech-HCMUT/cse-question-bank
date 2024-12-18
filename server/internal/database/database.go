@@ -63,6 +63,8 @@ func InitDatabase() Service {
 		slog.Error("Fail to migrate database", "error-message", err)
 	}
 
+	InitData(db)
+
 	return dbInstance
 }
 

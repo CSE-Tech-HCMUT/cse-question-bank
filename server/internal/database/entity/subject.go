@@ -3,9 +3,9 @@ package entity
 import "github.com/google/uuid"
 
 type Subject struct {
-	Id             uuid.UUID
+	Id             uuid.UUID	`gorm:"type:uuid;primaryKey"`
 	Name           string
-	Code           string
+	Code           string	`gorm:"uniqueIndex"`
 	DepartmentCode string
 	Department     Department `gorm:"foreignKey:DepartmentCode"`
 	Users          []User     `gorm:"many2many:subject_users"`

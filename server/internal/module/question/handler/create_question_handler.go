@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			CreateQuestionRequest	body		req.CreateQuestionRequest	true	"CreateQuestionRequest JSON"
-//	@Success		200	{object}	response.SuccessResponse{data=res.QuestionResponse}
+//	@Success		200	{object}	response.SuccessResponse{data=question_res.QuestionResponse}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/questions [post]
 func (h *questionHandlerImpl) CreateQuestion(c *gin.Context) {

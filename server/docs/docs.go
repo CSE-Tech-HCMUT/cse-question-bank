@@ -549,7 +549,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/res.QuestionResponse"
+                                                "$ref": "#/definitions/question_res.QuestionResponse"
                                             }
                                         }
                                     }
@@ -600,7 +600,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/res.QuestionResponse"
+                                            "$ref": "#/definitions/question_res.QuestionResponse"
                                         }
                                     }
                                 }
@@ -650,7 +650,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/res.QuestionResponse"
+                                            "$ref": "#/definitions/question_res.QuestionResponse"
                                         }
                                     }
                                 }
@@ -791,7 +791,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/entity.Tag"
+                                                "$ref": "#/definitions/tag_res.TagResponse"
                                             }
                                         }
                                     }
@@ -842,7 +842,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/entity.Tag"
+                                            "$ref": "#/definitions/tag_res.TagResponse"
                                         }
                                     }
                                 }
@@ -892,7 +892,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/entity.Tag"
+                                            "$ref": "#/definitions/tag_res.TagResponse"
                                         }
                                     }
                                 }
@@ -1008,6 +1008,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "department_res.DepartmentResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "entity.Option": {
             "type": "object",
             "properties": {
@@ -1019,30 +1030,6 @@ const docTemplate = `{
                 },
                 "tagID": {
                     "type": "integer"
-                }
-            }
-        },
-        "entity.Tag": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "options": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/entity.Option"
-                    }
-                },
-                "subject": {
-                    "description": "TODO: Add table subject -\u003e model subject",
-                    "type": "string"
                 }
             }
         },
@@ -1061,7 +1048,7 @@ const docTemplate = `{
                 "questions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/res.QuestionResponse"
+                        "$ref": "#/definitions/question_res.QuestionResponse"
                     }
                 },
                 "semester": {
@@ -1087,7 +1074,7 @@ const docTemplate = `{
                 "questions": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/res.QuestionResponse"
+                        "$ref": "#/definitions/question_res.QuestionResponse"
                     }
                 },
                 "tagAssignments": {
@@ -1122,7 +1109,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "answer": {
-                    "$ref": "#/definitions/res.AnswerResponse"
+                    "$ref": "#/definitions/question_res.AnswerResponse"
                 },
                 "content": {
                     "type": "string"
@@ -1139,7 +1126,7 @@ const docTemplate = `{
                 "tagAssignments": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/res.TagAssignmentResponse"
+                        "$ref": "#/definitions/question_res.TagAssignmentResponse"
                     }
                 },
                 "type": {
@@ -1154,10 +1141,97 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "option": {
-                    "$ref": "#/definitions/res.OptionResponse"
+                    "$ref": "#/definitions/option_res.OptionResponse"
                 },
                 "tag": {
-                    "$ref": "#/definitions/res.TagResponse"
+                    "$ref": "#/definitions/tag_res.TagResponse"
+                }
+            }
+        },
+        "option_res.OptionResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "question_res.AnswerResponse": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "object"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "question_res.OptionResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "question_res.QuestionResponse": {
+            "type": "object",
+            "properties": {
+                "answer": {
+                    "$ref": "#/definitions/question_res.AnswerResponse"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "subQuestions": {
+                    "type": "object"
+                },
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/question_res.TagAssignmentResponse"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "question_res.TagAssignmentResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "option": {
+                    "$ref": "#/definitions/question_res.OptionResponse"
+                },
+                "tag": {
+                    "$ref": "#/definitions/question_res.TagResponse"
+                }
+            }
+        },
+        "question_res.TagResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -1363,82 +1437,6 @@ const docTemplate = `{
                 }
             }
         },
-        "res.AnswerResponse": {
-            "type": "object",
-            "properties": {
-                "content": {
-                    "type": "object"
-                },
-                "id": {
-                    "type": "string"
-                }
-            }
-        },
-        "res.OptionResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "res.QuestionResponse": {
-            "type": "object",
-            "properties": {
-                "answer": {
-                    "$ref": "#/definitions/res.AnswerResponse"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "subQuestions": {
-                    "type": "object"
-                },
-                "tagAssignments": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/res.TagAssignmentResponse"
-                    }
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
-        "res.TagAssignmentResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "option": {
-                    "$ref": "#/definitions/res.OptionResponse"
-                },
-                "tag": {
-                    "$ref": "#/definitions/res.TagResponse"
-                }
-            }
-        },
-        "res.TagResponse": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
         "response.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -1456,6 +1454,51 @@ const docTemplate = `{
                 "data": {},
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "subject_res.SubjectResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "department": {
+                    "$ref": "#/definitions/department_res.DepartmentResponse"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "tag_res.TagResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/option_res.OptionResponse"
+                    }
+                },
+                "subject": {
+                    "description": "TODO: Add table subject -\u003e model subject",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/subject_res.SubjectResponse"
+                        }
+                    ]
                 }
             }
         }

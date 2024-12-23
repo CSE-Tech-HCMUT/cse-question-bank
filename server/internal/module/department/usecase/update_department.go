@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"cse-question-bank/internal/module/department/model/req"
-	"cse-question-bank/internal/module/department/model/res"
+	res "cse-question-bank/internal/module/department/model/res"
 )
 
 func (u *departmentUsecaseImpl) UpdateDepartment(ctx context.Context, request req.UpdateDepartmentRequest) (*res.DepartmentResponse, error) {

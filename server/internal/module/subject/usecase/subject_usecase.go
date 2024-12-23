@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"cse-question-bank/internal/module/subject/model/req"
-	"cse-question-bank/internal/module/subject/model/res"
+	res "cse-question-bank/internal/module/subject/model/res"
 	"cse-question-bank/internal/module/subject/repository"
 
 	"github.com/google/uuid"

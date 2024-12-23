@@ -1,4 +1,4 @@
-package res
+package department_res
 
 import "cse-question-bank/internal/database/entity"
 

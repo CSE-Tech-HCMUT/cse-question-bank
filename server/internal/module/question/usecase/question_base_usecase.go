@@ -2,10 +2,10 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/question/constant"
 	"cse-question-bank/internal/database/entity"
+	"cse-question-bank/internal/module/question/constant"
 	"cse-question-bank/internal/module/question/model/req"
-	"cse-question-bank/internal/module/question/model/res"
+	res "cse-question-bank/internal/module/question/model/res"
 	"cse-question-bank/internal/module/question/repository"
 	"log/slog"
 

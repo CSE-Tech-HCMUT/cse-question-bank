@@ -19,7 +19,7 @@ func EntityToGetUserResponse(userEntity *entity.User) *GetUserResponse {
 		Id: userEntity.Id,
 		Mail: userEntity.Mail,
 		Username: userEntity.Username,
-		Role: userEntity.Role,
+		Role: string(userEntity.Role),
 		Department: userEntity.Department,
 	}
 }

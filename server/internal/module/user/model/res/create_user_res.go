@@ -21,7 +21,7 @@ func EntityToCreateUserResponse(userEntity *entity.User) *CreateUserResponse {
 		Mail:       userEntity.Mail,
 		Username:   userEntity.Username,
 		Password:   userEntity.Password,
-		Role:       userEntity.Role,
+		Role:       string(userEntity.Role),
 		Department: userEntity.Department,
 	}
 }

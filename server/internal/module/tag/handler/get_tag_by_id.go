@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	path		int	true	"Id int"
-//	@Success		200	{object}	response.SuccessResponse{data=entity.Tag}
+//	@Success		200	{object}	response.SuccessResponse{data=tag_res.TagResponse}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/tags/{id} [get]
 func (h tagHandlerImpl) GetTagById(c *gin.Context) {

@@ -13,7 +13,7 @@ import (
 //	@Tags			Tag
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object} response.SuccessResponse{data=[]entity.Tag}
+//	@Success		200	{object} response.SuccessResponse{data=[]tag_res.TagResponse}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/tags [get]
 func (h tagHandlerImpl) GetAllTags(c *gin.Context) {

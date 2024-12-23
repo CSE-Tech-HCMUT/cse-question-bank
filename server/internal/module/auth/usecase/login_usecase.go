@@ -30,7 +30,7 @@ func (u *authUsecaseImpl) Login(ctx context.Context, request *req.LoginRequest) 
 		return "", "", errors.New("try again")
 	}
 
-	accessToken, err := generateAccessToken(userAccount[0].Id, userAccount[0].Role)
+	accessToken, err := generateAccessToken(userAccount[0].Id, string(userAccount[0].Role))
 	if err != nil {
 		return "", "", err
 	}

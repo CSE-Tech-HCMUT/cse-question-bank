@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/department/model/res"
+	res "cse-question-bank/internal/module/department/model/res"
 )
 
 func (u *departmentUsecaseImpl) GetDepartmentByCode(ctx context.Context, code string) (*res.DepartmentResponse, error) {

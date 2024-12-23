@@ -7,7 +7,7 @@ type User struct {
 	Mail           string
 	Username       string
 	Password       string
-	Role           string
+	Role           Role
 	DepartmentCode string      // Foreign key to Department
 	Department     Department `gorm:"foreignKey:DepartmentCode"`
 	Subjects       []Subject  `gorm:"many2many:subject_users"`

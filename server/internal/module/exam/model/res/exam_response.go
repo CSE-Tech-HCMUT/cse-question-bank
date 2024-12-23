@@ -1,8 +1,9 @@
 package exam_res
 
 import (
-	"cse-question-bank/internal/module/question/model/res"
-
+	question_res "cse-question-bank/internal/module/question/model/res"
+	tag_res "cse-question-bank/internal/module/tag/model/res"
+	option_res "cse-question-bank/internal/module/tag_option/model/res"
 	"cse-question-bank/internal/database/entity"
 
 	"github.com/google/uuid"
@@ -10,7 +11,7 @@ import (
 
 type ExamResponse struct {
 	Id               uuid.UUID
-	Questions        []*res.QuestionResponse
+	Questions        []*question_res.QuestionResponse `json:"questions"`
 	TotalQuestion    int
 	Semester         string
 	Subject          string
@@ -21,13 +22,13 @@ type FilterCondition struct {
 	Id             int
 	ExpectedCount  int
 	TagAssignments []*TagAssignment
-	Questions      []*res.QuestionResponse
+	Questions      []*question_res.QuestionResponse
 }
 
 type TagAssignment struct {
 	Id     int
-	Tag    res.TagResponse
-	Option res.OptionResponse
+	Tag    tag_res.TagResponse
+	Option option_res.OptionResponse
 }
 
 func EntityToResponse(exam *entity.Exam) *ExamResponse {
@@ -40,10 +41,10 @@ func EntityToResponse(exam *entity.Exam) *ExamResponse {
 	}
 }
 
-func convertQuestions(questions []*entity.Question) []*res.QuestionResponse {
-	questionResponses := make([]*res.QuestionResponse, 0)
+func convertQuestions(questions []*entity.Question) []*question_res.QuestionResponse {
+	questionResponses := make([]*question_res.QuestionResponse, 0)
 	for _, question := range questions {
-		questionResponses = append(questionResponses, res.EntityToResponse(question, nil))
+		questionResponses = append(questionResponses, question_res.EntityToResponse(question, nil))
 	}
 	return questionResponses
 }
@@ -66,12 +67,12 @@ func convertTagAssignments(tagAssignments []*entity.FilterTagAssignment) []*TagA
 	for _, tagAssignment := range tagAssignments {
 		tagAssignmentResponses = append(tagAssignmentResponses, &TagAssignment{
 			Id: tagAssignment.Id,
-			Tag: res.TagResponse{
+			Tag: tag_res.TagResponse{
 				Id:          tagAssignment.TagId,
 				Name:        tagAssignment.Tag.Name,
 				Description: tagAssignment.Tag.Description,
 			},
-			Option: res.OptionResponse{
+			Option: option_res.OptionResponse{
 				Id:   tagAssignment.OptionId,
 				Name: tagAssignment.Option.Name,
 			},

@@ -13,7 +13,7 @@ func (req *CreateUserRequest) ToEntity() *entity.User {
 	return &entity.User{
 		Mail:       req.Mail,
 		Username:   req.Username,
-		Role:       req.Role,
+		Role:       entity.Role(req.Role),
 		Department: req.Department,
 	}
 }

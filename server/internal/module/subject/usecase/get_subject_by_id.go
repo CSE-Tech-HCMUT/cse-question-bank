@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/subject/model/res"
+	res "cse-question-bank/internal/module/subject/model/res"
 
 	"github.com/google/uuid"
 )

@@ -3,7 +3,9 @@ package usecase
 import (
 	"context"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
-	"cse-question-bank/internal/module/question/model/res"
+	question_res "cse-question-bank/internal/module/question/model/res"
+	tag_res "cse-question-bank/internal/module/tag/model/res"
+	option_res "cse-question-bank/internal/module/tag_option/model/res"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -46,19 +48,19 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 				}
 
 				questionResponses = append(questionResponses, &exam_res.QuestionFilterExam{
-					QuestionResponse: res.EntityToResponse(question, nil),
+					QuestionResponse: question_res.EntityToResponse(question, nil),
 					IsUsed:           isUsed,
 				})
 			}
 
 			tagAssignmentRes = append(tagAssignmentRes, &exam_res.TagAssignment{
 				Id: tagAssignment.Id,
-				Tag: res.TagResponse{
+				Tag: tag_res.TagResponse{
 					Id: tagAssignment.TagId,
 					Name: tagAssignment.Tag.Name,
 					Description: tagAssignment.Tag.Description,
 				},
-				Option: res.OptionResponse{
+				Option: option_res.OptionResponse{
 					Id: tagAssignment.OptionId,
 					Name: tagAssignment.Option.Name,
 				},

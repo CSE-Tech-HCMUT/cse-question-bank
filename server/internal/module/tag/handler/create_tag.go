@@ -16,7 +16,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			CreateTagRequest	body		req.CreateTagRequest	true	"CreateTagRequest JSON"
-//	@Success		200	{object}	response.SuccessResponse{data=entity.Tag}
+//	@Success		200	{object}	response.SuccessResponse{data=tag_res.TagResponse}
 //	@Failure	400 {object} response.ErrorResponse
 //	@Router			/tags [post]
 func (h tagHandlerImpl) CreateTag(c *gin.Context) {

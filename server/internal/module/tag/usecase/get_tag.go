@@ -2,10 +2,10 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/database/entity"
+	tag_res "cse-question-bank/internal/module/tag/model/res"
 )
 
-func (t *tagUsecaseImpl) GetTag(ctx context.Context, tagId int) (*entity.Tag, error) {
+func (t *tagUsecaseImpl) GetTag(ctx context.Context, tagId int) (*tag_res.TagResponse, error) {
 	tags, err := t.tagRepository.Find(ctx, nil, map[string]interface{}{
 		"id": tagId,
 	})
@@ -13,5 +13,7 @@ func (t *tagUsecaseImpl) GetTag(ctx context.Context, tagId int) (*entity.Tag, er
 		return nil, nil
 	}
 
-	return tags[0], nil 
+	tagRes := tag_res.EntityToResponse(tags[0])
+
+	return tagRes, nil
 }

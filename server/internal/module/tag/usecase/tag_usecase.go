@@ -3,15 +3,16 @@ package usecase
 import (
 	"context"
 	"cse-question-bank/internal/database/entity"
+	tag_res "cse-question-bank/internal/module/tag/model/res"
 	"cse-question-bank/internal/module/tag/repository"
 )
 
 type TagUsecase interface {
-	GetTag(ctx context.Context, tagId int) (*entity.Tag, error)
-	GetAllTag(ctx context.Context) ([]*entity.Tag, error)
-	UpdateTag(ctx context.Context, tag entity.Tag) error
+	GetTag(ctx context.Context, tagId int) (*tag_res.TagResponse, error)
+	GetAllTag(ctx context.Context) ([]*tag_res.TagResponse, error)
+	UpdateTag(ctx context.Context, tag *entity.Tag) error
 	DeleteTag(ctx context.Context, tagId int) error
-	CreateTag(ctx context.Context, tag *entity.Tag) (*entity.Tag, error)
+	CreateTag(ctx context.Context, tag *entity.Tag) (*tag_res.TagResponse, error)
 }
 
 type tagUsecaseImpl struct {

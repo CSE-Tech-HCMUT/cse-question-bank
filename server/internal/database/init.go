@@ -14,6 +14,12 @@ func InitData(db *gorm.DB) error {
 } 
 
 func initDepartmentData(db *gorm.DB) error {
+	var count int64 
+	db.Model(&entity.Department{}).Count(&count)
+	if count != 0 {
+		return nil
+	}
+	
 	departments := []entity.Department{
 		{Code: "CSE", Name: "Khoa khoa học và Kỹ thuật Máy tính"},
 		{Code: "1", Name: "Khoa Điện - Điện tử"},
@@ -37,6 +43,12 @@ func initDepartmentData(db *gorm.DB) error {
 }
 
 func initSubjectData(db *gorm.DB) error {
+	var count int64 
+	db.Model(&entity.Subject{}).Count(&count)
+	if count != 0 {
+		return nil
+	}
+
 	subjects := []entity.Subject{
 		{Name: "Cấu trúc dữ liệu và Giải thuật", Code: "DSA", DepartmentCode: "CSE"},
 		{Name: "Kỹ thuật lập trình", Code: "KTLT", DepartmentCode: "CSE"},

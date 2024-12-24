@@ -12,7 +12,12 @@ func (t *tagUsecaseImpl) CreateTag(ctx context.Context, tag *entity.Tag) (*tag_r
 		return nil, err
 	}
 
-	tagRes := tag_res.EntityToResponse(tag)
-
-	return tagRes, nil
+	tagRes, err := t.tagRepository.Find(ctx, nil, map[string]interface{}{
+		"id": tag.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	
+	return tag_res.EntityToResponse(tagRes[0]), nil
 }

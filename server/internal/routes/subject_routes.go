@@ -38,7 +38,7 @@ func getSubjectRoutes(h handler.SubjectHandler) []Route {
 		},
 		{
 			Method: "GET",
-			Path: "/:code",
+			Path: "/:id",
 			Handler: h.GetSubjectById,
 		},
 		{

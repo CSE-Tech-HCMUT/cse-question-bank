@@ -24,20 +24,17 @@ definitions:
         type: array
       id:
         type: string
-      questions:
-        items:
-          $ref: '#/definitions/question_res.QuestionResponse'
-        type: array
       semester:
         type: string
       subject:
         type: string
       totalQuestion:
+        description: Questions        []*question_res.QuestionResponse `json:"questions"`
         type: integer
     type: object
   exam_res.FilterCondition:
     properties:
-      expectedCount:
+      expectCount:
         type: integer
       id:
         type: integer
@@ -52,7 +49,9 @@ definitions:
     type: object
   exam_res.FilterQuestionsList:
     properties:
-      expectedCount:
+      expectCount:
+        type: integer
+      id:
         type: integer
       questions:
         items:
@@ -90,6 +89,13 @@ definitions:
         $ref: '#/definitions/option_res.OptionResponse'
       tag:
         $ref: '#/definitions/tag_res.TagResponse'
+    type: object
+  internal_module_tag_model_req.UpdateOptionRequest:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
     type: object
   option_res.OptionResponse:
     properties:
@@ -207,6 +213,8 @@ definitions:
         items:
           $ref: '#/definitions/req.CreateTagOptionRequest'
         type: array
+      subjectId:
+        type: string
     type: object
   req.EditQuestionRequest:
     properties:
@@ -277,6 +285,21 @@ definitions:
         type: integer
       tagId:
         type: integer
+    type: object
+  req.UpdateTagRequest:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      options:
+        items:
+          $ref: '#/definitions/internal_module_tag_model_req.UpdateOptionRequest'
+        type: array
+      subjectId:
+        type: string
     type: object
   response.ErrorResponse:
     properties:
@@ -387,8 +410,7 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data:
-                  type: object
+                data: {}
               type: object
         "400":
           description: Bad Request
@@ -597,8 +619,7 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data:
-                  type: object
+                data: {}
               type: object
         "400":
           description: Bad Request
@@ -713,8 +734,7 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data:
-                  type: object
+                data: {}
               type: object
         "400":
           description: Bad Request
@@ -772,8 +792,7 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data:
-                  type: object
+                data: {}
               type: object
         "400":
           description: Bad Request
@@ -838,6 +857,36 @@ paths:
       summary: Create a tag
       tags:
       - Tag
+    put:
+      consumes:
+      - application/json
+      description: Edit a tag
+      parameters:
+      - description: UpdateTagRequest JSON
+        in: body
+        name: UpdateTagRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.UpdateTagRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/tag_res.TagResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Edit a tag
+      tags:
+      - Tag
   /tags/{id}:
     delete:
       consumes:
@@ -858,8 +907,7 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data:
-                  type: object
+                data: {}
               type: object
         "400":
           description: Bad Request
@@ -895,36 +943,6 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Show a tag
-      tags:
-      - Tag
-    put:
-      consumes:
-      - application/json
-      description: Edit a tag
-      parameters:
-      - description: UpdateTagRequest JSON
-        in: body
-        name: UpdateTagRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateTagRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  type: object
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      summary: Edit a tag
       tags:
       - Tag
 securityDefinitions:

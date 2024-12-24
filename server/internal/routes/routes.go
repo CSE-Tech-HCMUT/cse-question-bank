@@ -39,6 +39,8 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		iniTagOptionGroupRoutes(db, api)
 		initExamGroupRoutes(db, api)
 		initAuthGroupRoutes(db, api)
+		initSubjectGroupRoutes(db, api)
+		initDepartmentGroupRoutes(db, api)
 	}
 	
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

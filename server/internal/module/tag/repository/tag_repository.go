@@ -67,7 +67,7 @@ func (r *tagRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, conditionMa
 func (r *tagRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Tag, error) {
 	var tags []*entity.Tag
 	tx := r.getDB(ctx, db)
-	if err := tx.Preload("Options").Where(conditionMap).Find(&tags).Error; err != nil {
+	if err := tx.Preload("Options").Preload("Subject.Department").Where(conditionMap).Find(&tags).Error; err != nil {
 		return nil, err
 	}
 	return tags, nil

@@ -1,4 +1,4 @@
-package option_req
+package req
 
 import "cse-question-bank/internal/database/entity"
 

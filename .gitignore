@@ -9,4 +9,5 @@
 
 # server
 /server/.env
-/bin
+/server/bin
+/server/bin/*

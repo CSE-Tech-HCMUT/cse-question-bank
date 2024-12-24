@@ -15,7 +15,7 @@ import (
 //	@Produce		json
 //	@Success		200	{object} response.SuccessResponse{data=[]subject_res.SubjectResponse}
 //	@Failure	400 {object} response.ErrorResponse
-//	@Router			/tags [get]
+//	@Router			/subjects [get]
 func (h *subjectHandlerImpl) GetAllSubjects(c *gin.Context) {
 	res, err := h.subjectUsecase.GetAllSubjects(c)
 	if err != nil {

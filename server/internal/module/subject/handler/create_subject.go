@@ -18,7 +18,7 @@ import (
 //	@Param			CreateSubjectRequest	body		req.CreateSubjectRequest	true	"CreateSubjectRequest JSON"
 //	@Success		200	{object}	response.SuccessResponse{data=subject_res.SubjectResponse}
 //	@Failure	400 {object} response.ErrorResponse
-//	@Router			/tags [post]
+//	@Router			/subjects [post]
 func (h *subjectHandlerImpl) CreateSubject(c *gin.Context) {
 	var request req.CreateSubjectRequest
 	if err := c.ShouldBind(&request); err != nil {

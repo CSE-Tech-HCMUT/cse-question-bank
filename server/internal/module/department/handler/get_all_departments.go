@@ -15,7 +15,7 @@ import (
 //	@Produce		json
 //	@Success		200	{object} response.SuccessResponse{data=[]department_res.DepartmentResponse}
 //	@Failure	400 {object} response.ErrorResponse
-//	@Router			/tags [get]
+//	@Router			/departments [get]
 func (h *departmentHandlerImpl) GetAllDepartments(c *gin.Context) {
 	departmentResList, err := h.departmentUsecase.GetAllDepartments(c)
 	if err != nil {

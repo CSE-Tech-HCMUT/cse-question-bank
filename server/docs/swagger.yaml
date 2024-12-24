@@ -368,6 +368,32 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /departments:
+    get:
+      consumes:
+      - application/json
+      description: Show all departments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/department_res.DepartmentResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show all departments
+      tags:
+      - Department
   /exam:
     post:
       consumes:
@@ -810,6 +836,62 @@ paths:
       summary: Edit a question
       tags:
       - Question
+  /subjects:
+    get:
+      consumes:
+      - application/json
+      description: Show all subjects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/subject_res.SubjectResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show all subjects
+      tags:
+      - Subject
+    post:
+      consumes:
+      - application/json
+      description: Create a subject
+      parameters:
+      - description: CreateSubjectRequest JSON
+        in: body
+        name: CreateSubjectRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.CreateSubjectRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/subject_res.SubjectResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Create a subject
+      tags:
+      - Subject
   /tags:
     get:
       consumes:

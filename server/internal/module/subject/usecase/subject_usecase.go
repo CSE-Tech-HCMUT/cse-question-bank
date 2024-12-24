@@ -21,7 +21,7 @@ type subjectUsecaseImpl struct {
 	subjectRepository repository.SubjectRepository
 }
 
-func NewSubjectRepository(subjectRepository repository.SubjectRepository) SubjectUsecase {
+func NewSubjectUsecase(subjectRepository repository.SubjectRepository) SubjectUsecase {
 	return &subjectUsecaseImpl{
 		subjectRepository: subjectRepository,
 	}

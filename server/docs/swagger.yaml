@@ -191,6 +191,15 @@ definitions:
     - content
     - type
     type: object
+  req.CreateSubjectRequest:
+    properties:
+      code:
+        type: string
+      departmentCode:
+        type: string
+      name:
+        type: string
+    type: object
   req.CreateTagAssignmentRequest:
     properties:
       optionId:

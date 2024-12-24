@@ -6,6 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//	GetAllSubects godoc
+//
+//	@Summary		Show all subjects
+//	@Description	Show all subjects
+//	@Tags			Subject
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object} response.SuccessResponse{data=[]subject_res.SubjectResponse}
+//	@Failure	400 {object} response.ErrorResponse
+//	@Router			/tags [get]
 func (h *subjectHandlerImpl) GetAllSubjects(c *gin.Context) {
 	res, err := h.subjectUsecase.GetAllSubjects(c)
 	if err != nil {

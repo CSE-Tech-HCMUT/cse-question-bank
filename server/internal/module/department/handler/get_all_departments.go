@@ -6,6 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//	GetAllDepartment godoc
+//
+//	@Summary		Show all departments
+//	@Description	Show all departments
+//	@Tags			Department
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object} response.SuccessResponse{data=[]department_res.DepartmentResponse}
+//	@Failure	400 {object} response.ErrorResponse
+//	@Router			/tags [get]
 func (h *departmentHandlerImpl) GetAllDepartments(c *gin.Context) {
 	departmentResList, err := h.departmentUsecase.GetAllDepartments(c)
 	if err != nil {

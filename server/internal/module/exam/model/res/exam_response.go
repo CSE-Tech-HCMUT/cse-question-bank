@@ -1,34 +1,34 @@
 package exam_res
 
 import (
+	"cse-question-bank/internal/database/entity"
 	question_res "cse-question-bank/internal/module/question/model/res"
 	tag_res "cse-question-bank/internal/module/tag/model/res"
 	option_res "cse-question-bank/internal/module/tag_option/model/res"
-	"cse-question-bank/internal/database/entity"
 
 	"github.com/google/uuid"
 )
 
 type ExamResponse struct {
-	Id               uuid.UUID
-	Questions        []*question_res.QuestionResponse `json:"questions"`
-	TotalQuestion    int
-	Semester         string
-	Subject          string
-	FilterConditions []*FilterCondition
+	Id uuid.UUID `json:"id"`
+	// Questions        []*question_res.QuestionResponse `json:"questions"`
+	TotalQuestion    int                `json:"totalQuestion"`
+	Semester         string             `json:"semester"`
+	Subject          string             `json:"subject"`
+	FilterConditions []*FilterCondition `json:"filterConditions"`
 }
 
 type FilterCondition struct {
-	Id             int
-	ExpectedCount  int
-	TagAssignments []*TagAssignment
-	Questions      []*question_res.QuestionResponse
+	Id             int                              `json:"id"`
+	ExpectedCount  int                              `json:"expectCount"`
+	TagAssignments []*TagAssignment                 `json:"tagAssignments"`
+	Questions      []*question_res.QuestionResponse `json:"questions"`
 }
 
 type TagAssignment struct {
-	Id     int
-	Tag    tag_res.TagResponse
-	Option option_res.OptionResponse
+	Id     int                       `json:"id"`
+	Tag    tag_res.TagResponse       `json:"tag"`
+	Option option_res.OptionResponse `json:"option"`
 }
 
 func EntityToResponse(exam *entity.Exam) *ExamResponse {

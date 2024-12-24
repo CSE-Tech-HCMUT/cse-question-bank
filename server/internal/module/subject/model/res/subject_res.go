@@ -8,10 +8,10 @@ import (
 )
 
 type SubjectResponse struct {
-	Id         uuid.UUID
-	Name       string
-	Code       string
-	Department department_res.DepartmentResponse
+	Id         uuid.UUID	`json:"id"`
+	Name       string	`json:"name"`
+	Code       string	`json:"code"`
+	Department department_res.DepartmentResponse	`json:"department"`
 }
 
 func EntityToSubjectResponse(subject *entity.Subject) *SubjectResponse {

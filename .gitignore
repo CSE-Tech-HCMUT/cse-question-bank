@@ -9,4 +9,3 @@
 # server
 /server/.env
 /server/bin
-/server/docs

@@ -67,7 +67,7 @@ func (r *subjectRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, conditi
 func (r *subjectRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Subject, error) {
 	var subjects []*entity.Subject
 	tx := r.getDB(ctx, db)
-	if err := tx.Where(conditionMap).Find(&subjects).Error; err != nil {
+	if err := tx.Preload("Department").Where(conditionMap).Find(&subjects).Error; err != nil {
 		return nil, err
 	}
 	return subjects, nil

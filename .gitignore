@@ -1,7 +1,6 @@
 # dotenv environment variable files
 .env
 
-
 # client
 /client/node_modules
 /client/dist
@@ -11,3 +10,4 @@
 /server/.env
 /server/bin
 /server/bin/*
+/server/docs

@@ -17,8 +17,14 @@ type questionBaseUsecaseImpl struct {
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {
+	q, err := u.repo.Find(ctx, nil, map[string]interface{}{
+		"id": question.Id,
+	})
+
+	question.Answer.Id = q[0].Answer.Id
+
 	// TODO check valid option is from tag or not in tagAssignment
-	err := u.repo.Update(ctx, nil, question)
+	err = u.repo.Update(ctx, nil, question)
 	if err != nil {
 		slog.Error("Fail to update question", "error-message", err)
 		return constant.ErrUpdateQuestion(err)

@@ -33,7 +33,7 @@ func getSubjectRoutes(h handler.SubjectHandler) []Route {
 		},
 		{
 			Method: "PUT",
-			Path: "/:id",
+			Path: "",
 			Handler: h.UpdateSubject,
 		},
 		{

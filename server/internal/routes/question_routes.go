@@ -32,7 +32,7 @@ func getQuestionRoutes(h handler.QuestionHandler) []Route {
 		},
 		{
 			Method: "PUT",
-			Path: "/:id",
+			Path: "",
 			Handler: h.EditQuestion,
 		},
 		{

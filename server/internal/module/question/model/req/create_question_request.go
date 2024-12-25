@@ -14,7 +14,7 @@ type CreateQuestionRequest struct {
 	Type     string          `json:"type"`
 	IsParent bool            `json:"isParent"`
 	ParentId *string         `json:"parentId"`
-	Answer   json.RawMessage `json:"answer" swaggertype:"object"`
+	Answer   json.RawMessage `json:"answer" swaggertype:"array,object"`
 
 	TagAssignmentsReq []*req.CreateTagAssignmentRequest `json:"tagAssignments"`
 }

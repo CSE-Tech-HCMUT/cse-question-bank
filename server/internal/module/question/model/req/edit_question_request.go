@@ -7,16 +7,16 @@ import (
 	"encoding/json"
 )
 
-type EditAnswerRequest struct {
-	Id      string          `json:"id"`
-	Content json.RawMessage `json:"content"`
-}
+// type EditAnswerRequest struct {
+// 	Id      string          `json:"id"`
+// 	Content json.RawMessage `json:"content" swaggertype:"array,object"`
+// }
 
 type EditQuestionRequest struct {
-	Id      string             `json:"id"`
+	Id      string             `json:"id" binding:"required"`
 	Content string             `json:"content"`
 	Type    string             `json:"type"`
-	Answer  *EditAnswerRequest `json:"answer" swaggertype:"object"`
+	Answer   json.RawMessage `json:"answer" swaggertype:"array,object"`
 
 	TagAssignmentsReq []req.UpdateTagAssignmentRequest `json:"tagAssignments"`
 }
@@ -27,11 +27,11 @@ func EditReqToQuestionModel(req *EditQuestionRequest) *entity.Question {
 
 	var answer entity.Answer
 	if req.Answer != nil {
-		answerUUID, _ := util.ParseUUID(req.Answer.Id)
+		// answerUUID, _ := util.ParseUUID(req.Answer.Id)
 
 		answer = entity.Answer{
-			Id:      answerUUID,
-			Content: req.Answer.Content,
+			// Id:      answerUUID,
+			Content: req.Answer,
 		}
 	}
 

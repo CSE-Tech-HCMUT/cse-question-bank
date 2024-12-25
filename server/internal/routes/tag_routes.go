@@ -33,7 +33,7 @@ func getTagRoutes(h handler.TagHandler) []Route {
 		},
 		{
 			Method: "PUT",
-			Path: "/:id",
+			Path: "",
 			Handler: h.UpdateTag,
 		},
 		{

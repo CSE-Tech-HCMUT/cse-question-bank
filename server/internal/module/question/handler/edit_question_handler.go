@@ -18,7 +18,7 @@ import (
 //	@Param			EditQuestionRequest	body		req.EditQuestionRequest	true	"EditQuestionReq JSON"
 //	@Success		200	{object}	response.SuccessResponse{data=interface{}}
 //	@Failure	400 {object} response.ErrorResponse
-//	@Router			/questions/{id} [put]
+//	@Router			/questions [put]
 func (h *questionHandlerImpl) EditQuestion(c *gin.Context) {
 	var request req.EditQuestionRequest
 	if err := c.ShouldBind(&request); err != nil {

@@ -65,7 +65,9 @@ definitions:
   exam_res.QuestionFilterExam:
     properties:
       answer:
-        $ref: '#/definitions/question_res.AnswerResponse'
+        items:
+          type: object
+        type: array
       content:
         type: string
       id:
@@ -73,7 +75,9 @@ definitions:
       isUsed:
         type: boolean
       subQuestions:
-        type: object
+        items:
+          type: object
+        type: array
       tagAssignments:
         items:
           $ref: '#/definitions/question_res.TagAssignmentResponse'
@@ -104,13 +108,6 @@ definitions:
       name:
         type: string
     type: object
-  question_res.AnswerResponse:
-    properties:
-      content:
-        type: object
-      id:
-        type: string
-    type: object
   question_res.OptionResponse:
     properties:
       id:
@@ -121,13 +118,17 @@ definitions:
   question_res.QuestionResponse:
     properties:
       answer:
-        $ref: '#/definitions/question_res.AnswerResponse'
+        items:
+          type: object
+        type: array
       content:
         type: string
       id:
         type: string
       subQuestions:
-        type: object
+        items:
+          type: object
+        type: array
       tagAssignments:
         items:
           $ref: '#/definitions/question_res.TagAssignmentResponse'
@@ -174,7 +175,9 @@ definitions:
   req.CreateQuestionRequest:
     properties:
       answer:
-        type: object
+        items:
+          type: object
+        type: array
       content:
         type: string
       isParent:
@@ -187,9 +190,6 @@ definitions:
         type: array
       type:
         type: string
-    required:
-    - content
-    - type
     type: object
   req.CreateSubjectRequest:
     properties:
@@ -228,7 +228,9 @@ definitions:
   req.EditQuestionRequest:
     properties:
       answer:
-        type: object
+        items:
+          type: object
+        type: array
       content:
         type: string
       id:
@@ -239,6 +241,8 @@ definitions:
         type: array
       type:
         type: string
+    required:
+    - id
     type: object
   req.FilterCondition:
     properties:
@@ -249,19 +253,6 @@ definitions:
       tagAssignments:
         items:
           $ref: '#/definitions/req.TagAssignment'
-        type: array
-    type: object
-  req.QuestionCompileRequest:
-    properties:
-      answer:
-        type: object
-      content:
-        type: string
-      isParent:
-        type: boolean
-      subQuestions:
-        items:
-          type: object
         type: array
     type: object
   req.TagAssignment:
@@ -333,6 +324,21 @@ definitions:
         type: string
       name:
         type: string
+      tags:
+        items:
+          $ref: '#/definitions/tag_res.TagResponse'
+        type: array
+    type: object
+  tag_res.SubjectResponse:
+    properties:
+      code:
+        type: string
+      department:
+        $ref: '#/definitions/department_res.DepartmentResponse'
+      id:
+        type: string
+      name:
+        type: string
     type: object
   tag_res.TagResponse:
     properties:
@@ -348,7 +354,7 @@ definitions:
         type: array
       subject:
         allOf:
-        - $ref: '#/definitions/subject_res.SubjectResponse'
+        - $ref: '#/definitions/tag_res.SubjectResponse'
         description: 'TODO: Add table subject -> model subject'
     type: object
 externalDocs:
@@ -368,6 +374,61 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /compile-latex/exams/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get exam PDF preview
+      parameters:
+      - description: Exam Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/pdf
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get exam PDF preview
+      tags:
+      - Latex Compile
+  /compile-latex/questions/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get question pdf preview
+      parameters:
+      - description: Question Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get question pdf preview
+      tags:
+      - Latex Compile
   /departments:
     get:
       consumes:
@@ -445,7 +506,8 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data: {}
+                data:
+                  type: object
               type: object
         "400":
           description: Bad Request
@@ -577,32 +639,6 @@ paths:
       summary: Get exam filter questions list
       tags:
       - Exam
-  /latex-compile:
-    post:
-      consumes:
-      - application/json
-      description: Compile Latex to PDF
-      parameters:
-      - description: QuestionCompileRequest JSON
-        in: body
-        name: QuestionCompileRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.QuestionCompileRequest'
-      produces:
-      - application/pdf
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: file
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      summary: Compile Latex to PDF
-      tags:
-      - Latex Compile
   /options:
     post:
       consumes:
@@ -654,7 +690,8 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data: {}
+                data:
+                  type: object
               type: object
         "400":
           description: Bad Request
@@ -749,6 +786,36 @@ paths:
       summary: Create a question
       tags:
       - Question
+    put:
+      consumes:
+      - application/json
+      description: Edit a question
+      parameters:
+      - description: EditQuestionReq JSON
+        in: body
+        name: EditQuestionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.EditQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Edit a question
+      tags:
+      - Question
   /questions/{id}:
     delete:
       consumes:
@@ -769,7 +836,8 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data: {}
+                data:
+                  type: object
               type: object
         "400":
           description: Bad Request
@@ -805,35 +873,6 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Show a question
-      tags:
-      - Question
-    put:
-      consumes:
-      - application/json
-      description: Edit a question
-      parameters:
-      - description: EditQuestionReq JSON
-        in: body
-        name: EditQuestionRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.EditQuestionRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.ErrorResponse'
-      summary: Edit a question
       tags:
       - Question
   /subjects:
@@ -890,6 +929,38 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Create a subject
+      tags:
+      - Subject
+  /subjects/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get subject by id
+      parameters:
+      - description: Subject Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/subject_res.SubjectResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get subject by id
       tags:
       - Subject
   /tags:
@@ -998,7 +1069,8 @@ paths:
             allOf:
             - $ref: '#/definitions/response.SuccessResponse'
             - properties:
-                data: {}
+                data:
+                  type: object
               type: object
         "400":
           description: Bad Request

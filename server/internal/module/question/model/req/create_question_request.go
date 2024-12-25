@@ -10,8 +10,8 @@ import (
 )
 
 type CreateQuestionRequest struct {
-	Content  string          `json:"content" binding:"required"`
-	Type     string          `json:"type" binding:"required"`
+	Content  string          `json:"content"`
+	Type     string          `json:"type"`
 	IsParent bool            `json:"isParent"`
 	ParentId *string         `json:"parentId"`
 	Answer   json.RawMessage `json:"answer" swaggertype:"object"`

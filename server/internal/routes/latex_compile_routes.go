@@ -16,7 +16,7 @@ func initLatexCompileGroupRoutes(db *gorm.DB, api *gin.RouterGroup) {
 	latexCompileUsecase := usecase.NewLatexCompiler(examRepository, questionRepository)
 	latexCompileHandler := handler.NewLatexCompilerHandler(latexCompileUsecase)
 
-	latexComileRoutes := api.Group("/latex-compile")
+	latexComileRoutes := api.Group("/compile-latex")
 	{
 		addGroupRoutes(latexComileRoutes, getLatexCompileRoutes(latexCompileHandler))
 	}

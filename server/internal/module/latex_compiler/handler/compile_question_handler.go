@@ -9,17 +9,17 @@ import (
 	"github.com/google/uuid"
 )
 
-// CompileHandler godoc
+// CompileQuestion godoc
 //
-// @Summary      Compile Latex to PDF
-// @Description  Compile Latex to PDF
-// @Tags         Latex Compile
-// @Accept       json
-// @Produce      application/pdf
-// @Param        QuestionCompileRequest  body      req.QuestionCompileRequest  true  "QuestionCompileRequest JSON"
-// @Success      200  {file}  file
-// @Failure      400  {object}  response.ErrorResponse
-// @Router       /latex-compile [post]
+// @Summary		Get question pdf preview
+// @Description	Get question pdf preview
+// @Tags			 Latex Compile
+// @Accept			jsons
+// @Param			id	path		string	true	"Question Id"
+// @Produce		json
+// @Success		200	{object}	response.SuccessResponse{}
+// @Failure	400 {object} response.ErrorResponse
+// @Router			compile-latex/exams/{id} [get]
 func (h *latexCompilerHandlerImpl) CompileQuestion(c *gin.Context) {
 	questionId := c.Param("id")
 	questionUUID, err := uuid.Parse(questionId)

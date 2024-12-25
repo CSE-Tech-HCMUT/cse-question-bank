@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
+
+// CompileExam godoc
+//
+// @Summary		Get exam pdf preview
+// @Description	Get exam pdf preview
+// @Tags			 Latex Compile
+// @Accept			jsons
+// @Param			id	path		string	true	"Exam Id"
+// @Produce		json
+// @Success		200	{object}	response.SuccessResponse{}
+// @Failure	400 {object} response.ErrorResponse
+// @Router			compile-latex/exams/{id} [get]
 func (h *latexCompilerHandlerImpl) CompileExam(c *gin.Context) {
 	examId := c.Param("id")
 	examUUID, err := uuid.Parse(examId)

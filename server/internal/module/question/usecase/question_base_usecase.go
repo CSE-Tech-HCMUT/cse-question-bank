@@ -21,7 +21,9 @@ func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *en
 		"id": question.Id,
 	})
 
-	question.Answer.Id = q[0].Answer.Id
+	if q[0].Answer != nil {
+		question.Answer.Id = q[0].Answer.Id
+	}
 
 	// TODO check valid option is from tag or not in tagAssignment
 	err = u.repo.Update(ctx, nil, question)

@@ -17,7 +17,7 @@ import (
 // @Accept			jsons
 // @Param			id	path		string	true	"Question Id"
 // @Produce		json
-// @Success		200	{object}	response.SuccessResponse{}
+// @Success		200	{object}	response.SuccessResponse{data=interface{}}
 // @Failure	400 {object} response.ErrorResponse
 // @Router			compile-latex/exams/{id} [get]
 func (h *latexCompilerHandlerImpl) CompileQuestion(c *gin.Context) {

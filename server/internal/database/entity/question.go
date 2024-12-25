@@ -21,11 +21,11 @@ type Question struct {
 	// LatexContent string       `gorm:"type:text"`
 	IsParent  bool         `gorm:"type:boolean"`
 	ParentId  *uuid.UUID   `gorm:"type:uuid;default:null"` // Nullable foreign key
-	RelateId  *uuid.UUID   `gorm:"type:uuid;default:null"` // Nullable foreign key
+	// RelateId  *uuid.UUID   `gorm:"type:uuid;default:null"` // Nullable foreign key
 	Type      QuestionType `gorm:"type:varchar(20)"`
 	Difficult int          `gorm:"type:int"`
 
-	SubjectId uuid.UUID `gorm:"type:uuid"` // Foreign key to Subject
+	SubjectId *uuid.UUID `gorm:"type:uuid;default:null"` // Foreign key to Subject
 	Subject   Subject   `gorm:"foreignKey:SubjectId"`
 
 	Answer *Answer `gorm:"foreignKey:QuestionId;constraint:OnDelete:CASCADE"` // One-to-many relationship

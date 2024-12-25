@@ -38,7 +38,7 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		initTagGroupRoutes(db, api)
 		iniTagOptionGroupRoutes(db, api)
 		initExamGroupRoutes(db, api)
-		initAuthGroupRoutes(db, api)
+		initAuthenGroupRoutes(db, api)
 		initSubjectGroupRoutes(db, api)
 		initDepartmentGroupRoutes(db, api)
 	}

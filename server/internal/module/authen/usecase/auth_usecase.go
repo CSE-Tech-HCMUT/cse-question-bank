@@ -2,21 +2,21 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/auth/model/req"
+	"cse-question-bank/internal/module/authen/model/req"
 	"cse-question-bank/internal/module/user/repository"
 )
 
-type AuthUsecase interface {
+type AuthenUsecase interface {
 	Login(ctx context.Context, request *req.LoginRequest) (string, string, error)
 	RegisterAccount(ctx context.Context, request req.RegisterAccountRequest) error
 }
 
-type authUsecaseImpl struct {
+type authenUsecaseImpl struct {
 	userRepository repository.UserRepository
 }
 
-func NewAuthUsecase(userRepository repository.UserRepository) AuthUsecase {
-	return &authUsecaseImpl{
+func NewAuthenUsecase(userRepository repository.UserRepository) AuthenUsecase {
+	return &authenUsecaseImpl{
 		userRepository: userRepository,
 	}
 }

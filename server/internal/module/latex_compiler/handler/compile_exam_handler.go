@@ -11,15 +11,15 @@ import (
 
 // CompileExam godoc
 //
-// @Summary		Get exam pdf preview
-// @Description	Get exam pdf preview
+// @Summary		Get exam PDF preview
+// @Description	Get exam PDF preview
 // @Tags			 Latex Compile
-// @Accept			jsons
+// @Accept			json
 // @Param			id	path		string	true	"Exam Id"
-// @Produce		json
-// @Success		200	{object}	response.SuccessResponse{data=interface{}}
-// @Failure	400 {object} response.ErrorResponse
-// @Router			compile-latex/exams/{id} [get]
+// @Produce		application/pdf
+// @Success		200	{file}		response.SuccessResponse{data=interface{}}
+// @Failure		400	{object}	response.ErrorResponse
+// @Router			/compile-latex/exams/{id} [get]
 func (h *latexCompilerHandlerImpl) CompileExam(c *gin.Context) {
 	examId := c.Param("id")
 	examUUID, err := uuid.Parse(examId)

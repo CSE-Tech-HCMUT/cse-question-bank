@@ -14,12 +14,12 @@ import (
 // @Summary		Get question pdf preview
 // @Description	Get question pdf preview
 // @Tags			 Latex Compile
-// @Accept			jsons
+// @Accept			json
 // @Param			id	path		string	true	"Question Id"
 // @Produce		json
 // @Success		200	{object}	response.SuccessResponse{data=interface{}}
 // @Failure	400 {object} response.ErrorResponse
-// @Router			compile-latex/exams/{id} [get]
+// @Router			/compile-latex/questions/{id} [get]
 func (h *latexCompilerHandlerImpl) CompileQuestion(c *gin.Context) {
 	questionId := c.Param("id")
 	questionUUID, err := uuid.Parse(questionId)

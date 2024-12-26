@@ -40,8 +40,8 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 
 		for _, tagAssignment := range filterCondition.FilterTagAssignments {
 			questions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
-				"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
-				"tag_assignment.option_id": strconv.Itoa(tagAssignment.OptionId),
+				"tag_assignments.tag_id":    strconv.Itoa(tagAssignment.TagId),
+				"tag_assignments.option_id": strconv.Itoa(tagAssignment.OptionId),
 			})
 			if err != nil {
 				return nil, err

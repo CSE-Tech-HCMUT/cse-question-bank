@@ -69,7 +69,7 @@ func (r *questionRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditio
 	var questions []*entity.Question
 	tx := r.getDB(ctx, db)
 
-	if err := tx.Preload("Answer").Preload("TagAssignments." + clause.Associations).Where(conditionMap).Find(&questions).Error; err != nil {
+	if err := tx.Preload("Answer").Preload("TagAssignments").Preload("TagAssignments." + clause.Associations).Where(conditionMap).Find(&questions).Error; err != nil {
 		return nil, err
 	}
 	return questions, nil

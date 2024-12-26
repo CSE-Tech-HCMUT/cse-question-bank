@@ -13,7 +13,7 @@ type QuestionRepository interface {
 	Update(ctx context.Context, db *gorm.DB, question *entity.Question) error
 	Delete(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) error
 	Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Question, error)
-
+	FindWithTag(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Question, error)
 	BeginTx(ctx context.Context) (*gorm.DB, error)
 	RollBackTx(tx *gorm.DB) error
 	CommitTx(tx *gorm.DB) error
@@ -69,8 +69,17 @@ func (r *questionRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditio
 	var questions []*entity.Question
 	tx := r.getDB(ctx, db)
 
-	tx = tx.Joins("JOIN tag_assignment ON tag_assignment.question_id = question.id")
+	if err := tx.Preload("Subject").Preload("Answer").Preload("TagAssignments." + clause.Associations).Where(conditionMap).Find(&questions).Error; err != nil {
+		return nil, err
+	}
+	return questions, nil
+}
 
+func (r *questionRepositoryImpl) FindWithTag(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Question, error) {
+	var questions []*entity.Question
+	tx := r.getDB(ctx, db)
+	
+	tx = tx.Joins("JOIN tag_assignment ON tag_assignment.question_id = question.id")
 	if err := tx.Preload("Subject").Preload("Answer").Preload("TagAssignments." + clause.Associations).Where(conditionMap).Find(&questions).Error; err != nil {
 		return nil, err
 	}

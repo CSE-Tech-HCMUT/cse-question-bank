@@ -49,9 +49,9 @@ func (r *examRepositoryImpl) Create(ctx context.Context, db *gorm.DB, exam *enti
 // Update
 func (r *examRepositoryImpl) Update(ctx context.Context, db *gorm.DB, exam *entity.Exam) error {
 	tx := r.getDB(ctx, db)
-	if err := tx.Session(&gorm.Session{FullSaveAssociations: true}).Updates(exam).Error; err != nil {
-		return err
-	}
+		if err := tx.Session(&gorm.Session{FullSaveAssociations: true}).Updates(exam).Error; err != nil {
+			return err
+		}
 	return nil
 }
 

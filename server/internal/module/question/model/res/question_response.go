@@ -20,9 +20,9 @@ type QuestionResponse struct {
 // }
 
 type TagAssignmentResponse struct {
-	Id     int
-	Tag    *TagResponse
-	Option *OptionResponse
+	Id     int             `json:"id"`
+	Tag    *TagResponse    `json:"tag"`
+	Option *OptionResponse `json:"option"`
 }
 
 type TagResponse struct {
@@ -41,7 +41,7 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 	var answer json.RawMessage
 	if question.Answer != nil {
 		answer = question.Answer.Content
-	
+
 	}
 
 	tagsAssginmentsList := make([]*TagAssignmentResponse, 0)

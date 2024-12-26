@@ -5,6 +5,8 @@ import (
 	"cse-question-bank/internal/module/tag_assignment/model/req"
 	"cse-question-bank/internal/util"
 	"encoding/json"
+
+	"github.com/google/uuid"
 )
 
 // type EditAnswerRequest struct {
@@ -13,10 +15,11 @@ import (
 // }
 
 type EditQuestionRequest struct {
-	Id      string             `json:"id" binding:"required"`
-	Content string             `json:"content"`
-	Type    string             `json:"type"`
-	Answer   json.RawMessage `json:"answer" swaggertype:"array,object"`
+	Id        string          `json:"id" binding:"required"`
+	Content   string          `json:"content"`
+	Type      string          `json:"type"`
+	Answer    json.RawMessage `json:"answer" swaggertype:"array,object"`
+	SubjectId uuid.UUID       `json:"subjectId"`
 
 	TagAssignmentsReq []req.UpdateTagAssignmentRequest `json:"tagAssignments"`
 }
@@ -52,5 +55,6 @@ func EditReqToQuestionModel(req *EditQuestionRequest) *entity.Question {
 		Type:           entity.QuestionType(req.Type),
 		Answer:         &answer,
 		TagAssignments: tagAssignments,
+		SubjectId:      &req.SubjectId,
 	}
 }

@@ -10,11 +10,12 @@ import (
 )
 
 type CreateQuestionRequest struct {
-	Content  string          `json:"content"`
-	Type     string          `json:"type"`
-	IsParent bool            `json:"isParent"`
-	ParentId *string         `json:"parentId"`
-	Answer   json.RawMessage `json:"answer" swaggertype:"array,object"`
+	Content   string          `json:"content"`
+	Type      string          `json:"type"`
+	IsParent  bool            `json:"isParent"`
+	ParentId  *string         `json:"parentId"`
+	Answer    json.RawMessage `json:"answer" swaggertype:"array,object"`
+	SubjectId uuid.UUID       `json:"subjectId"`
 
 	TagAssignmentsReq []*req.CreateTagAssignmentRequest `json:"tagAssignments"`
 }
@@ -51,5 +52,6 @@ func CreateReqToQuestionModel(req *CreateQuestionRequest) *entity.Question {
 		Type:           entity.QuestionType(req.Type),
 		Answer:         answer,
 		TagAssignments: tagAssignments,
+		SubjectId:      &req.SubjectId,
 	}
 }

@@ -3,6 +3,8 @@ package question_res
 import (
 	"cse-question-bank/internal/database/entity"
 	"encoding/json"
+
+	"github.com/google/uuid"
 )
 
 type QuestionResponse struct {
@@ -12,12 +14,14 @@ type QuestionResponse struct {
 	Question       []*QuestionResponse      `json:"subQuestions" swaggertype:"array,object"`
 	Answer         json.RawMessage          `json:"answer" swaggertype:"array,object"`
 	TagAssignments []*TagAssignmentResponse `json:"tagAssignments"`
+	Subject        SubjectResponse          `json:"subject"`
 }
 
-// type AnswerResponse struct {
-// 	Id      string          `json:"id"`
-// 	Content json.RawMessage `json:"content" swaggertype:"array,object"`
-// }
+type SubjectResponse struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+	Code string    `json:"code"`
+}
 
 type TagAssignmentResponse struct {
 	Id     int             `json:"id"`
@@ -71,5 +75,10 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 		Answer:         answer,
 		Question:       childQuestion,
 		TagAssignments: tagsAssginmentsList,
+		Subject: SubjectResponse{
+			Id:   question.Subject.Id,
+			Name: question.Subject.Name,
+			Code: question.Subject.Code,
+		},
 	}
 }

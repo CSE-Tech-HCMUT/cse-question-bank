@@ -21,8 +21,16 @@ func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *en
 		"id": question.Id,
 	})
 
+	// load id of answer from database
 	if q[0].Answer != nil {
 		question.Answer.Id = q[0].Answer.Id
+	}
+
+	// load id of tagAssignment from database
+	if q[0].TagAssignments != nil {
+		for index, tagAssignment := range q[0].TagAssignments {
+			question.TagAssignments[index].Id = tagAssignment.Id
+		}
 	}
 
 	// TODO check valid option is from tag or not in tagAssignment

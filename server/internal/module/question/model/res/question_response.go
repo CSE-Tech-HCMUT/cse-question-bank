@@ -38,12 +38,11 @@ type OptionResponse struct {
 
 func EntityToResponse(question *entity.Question, childQuestion []*QuestionResponse) *QuestionResponse {
 	// var answer *AnswerResponse
-	// if question.Answer != nil {
-	// 	answer = &AnswerResponse{
-	// 		Id:      question.Answer.Id.String(),
-	// 		Content: question.Answer.Content,
-	// 	}
-	// }
+	var answer json.RawMessage
+	if question.Answer != nil {
+		answer = question.Answer.Content
+	
+	}
 
 	tagsAssginmentsList := make([]*TagAssignmentResponse, 0)
 	for _, tagAssignment := range question.TagAssignments {
@@ -69,7 +68,7 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 		Id:             question.Id.String(),
 		Content:        question.Content,
 		Type:           string(question.Type),
-		Answer:         question.Answer.Content,
+		Answer:         answer,
 		Question:       childQuestion,
 		TagAssignments: tagsAssginmentsList,
 	}

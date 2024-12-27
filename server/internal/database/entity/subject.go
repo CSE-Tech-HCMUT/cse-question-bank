@@ -15,6 +15,7 @@ type Subject struct {
 	Department     Department `gorm:"foreignKey:DepartmentCode"`
 	Users          []User     `gorm:"many2many:subject_users"`
 	Questions      []Question `gorm:"foreignKey:SubjectId;constraint:OnDelete:CASCADE"`
+	Exams          []Exam     `gorm:"foreignKey:SubjectId;constraint:OnDelete:CASCADE"`
 	Tags           []Tag      `gorm:"foreignKey:SubjectId;constraint:OnDelete:CASCADE"`
 }
 

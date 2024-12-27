@@ -34,6 +34,6 @@ func CreateTagReqToEntity(tag CreateTagRequest) *entity.Tag {
 		Name:        tag.Name,
 		Description: tag.Description,
 		Options:     createOptoinTagReqToEntity(tag.Options),
-		SubjectId:   tag.SubjectId,
+		SubjectId:   &tag.SubjectId,
 	}
 }

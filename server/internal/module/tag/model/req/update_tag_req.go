@@ -38,6 +38,6 @@ func UpdateTagReqToEntity(tag UpdateTagRequest) *entity.Tag {
 		Name:        tag.Name,
 		Description: tag.Description,
 		Options:     updateOptionReqToEntity(tag.Options),
-		SubjectId:   tag.SubjectId,
+		SubjectId:   &tag.SubjectId,
 	}
 }

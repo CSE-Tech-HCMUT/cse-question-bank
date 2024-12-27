@@ -40,7 +40,7 @@ func (r *examRepositoryImpl) getDB(ctx context.Context, db *gorm.DB) *gorm.DB {
 // Create
 func (r *examRepositoryImpl) Create(ctx context.Context, db *gorm.DB, exam *entity.Exam) error {
 	tx := r.getDB(ctx, db)
-	if err := tx.Create(exam).Error; err != nil {
+	if err := tx.Session(&gorm.Session{FullSaveAssociations: true}).Create(exam).Error; err != nil {
 		return err
 	}
 	return nil

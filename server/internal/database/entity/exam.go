@@ -10,7 +10,8 @@ import (
 type Exam struct {
 	Id               uuid.UUID `gorm:"type:uuid;primaryKey"`
 	Semester         string
-	Subject          string
+	SubjectId        *uuid.UUID `gorm:"type:uuid;default:null"` // Foreign key to Subject
+	Subject          Subject    `gorm:"foreignKey:SubjectId"`
 	TotalQuestion    int
 	FilterConditions []*FilterCondition `gorm:"foreignKey:ExamID;constraint:OnDelete:CASCADE;"`
 }

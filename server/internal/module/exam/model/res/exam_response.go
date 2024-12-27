@@ -14,8 +14,14 @@ type ExamResponse struct {
 	// Questions        []*question_res.QuestionResponse `json:"questions"`
 	TotalQuestion    int                `json:"totalQuestion"`
 	Semester         string             `json:"semester"`
-	Subject          string             `json:"subject"`
+	Subject          SubjectResponse    `json:"subject"`
 	FilterConditions []*FilterCondition `json:"filterConditions"`
+}
+
+type SubjectResponse struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+	Code string    `json:"code"`
 }
 
 type FilterCondition struct {
@@ -33,10 +39,14 @@ type TagAssignment struct {
 
 func EntityToResponse(exam *entity.Exam) *ExamResponse {
 	return &ExamResponse{
-		Id:               exam.Id,
-		TotalQuestion:    exam.TotalQuestion,
-		Semester:         exam.Semester,
-		Subject:          exam.Subject,
+		Id:            exam.Id,
+		TotalQuestion: exam.TotalQuestion,
+		Semester:      exam.Semester,
+		Subject: SubjectResponse{
+			Id:   exam.Subject.Id,
+			Name: exam.Subject.Name,
+			Code: exam.Subject.Code,
+		},
 		FilterConditions: convertFilterTags(exam.FilterConditions),
 	}
 }

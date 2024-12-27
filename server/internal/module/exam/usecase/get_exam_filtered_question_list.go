@@ -36,6 +36,7 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 			questions, err := u.questionRepository.FindWithTag(ctx, nil, map[string]interface{}{
 				"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
 				"tag_assignment.option_id": strconv.Itoa(tagAssignment.OptionId),
+				"subject_id":               exam.SubjectId,
 			})
 			if err != nil {
 				return nil, err

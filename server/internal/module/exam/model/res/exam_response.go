@@ -12,7 +12,7 @@ import (
 type ExamResponse struct {
 	Id uuid.UUID `json:"id"`
 	// Questions        []*question_res.QuestionResponse `json:"questions"`
-	TotalQuestion    int                `json:"totalQuestion"`
+	TotalQuestion    int                `json:"numberQuestion"`
 	Semester         string             `json:"semester"`
 	Subject          SubjectResponse    `json:"subject"`
 	FilterConditions []*FilterCondition `json:"filterConditions"`
@@ -26,7 +26,7 @@ type SubjectResponse struct {
 
 type FilterCondition struct {
 	Id             int                              `json:"id"`
-	ExpectedCount  int                              `json:"expectCount"`
+	ExpectedCount  int                              `json:"numberQuestion"`
 	TagAssignments []*TagAssignment                 `json:"tagAssignments"`
 	Questions      []*question_res.QuestionResponse `json:"questions"`
 }

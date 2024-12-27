@@ -47,7 +47,7 @@ func getExamRoutes(h handler.ExamHandler) []Route {
 		},
 		{
 			Method: "PUT",
-			Path: "/:id",
+			Path: "",
 			Handler: h.UpdateExam,
 		},
 		{

@@ -14,5 +14,9 @@ func (u *examUsecaseImpl) UpdateExam(ctx context.Context, request *req.UpdateExa
 		return nil, err
 	}
 
-	return exam_res.EntityToResponse(exam), nil
+	examEntity, _ := u.examRepostiroy.Find(ctx, nil, map[string]interface{}{
+		"id": exam.Id,
+	})
+
+	return exam_res.EntityToResponse(examEntity[0]), nil
 }

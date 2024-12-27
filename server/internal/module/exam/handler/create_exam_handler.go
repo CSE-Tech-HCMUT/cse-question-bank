@@ -18,7 +18,7 @@ import (
 //	@Param			CreateExamRequest	body		req.CreateExamRequest	true	"CreateExamRequest JSON"
 //	@Success		200	{object}	response.SuccessResponse{data=exam_res.ExamResponse}
 //	@Failure	400 {object} response.ErrorResponse
-//	@Router			/exam [post]
+//	@Router			/exams [post]
 func (h *examHandlerImpl) CreateExam(c *gin.Context) {
 	var request req.CreateExamRequest
 	if err := c.ShouldBind(&request); err != nil {

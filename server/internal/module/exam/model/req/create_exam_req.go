@@ -9,7 +9,7 @@ import (
 type CreateExamRequest struct {
 	TotalQuestion    int                `json:"numberQuestion"`
 	SubjectId        uuid.UUID          `json:"subjectId"`
-	FilterConditions []*FilterCondition `json:"filterTags"`
+	FilterConditions []*FilterCondition `json:"filterConditions"`
 }
 
 func (req CreateExamRequest) ToEntity() entity.Exam {

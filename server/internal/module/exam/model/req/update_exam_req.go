@@ -10,7 +10,7 @@ type UpdateExamRequest struct {
 	Id               uuid.UUID
 	TotalQuestion    int                `json:"numberQuestion"`
 	SubjectId        uuid.UUID          `json:"subjectId"`
-	FilterConditions []*FilterCondition `json:"filterTags"`
+	FilterConditions []*FilterCondition `json:"filterConditions"`
 }
 
 func (req UpdateExamRequest) ToEntity() *entity.Exam {

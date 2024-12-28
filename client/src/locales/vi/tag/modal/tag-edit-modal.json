@@ -1,0 +1,28 @@
+{
+  "validation": {
+    "nameRequired": "Vui lòng nhập tên nhãn!",
+    "optionRequired": "Lựa chọn không thể để trống!",
+    "minOptions": "Vui lòng thêm ít nhất một lựa chọn!"
+  },
+  "validateName": "Vui lòng nhập tên nhãn!",
+  "validateOptions": "Vui lòng thêm ít nhất một lựa chọn!",
+  "createLabel": "Tạo nhãn mới",
+  "name": "Tên",
+  "placeholderName": "Nhập tên nhãn",
+  "description": "Mô tả",
+  "placeholder description": "Nhập mô tả",
+  "subject": "Môn học",
+  "placeholder subject": "Chọn môn học",
+  "options": "Các lựa chọn",
+  "placeholderOption": "Nhập nội dung của lựa chọn",
+  "addOption": "Thêm lựa chọn",
+  "cancel": "Hủy",
+  "create": "Tạo",
+  "editTag": "Chỉnh sửa nhãn",
+  "saveOption": "Lưu lựa chọn",
+  "actions": "Hành động",
+  "tagContent": "Nội dung nhãn",
+  "tagOptions": "Các lựa chọn nhãn",
+  "optionExists": "Lựa chọn đã tồn tại hoặc trống.",
+  "save": "Lưu"
+}

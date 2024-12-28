@@ -1,0 +1,29 @@
+{
+    "validation": {
+      "nameRequired": "Please input the tag content!",
+      "optionRequired": "Option cannot be empty!",
+      "minOptions": "Please add at least one option!"
+    },
+    "validateName": "Please enter a label name!",
+    "validateOptions": "Please add at least one option!",
+    "createLabel": "Create new tag",
+    "name": "Name",
+    "placeholderName": "Enter a label name",
+    "description": "Description",
+    "placeholder description": "Enter a description for the tag",
+    "subject": "Subject",
+    "placeholder subject": "Select a subject for the tag",
+    "options": "Options",
+    "placeholderOption": "Enter a content for the option",
+    "addOption": "Add option",
+    "cancel": "Cancel",
+    "create": "Create",
+    "editTag": "Edit Tag",
+    "saveOption": "Save Option",
+    "actions": "Actions",
+    "tagContent": "Tag Content",
+    "tagOptions": "Tag Options",
+    "optionExists": "Option already exists or is empty.",
+    "save": "Save"
+  }
+  

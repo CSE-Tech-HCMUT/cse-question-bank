@@ -1,0 +1,10 @@
+{
+    "username": "Username",
+    "placeholderUsername": "Please input your username!",
+    "password": "Password",
+    "placeholderPassword": "Please input your password!",
+    "forgotPassword": "Forgot Password?",
+    "login": "Login",
+    "notMember": "Not a member?",
+    "signup": "Sign up now"
+}

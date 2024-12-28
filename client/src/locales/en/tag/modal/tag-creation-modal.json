@@ -1,0 +1,20 @@
+{
+    "nameRequired": "Please input the tag content!",
+    "optionRequired": "Option cannot be empty!",
+    "subjectRequired": "Please select the subject",
+    "minOptions": "Please add at least one option!",
+    "validate name": "Plese enter a label name!",
+    "validate options": "Please add at least one option!",
+    "create label": "Create new tag",
+    "name": "Name",
+    "placeholder name": "Enter a label name",
+    "description": "Description",
+    "placeholder description": "Enter a description for the tag",
+    "subject": "Subject",
+    "placeholder subject": "Select a subject for the tag",
+    "options": "Options",
+    "placeholder option": "Enter a content for the option",
+    "add option": "Add option",
+    "cancel": "Cancel",
+    "create": "Create"
+}

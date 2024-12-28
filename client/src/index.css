@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-icon {
+  font-size: 25px;
+  cursor: pointer;
+  color: white;
+  background-color: #0388b4; 
+  border-radius: 50%;
+  padding: 6px; 
+}
+
+.custom-icon:hover {
+  background-color: #026b92; 
+}

@@ -1,0 +1,14 @@
+{
+    "bank question title": "Ngân Hàng Câu Hỏi",
+    
+    "sidebar": {
+        "dashboard": "Trang chủ",
+        "bank question": "Ngân hàng câu hỏi",
+        "assigned question": "Phụ trách câu hỏi",
+        "tag management": "Quản lý nhãn",
+        "question": "Câu hỏi",
+        "exam": "Đề thi",
+        "bank exam": "Ngân hàng đề thi",
+        "assigned exam": "Đề thi phụ trách "
+    }
+}

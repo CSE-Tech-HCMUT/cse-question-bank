@@ -1,0 +1,27 @@
+{
+    "header": {
+        "ho chi minh city university of technology": "HO CHI MINH CITY UNIVERSITY OF TECHNOLOGY",
+        "vietnam national university ho chi minh city": "VIETNAM NATIONAL UNIVERSITY HO CHI MINH CITY",
+        "language": "LANGUAGE",
+        "signup": "SIGN UP",
+        "login": "LOG IN"
+    },
+
+    "application for administrator": "APPLICATION FOR ADMINISTRATOR",
+    "application for lecturer": "APPLICATION FOR LECTURER",
+    "application for student": "APPLICATION FOR STUDENT",
+    "user management": "User management",
+    "content user management": "The system manages the system's user list",
+    "department management": "Department management",
+    "content department management": "School faculty list management system",
+    "subject management": "Subject management",
+    "content subject management": "School subject list management system",
+    "question management": "Question management",
+    "content question management": "The system manages the system's question list",
+    "exam management": "Exam management",
+    "content exam management": "School exam list management system",
+    "reference question": "Reference question",
+    "content reference question": "List of questions for all subjects in all years",
+    "reference exam": "Reference exam",
+    "content reference exam": "List of exam questions for all subjects in each year"
+}

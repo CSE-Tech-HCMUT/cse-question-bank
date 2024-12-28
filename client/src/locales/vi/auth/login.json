@@ -1,0 +1,10 @@
+{
+    "username": "Tài khoản",
+    "placeholderUsername": "Vui lòng nhập tài khoản!",
+    "password": "Mật khẩu",
+    "placeholderPassword": "Vui lòng nhâp mật khẩu!",
+    "forgotPassword": "Quên mật khẩu?",
+    "login": "Đăng nhập",
+    "notMember": "Bạn chưa có tài khoản?",
+    "signup": "Đăng ký ngay"
+}

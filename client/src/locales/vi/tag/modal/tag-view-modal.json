@@ -1,0 +1,14 @@
+{
+    "viewTag": "Xem chi tiết thông tin nhãn",
+    "name": "Tên nhãn",
+    "placeholderName": "Nhập nội dung nhãn",
+    "description": "Mô tả",
+    "placeholderDescription": "Nhập mô tả nhãn",
+    "subject": "Môn học",
+    "subjectPlaceholder": "Nhập môn học",
+    "tagOptions": "Các lựa chọn nhãn",
+    "close": "Đóng",
+    "id": "ID",
+    "content": "Nội Dung"
+  }
+  

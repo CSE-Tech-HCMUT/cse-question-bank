@@ -1,0 +1,13 @@
+{
+    "create question": "Tạo câu hỏi",
+    "no": "STT",
+    "content": "Nội dung",
+    "type": "Loại câu hỏi",
+    "tag": "Nhãn câu hỏi",
+    "actions": "Thao tác",
+    "subject": "Môn học",
+    "view details": "Thông tin chi thiết",
+    "edit": "Cập nhật",
+    "delete": "Xóa",
+    "question management": "Quản lý câu hỏi"
+}

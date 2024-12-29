@@ -95,9 +95,7 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -156,7 +154,57 @@ const docTemplate = `{
                 }
             }
         },
-        "/exam": {
+        "/exams": {
+            "put": {
+                "description": "Update a exam",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Update a exam",
+                "parameters": [
+                    {
+                        "description": "UpdateExamRequest JSON",
+                        "name": "UpdateExamRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.UpdateExamRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/exam_res.ExamResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a exam",
                 "consumes": [
@@ -257,56 +305,6 @@ const docTemplate = `{
                     }
                 }
             },
-            "put": {
-                "description": "Update a exam",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Exam"
-                ],
-                "summary": "Update a exam",
-                "parameters": [
-                    {
-                        "description": "UpdateExamRequest JSON",
-                        "name": "UpdateExamRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/req.UpdateExamRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.SuccessResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/exam_res.ExamResponse"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Delete a exam",
                 "consumes": [
@@ -339,9 +337,7 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -547,9 +543,7 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -691,9 +685,7 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -839,9 +831,7 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -1228,9 +1218,7 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -1284,25 +1272,25 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "numberQuestion": {
+                    "description": "Questions        []*question_res.QuestionResponse ` + "`" + `json:\"questions\"` + "`" + `",
+                    "type": "integer"
+                },
                 "semester": {
                     "type": "string"
                 },
                 "subject": {
-                    "type": "string"
-                },
-                "totalQuestion": {
-                    "description": "Questions        []*question_res.QuestionResponse ` + "`" + `json:\"questions\"` + "`" + `",
-                    "type": "integer"
+                    "$ref": "#/definitions/exam_res.SubjectResponse"
                 }
             }
         },
         "exam_res.FilterCondition": {
             "type": "object",
             "properties": {
-                "expectCount": {
+                "id": {
                     "type": "integer"
                 },
-                "id": {
+                "numberQuestion": {
                     "type": "integer"
                 },
                 "questions": {
@@ -1322,10 +1310,10 @@ const docTemplate = `{
         "exam_res.FilterQuestionsList": {
             "type": "object",
             "properties": {
-                "expectCount": {
+                "id": {
                     "type": "integer"
                 },
-                "id": {
+                "numberQuestion": {
                     "type": "integer"
                 },
                 "questions": {
@@ -1366,6 +1354,9 @@ const docTemplate = `{
                         "type": "object"
                     }
                 },
+                "subject": {
+                    "$ref": "#/definitions/question_res.SubjectResponse"
+                },
                 "tagAssignments": {
                     "type": "array",
                     "items": {
@@ -1373,6 +1364,20 @@ const docTemplate = `{
                     }
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "exam_res.SubjectResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -1445,6 +1450,9 @@ const docTemplate = `{
                         "type": "object"
                     }
                 },
+                "subject": {
+                    "$ref": "#/definitions/question_res.SubjectResponse"
+                },
                 "tagAssignments": {
                     "type": "array",
                     "items": {
@@ -1452,6 +1460,20 @@ const docTemplate = `{
                     }
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "question_res.SubjectResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -1487,7 +1509,7 @@ const docTemplate = `{
         "req.CreateExamRequest": {
             "type": "object",
             "properties": {
-                "filterTags": {
+                "filterConditions": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/req.FilterCondition"
@@ -1496,7 +1518,7 @@ const docTemplate = `{
                 "numberQuestion": {
                     "type": "integer"
                 },
-                "subject": {
+                "subjectId": {
                     "type": "string"
                 }
             }
@@ -1528,6 +1550,9 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "parentId": {
+                    "type": "string"
+                },
+                "subjectId": {
                     "type": "string"
                 },
                 "tagAssignments": {
@@ -1612,6 +1637,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "subjectId": {
+                    "type": "string"
+                },
                 "tagAssignments": {
                     "type": "array",
                     "items": {
@@ -1657,7 +1685,7 @@ const docTemplate = `{
         "req.UpdateExamRequest": {
             "type": "object",
             "properties": {
-                "filterTags": {
+                "filterConditions": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/req.FilterCondition"
@@ -1669,7 +1697,7 @@ const docTemplate = `{
                 "numberQuestion": {
                     "type": "integer"
                 },
-                "subject": {
+                "subjectId": {
                     "type": "string"
                 }
             }

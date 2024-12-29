@@ -89,9 +89,7 @@
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -150,7 +148,57 @@
                 }
             }
         },
-        "/exam": {
+        "/exams": {
+            "put": {
+                "description": "Update a exam",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Update a exam",
+                "parameters": [
+                    {
+                        "description": "UpdateExamRequest JSON",
+                        "name": "UpdateExamRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.UpdateExamRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/exam_res.ExamResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a exam",
                 "consumes": [
@@ -251,56 +299,6 @@
                     }
                 }
             },
-            "put": {
-                "description": "Update a exam",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Exam"
-                ],
-                "summary": "Update a exam",
-                "parameters": [
-                    {
-                        "description": "UpdateExamRequest JSON",
-                        "name": "UpdateExamRequest",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/req.UpdateExamRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.SuccessResponse"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/exam_res.ExamResponse"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/response.ErrorResponse"
-                        }
-                    }
-                }
-            },
             "delete": {
                 "description": "Delete a exam",
                 "consumes": [
@@ -333,9 +331,7 @@
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -541,9 +537,7 @@
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -685,9 +679,7 @@
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -833,9 +825,7 @@
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -1222,9 +1212,7 @@
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object"
-                                        }
+                                        "data": {}
                                     }
                                 }
                             ]
@@ -1278,25 +1266,25 @@
                 "id": {
                     "type": "string"
                 },
+                "numberQuestion": {
+                    "description": "Questions        []*question_res.QuestionResponse `json:\"questions\"`",
+                    "type": "integer"
+                },
                 "semester": {
                     "type": "string"
                 },
                 "subject": {
-                    "type": "string"
-                },
-                "totalQuestion": {
-                    "description": "Questions        []*question_res.QuestionResponse `json:\"questions\"`",
-                    "type": "integer"
+                    "$ref": "#/definitions/exam_res.SubjectResponse"
                 }
             }
         },
         "exam_res.FilterCondition": {
             "type": "object",
             "properties": {
-                "expectCount": {
+                "id": {
                     "type": "integer"
                 },
-                "id": {
+                "numberQuestion": {
                     "type": "integer"
                 },
                 "questions": {
@@ -1316,10 +1304,10 @@
         "exam_res.FilterQuestionsList": {
             "type": "object",
             "properties": {
-                "expectCount": {
+                "id": {
                     "type": "integer"
                 },
-                "id": {
+                "numberQuestion": {
                     "type": "integer"
                 },
                 "questions": {
@@ -1360,6 +1348,9 @@
                         "type": "object"
                     }
                 },
+                "subject": {
+                    "$ref": "#/definitions/question_res.SubjectResponse"
+                },
                 "tagAssignments": {
                     "type": "array",
                     "items": {
@@ -1367,6 +1358,20 @@
                     }
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "exam_res.SubjectResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -1439,6 +1444,9 @@
                         "type": "object"
                     }
                 },
+                "subject": {
+                    "$ref": "#/definitions/question_res.SubjectResponse"
+                },
                 "tagAssignments": {
                     "type": "array",
                     "items": {
@@ -1446,6 +1454,20 @@
                     }
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "question_res.SubjectResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -1481,7 +1503,7 @@
         "req.CreateExamRequest": {
             "type": "object",
             "properties": {
-                "filterTags": {
+                "filterConditions": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/req.FilterCondition"
@@ -1490,7 +1512,7 @@
                 "numberQuestion": {
                     "type": "integer"
                 },
-                "subject": {
+                "subjectId": {
                     "type": "string"
                 }
             }
@@ -1522,6 +1544,9 @@
                     "type": "boolean"
                 },
                 "parentId": {
+                    "type": "string"
+                },
+                "subjectId": {
                     "type": "string"
                 },
                 "tagAssignments": {
@@ -1606,6 +1631,9 @@
                 "id": {
                     "type": "string"
                 },
+                "subjectId": {
+                    "type": "string"
+                },
                 "tagAssignments": {
                     "type": "array",
                     "items": {
@@ -1651,7 +1679,7 @@
         "req.UpdateExamRequest": {
             "type": "object",
             "properties": {
-                "filterTags": {
+                "filterConditions": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/req.FilterCondition"
@@ -1663,7 +1691,7 @@
                 "numberQuestion": {
                     "type": "integer"
                 },
-                "subject": {
+                "subjectId": {
                     "type": "string"
                 }
             }

@@ -22,6 +22,7 @@
     "i18next": "^24.1.0",
     "jodit": "^4.2.47",
     "jodit-react": "^4.1.2",
+    "mathjax": "^3.2.2",
     "react": "^18.3.1",
     "react-ace": "^13.0.0",
     "react-awesome-reveal": "^4.3.1",

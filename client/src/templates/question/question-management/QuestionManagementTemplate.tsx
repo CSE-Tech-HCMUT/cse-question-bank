@@ -3,7 +3,7 @@ import { questionActions } from "@/stores/question/slice";
 import { createQuestionThunk, getAllQuestionsThunk, previewPDFFileThunk } from "@/stores/question/thunk";
 import { Question } from "@/types/question";
 import { TagAssignment } from "@/types/tagOption";
-import { Button, Space, TableProps, Tag, theme, Tooltip } from "antd"
+import { Button, Space, TableProps, Tag, Tooltip } from "antd"
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next"
@@ -24,10 +24,6 @@ export const QuestionManagementTemplate = () => {
 
   // Authen
   const [subjectAuthen, setSubjectAuthen] = useState<Subject>();
-
-  const {
-    token: { colorPrimary }
-  } = theme.useToken();
 
   const [current, setCurrent] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -133,23 +129,37 @@ export const QuestionManagementTemplate = () => {
         const MAX_OPTIONS = 3;
         const visibleTagAssignments = tagAssignments.slice(0, MAX_OPTIONS);
         const hiddenTagAssignments = tagAssignments.slice(MAX_OPTIONS);
-
+    
+        // Hàm để xác định màu của tag dựa trên vị trí của nó
+        const getTagColor = (index: number) => {
+          switch(index) {
+            case 0:
+              return 'red';
+            case 1:
+              return 'blue';
+            case 2:
+              return 'green';
+            default:
+              return 'cyan';
+          }
+        };
+    
         return (
           <>
             {
-              visibleTagAssignments.map((tagAssignment) => (
-                <Tag color={colorPrimary} key={tagAssignment.id} className="mb-1">
+              visibleTagAssignments.map((tagAssignment, index) => (
+                <Tag color={getTagColor(index)} key={tagAssignment.id} className="mb-1">
                   {tagAssignment.option?.name}
                 </Tag>
               ))
             }
             {hiddenTagAssignments.length > 0 && (
-                  <Tag color="cyan">+{hiddenTagAssignments.length} more</Tag>
+              <Tag color="cyan">+{hiddenTagAssignments.length} more</Tag>
             )}
           </>
         )
       }
-    },
+    },    
     {
       title: t("actions"),
       key: "actions",

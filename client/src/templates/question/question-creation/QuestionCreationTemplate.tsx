@@ -1,7 +1,7 @@
 import { LatexEditor, TextEditor } from "@/components";
 import PDFPreview from "@/components/pdf/PDFPreview";
 import PATH from "@/const/path";
-import { getTextFromHtml } from "@/helper";
+import { getLatexFromHtml, getTextFromHtml } from "@/helper";
 import { RootState, useAppDispatch } from "@/stores";
 import { editQuestionThunk, previewPDFFileThunk } from "@/stores/question/thunk";
 import { getAllTagsThunk } from "@/stores/tag-management/thunk";
@@ -51,7 +51,12 @@ export const QuestionCreationTemplate = () => {
   const [numberOfDistractionAnswers, setNumberOfDistractionAnswer] = useState<number>(0);
 
   // Manual
-  const [manualAnswers, setManualAnswers] = useState<Answer[]>([]);
+  const [manualAnswers, setManualAnswers] = useState<Answer[]>([
+    { content: '', isTrue: false },
+    { content: '', isTrue: false },
+    { content: '', isTrue: false },
+    { content: '', isTrue: false },
+  ]);
 
   const [editorMode, setEditorMode] = useState<"text" | "latex">("text"); 
 
@@ -74,7 +79,8 @@ export const QuestionCreationTemplate = () => {
    });
   };
   const handleEditorChangeContentQuestion = (content: string) => {
-    setContentQuestion(getTextFromHtml(content));   
+    setContentQuestion(getTextFromHtml(content));
+    // setContentQuestion(getLatexFromHtml(content));   
   };
 
   // Pdf
@@ -106,7 +112,7 @@ export const QuestionCreationTemplate = () => {
       payload = {...payload,
         answer: manualAnswers
       }
-    }
+    }    
     
     dispatch(editQuestionThunk(payload)).then((actionResult) => { 
       

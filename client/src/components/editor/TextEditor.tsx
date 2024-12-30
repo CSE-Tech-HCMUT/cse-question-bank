@@ -1,7 +1,8 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import JoditEditor from 'jodit-react';
 import { useTranslation } from 'react-i18next';
-import { getTextFromHtml } from '@/helper';
+import { getLatexFromHtml, getTextFromHtml } from '@/helper';
+import 'mathjax/es5/tex-mml-chtml.js';
 
 interface JoditEditorProps {
     placeholder?: string;
@@ -17,11 +18,17 @@ interface UploadResponse {
     error?: string;
 }
 
-export const TextEditor: React.FC<JoditEditorProps> = ({ placeholder, onChange }) => {
+declare global {
+    interface Window {
+        MathJax: any;
+    }
+}
+
+export const TextEditor: React.FC<JoditEditorProps> = ({ placeholder, onChange, value }) => {
     const { t } = useTranslation('text_editor');
 
     const editor = useRef<HTMLDivElement>(null);
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(value || '');
     const [showToolbar, setShowToolbar] = useState(false);
 
     const config = useMemo(
@@ -31,6 +38,19 @@ export const TextEditor: React.FC<JoditEditorProps> = ({ placeholder, onChange }
             toolbar: showToolbar,
             minHeight: 100,
             height: 150,
+            buttons: [
+                'bold', 'italic', 'underline', 'superscript', 'subscript', 'eraser', '|', 'ul', 'ol', 'outdent', 'indent', 'font', 'fontsize', 'paragraph', '|', 'image', 'table', 'link', '|', 'hr', 'symbol', 'fullsize', '|', 'source', '|', {
+                    name: 'MathType',
+                    exec: function (editor: any) {
+                        const mathML = '<span>\\( n^2 \\)</span>';
+                        editor.selection.insertHTML(mathML);
+                        if (window.MathJax) {
+                            window.MathJax.typeset();
+                        }
+                    },
+                    tooltip: 'Insert Math Formula'
+                }
+            ],
             uploader: {
                 insertImageAsBase64URI: true,
                 url: '/upload', 
@@ -75,7 +95,17 @@ export const TextEditor: React.FC<JoditEditorProps> = ({ placeholder, onChange }
         return () => { 
             document.removeEventListener("mousedown", handleClickOutside);
         }
-    }, [editor])
+    }, [editor]);
+
+    const updateMathJax = () => {
+        if (window.MathJax) {
+            window.MathJax.typeset();
+        }
+    };
+
+    useEffect(() => {
+        updateMathJax();
+    }, [content]);
 
     return (
         <div ref={editor} onClick={() => { setShowToolbar(true) }}>
@@ -84,9 +114,19 @@ export const TextEditor: React.FC<JoditEditorProps> = ({ placeholder, onChange }
                 value={content}
                 config={config}
                 onBlur={(newContent) => {
-                    setContent(getTextFromHtml(newContent))
+                    setContent(getTextFromHtml(newContent));
+                    // setContent(getLatexFromHtml(newContent));
+                    if (onChange) {
+                        onChange(newContent);
+                    }
+                    updateMathJax();
                 }}
-                onChange={onChange}
+                onChange={(newContent) => {
+                    setContent(newContent);
+                    if (onChange) {
+                        onChange(newContent);
+                    }
+                }}
             />
         </div>
     );

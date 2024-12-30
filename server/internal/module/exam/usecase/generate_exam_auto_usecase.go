@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"cse-question-bank/internal/database/entity"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
 	"math/rand"
 	"strconv"
@@ -62,11 +63,47 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 				}
 
 				filterCondition.Questions = append(filterCondition.Questions, question)
+				checkQuestion[question.Id] = struct{}{}
 				currentCount++
 			}
 		}
 	}
-	print("!@#!#!@#@!")
+
+	if len(checkQuestion) < exam.TotalQuestion {
+		var otherFilterCondition entity.FilterCondition	
+
+		excludedIDs := make([]string, 0, len(checkQuestion))
+		for id := range checkQuestion {
+			excludedIDs = append(excludedIDs, id.String())
+		}
+
+		randomQuestions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
+			"subject_id": exam.SubjectId,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		rand.Shuffle(len(randomQuestions), func(i, j int) {
+			randomQuestions[i], randomQuestions[j] = randomQuestions[j], randomQuestions[i]
+		})
+
+		for _, question := range randomQuestions {
+			if len(checkQuestion) >= exam.TotalQuestion {
+				break
+			}
+			if _, exists := checkQuestion[question.Id]; exists {
+				continue
+			}
+			checkQuestion[question.Id] = struct{}{}
+			otherFilterCondition.Questions = append(otherFilterCondition.Questions, question)
+			checkQuestion[question.Id] = struct{}{}
+			otherFilterCondition.ExpectedCount++
+		}
+
+		exam.FilterConditions = append(exam.FilterConditions, &otherFilterCondition)
+	}
+
 	err = u.examRepostiroy.Update(ctx, nil, exam)
 	if err != nil {
 		return nil, err

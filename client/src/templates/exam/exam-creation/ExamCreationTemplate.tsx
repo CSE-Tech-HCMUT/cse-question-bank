@@ -29,6 +29,9 @@ export const ExamCreationTemplate = () => {
   const [filterConditions, setFilterConditions] = useState<FilterCondition[]>([{ numberQuestion: 0, tagAssignments: [] }]);
   const [totalQuestion, setTotalQuestion] = useState<number>(0);
   const [semester, setSemester] = useState<string>('');
+  const [examDate, setExamDate] = useState<Date>();
+  const [time, setTime] = useState<number>(0);
+  const [note, setNote] = useState<string>('');
 
   const { data: tagData } = useSelector((state: RootState) => state.tagManagementReducer);
   const { pdfUrl } = useSelector((state: RootState) => state.examReducer);
@@ -140,6 +143,38 @@ export const ExamCreationTemplate = () => {
                   setTotalQuestion(Number(event.target.value));
                 }} />
               </Col>
+
+              <Col xs={24} md={12}>
+                <label className="ant-form-item-label">
+                  <span> { "Ngày thi" } </span>
+                </label>
+                <Input type="date" placeholder={"Chọn ngày thi"} name="examDate" onChange={(event) => {
+                  setExamDate(new Date(event.target.value));
+                }} />
+              </Col>
+
+              <Col xs={24} md={12}>
+                <label className="ant-form-item-label">
+                  <span> { "Thời lượng thi (phút)" } </span>
+                </label>
+                <Input placeholder={"Nhập thời gian thi (phút)"} name="time" onChange={(event) => {
+                  setTime(Number(event.target.value));
+                }} />
+              </Col>
+
+              <Col xs={24}>
+                <label className="ant-form-item-label">
+                  <span> { "Ghi chú" } </span>
+                </label>
+                <Input.TextArea
+                  placeholder={"Nhập ghi chú cho đề thi"}
+                  name="note"
+                  onChange={(event) => {
+                    setNote(event.target.value);
+                  }}
+                />
+              </Col>
+
             </Row>
           </Card>
         </Col>

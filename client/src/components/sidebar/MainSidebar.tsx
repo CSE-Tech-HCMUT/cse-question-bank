@@ -45,7 +45,7 @@ export const MainSidebar: React.FC<MainSidebarProps> = ({ collapsed }) => {
     { label: t("sidebar.exam"), key: '3', icon: <AiFillRead className="!hover:text-black" size={"18px"} color="white"/>,
       children: [
         { label: t("sidebar.bank exam"), key: '3-1', icon: <BsBank className="!hover:text-black" size={"18px"} color="white"/> },
-        { label: t("sidebar.assigned exam"), key: '3-2', icon: <BsFillPassFill className="!hover:text-black" size={"18px"} color="white"/> },
+        // { label: t("sidebar.assigned exam"), key: '3-2', icon: <BsFillPassFill className="!hover:text-black" size={"18px"} color="white"/> },
       ] 
     }
   ]

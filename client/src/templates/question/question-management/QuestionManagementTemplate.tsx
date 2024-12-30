@@ -97,7 +97,7 @@ export const QuestionManagementTemplate = () => {
       dataIndex: "id",
       key: "id",
       className: "!text-center",
-      render: (_text, _record, index: number) => <span className="text-primary">{index + 1}</span>
+      render: (_text, _record, index: number) => <span className="text-primary">{index + pageSize*(current - 1) + 1}</span>
     },
     {
       title: t("content"),

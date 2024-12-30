@@ -1,0 +1,15 @@
+{
+    "bank question title": "Bank Question",
+    
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "bank question": "Bank question",
+        "assigned question": "Assigned question",
+        "tag management": "Tag management",
+        "question": "Question",
+        "exam": "Exam",
+        "bank exam": "Bank exam",
+        "assigned exam": "Assigned exam"
+    }
+    
+}

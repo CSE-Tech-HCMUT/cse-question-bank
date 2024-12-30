@@ -1,0 +1,14 @@
+{
+    "viewTag": "View Tag",
+    "name": "Name",
+    "placeholderName": "Enter tag content",
+    "description": "Description",
+    "placeholderDescription": "Enter tag description",
+    "subject": "Subject",
+    "subjectPlaceholder": "Enter subject",
+    "tagOptions": "Options",
+    "close": "Close",
+    "id": "ID",
+    "content": "Content"
+  }
+  

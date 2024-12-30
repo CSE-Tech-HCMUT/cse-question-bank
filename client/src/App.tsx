@@ -1,8 +1,15 @@
-import { useRoutes } from 'react-router-dom'
-import { router } from './routes'
+import { useRoutes } from 'react-router-dom';
+import { routeManagement } from './routes';
 
 function App() {
-  return <>{useRoutes(router)}</>
+  
+  return (
+    <>
+      {
+        useRoutes(routeManagement)
+      }
+    </>
+  )
 }
 
 export default App

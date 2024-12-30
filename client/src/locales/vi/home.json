@@ -1,0 +1,27 @@
+{
+    "header": {
+        "ho chi minh city university of technology": "TRƯỜNG ĐẠI HỌC BÁCH KHOA",
+        "vietnam national university ho chi minh city": "ĐẠI HỌC QUỐC GIA TP.HCM",
+        "language": "NGÔN NGỮ",
+        "signup": "ĐĂNG KÝ",
+        "login": "ĐĂNG NHẬP"
+    },
+
+    "application for administrator": "ỨNG DỤNG CHO QUẢN TRỊ VIÊN",
+    "application for lecturer": "ỨNG DỤNG CHO GIẢNG VIÊN",
+    "application for student": "ỨNG DỤNG CHO SINH VIÊN",
+    "user management": "Quản lý người dùng",
+    "content user management": "Hệ thống quản lý danh sách người dùng của hệ thống",
+    "department management": "Quản lý Khoa",
+    "content department management": "Hệ thống quản lý danh sách khoa của trường",
+    "subject management": "Quản lý môn học",
+    "content subject management": "Hệ thống quản lý danh sách môn học của trường",
+    "question management": "Quản lý câu hỏi",
+    "content question management": "Hệ thống quản lý danh sách câu hỏi của hệ thống",
+    "exam management": "Quản lý đề thi",
+    "content exam management": "Hệ thống quản lý danh sách đề thi của trường",
+    "reference question": "Câu hỏi tham khảo",
+    "content reference question": "Danh sách câu hỏi của tất cả môn trong các năm",
+    "reference exam": "Đề thi tham khảo",
+    "content reference exam": "Danh sách đề thi của tất cả môn trong các năm"
+}

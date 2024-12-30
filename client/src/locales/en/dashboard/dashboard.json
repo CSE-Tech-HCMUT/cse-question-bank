@@ -1,0 +1,15 @@
+{
+    "title": "Question Bank",
+    "content_1": "Question bank is a powerful platform designed to help educators create, manage, and curate exam questions with ease. With a vast array of tools, educators can organize questions, tag them by subjects and difficulty levels, and collaborate with other educators to ensure high-quality exams.",
+    "content_2": "Users can create personalized exams, filter questions based on categories, and review past assessments to improve teaching strategies and student performance.",
+    "createQuestion": "Create Question",
+    "Available Subjects at HCMUT": "Available Subjects at HCMUT",
+    "placeholderDepartment": "Please select the department",
+    "instruction": "Instruction",
+    "createExam": "Create Exam",
+    "statistics": "Statistics",
+    "statisticTitle": "Content",
+    "count": "Number",
+    "questionCount": "Number of questions",
+    "examCount": "Number of exams"
+}

@@ -1,0 +1,47 @@
+.create-tag-modal {
+    .options-input {
+      display: flex;
+      margin-bottom: 8px;
+  
+      .option-input {
+        flex: 1;
+        margin-right: 8px;
+      }
+    }
+  
+    .options-list {
+      margin-top: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+  
+        .option-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px;
+            border: 1px solid #d9d9d9;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 8px;
+  
+        &:hover {
+          background-color: #e6f7ff;
+        }
+  
+        .ant-typography {
+          margin: 0;
+        }
+  
+        .anticon {
+          color: #ff4d4f;
+          font-size: 16px;
+          cursor: pointer;
+  
+          &:hover {
+            color: #ff7875;
+          }
+        }
+      }
+    }
+}
+  

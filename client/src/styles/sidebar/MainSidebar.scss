@@ -1,0 +1,46 @@
+.custom-menu .ant-menu-item {
+    color: white;
+}
+
+.ant-menu-sub {
+    .ant-menu-item {
+        padding-left: 24px!important;
+    }
+}
+
+.custom-menu .ant-menu-submenu-title {
+    .ant-menu-title-content {
+        color: white;
+    }
+    .ant-menu-submenu-arrow {
+        color: white;
+    }
+}
+
+.custom-menu .ant-menu-submenu-title:hover {
+    background-color: #161c1f!important; 
+    color: #FFFFFF; 
+    svg {
+        color: #000000!important; 
+    }
+    .ant-menu-title-content {
+        color: #000000!important;
+    }
+    .ant-menu-submenu-arrow {
+        color: #000000;
+    }
+}
+
+.custom-menu .ant-menu-item:hover {
+    background-color: #161c1f!important; 
+    color: #FFFFFF; 
+    svg {
+        color: #000000!important; 
+    }
+}
+  
+.custom-menu .ant-menu-item-selected {
+    background-color: #141d21; 
+    color: #FFFFFF; 
+}
+  

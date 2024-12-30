@@ -1,0 +1,20 @@
+{
+  "nameRequired": "Vui lòng nhập tên nhãn!",
+  "optionRequired": "Lựa chọn không thể để trống!",
+  "subjectRequired": "Vui lòng chọn môn học",
+  "minOptions": "Vui lòng thêm ít nhất một lựa chọn!",
+  "validate name": "Vui lòng nhập tên nhãn!",
+  "validate options": "Vui lòng thêm ít nhất một lựa chọn!",
+  "create label": "Thêm nhãn mới",
+  "name": "Tên nhãn",
+  "placeholder name": "Nhập tên nhãn",
+  "description": "Mô tả",
+  "placeholder description": "Nhập mô tả",
+  "subject": "Môn học",
+  "placeholder subject": "Chọn môn học",
+  "options": "Các lựa chọn cho nhãn",
+  "placeholder option": "Nhập nội dung của lựa chọn",
+  "add option": "Thêm lựa chọn",
+  "cancel": "Hủy",
+  "create": "Thêm"
+}

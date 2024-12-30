@@ -13,6 +13,7 @@ type ExamHandler interface {
 	DeleteExam(c *gin.Context)
 	GetExam(c *gin.Context)
 	UpdateExam(c *gin.Context)
+	GetAllExams(c *gin.Context)
 }
 
 type examHandlerImpl struct {

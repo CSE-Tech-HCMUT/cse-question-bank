@@ -13,14 +13,3 @@ func NewReviewUsecase(reviewRepository repository.ReviewRepository) ReviewUsecas
 		reviewRepository: reviewRepository,
 	}
 }
-
-type ReviewStatus string
-
-var (
-	OpenRequest    ReviewStatus = "open"            // after create request
-	PendingReview  ReviewStatus = "pending-review"  // after add reviewer
-	StartingReview ReviewStatus = "starting-review" // reviewer start review
-	PendingChange  ReviewStatus = "pending-change"  // reviewer require creator change in question
-	Accepted       ReviewStatus = "accepted"        // reviewer accept request
-	Rejected       ReviewStatus = "rejected"        // reviewer reject request
-)

@@ -8,8 +8,8 @@ import (
 )
 
 type ReviewRepository interface {
-	Create(ctx context.Context, db *gorm.DB, question *entity.ReviewRequest) error
-	Update(ctx context.Context, db *gorm.DB, question *entity.ReviewRequest) error
+	Create(ctx context.Context, db *gorm.DB, review *entity.ReviewRequest) error
+	Update(ctx context.Context, db *gorm.DB, review *entity.ReviewRequest) error
 	Delete(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) error
 	Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.ReviewRequest, error)
 
@@ -22,7 +22,7 @@ type reviewRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewQuestionRepository(db *gorm.DB) ReviewRepository {
+func NewReviewRepository(db *gorm.DB) ReviewRepository {
 	return &reviewRepositoryImpl{
 		db: db,
 	}

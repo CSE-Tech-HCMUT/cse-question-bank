@@ -7,3 +7,5 @@ type CreateCommentRequest struct {
 	ReviewRequestId uuid.UUID
 	// field for current user id
 }
+
+// func (req *CreateCommentRequest)

@@ -1,9 +1,20 @@
 package req
 
-import "github.com/google/uuid"
+import (
+	"cse-question-bank/internal/database/entity"
+
+	"github.com/google/uuid"
+)
 
 // Only use for change information of Review Request such as: status, ...
-type UpdateReviewRequest struct {
-	Id         uuid.UUID
-	Status     string    
+type UpdateReviewStatusRequest struct {
+	Id     uuid.UUID
+	Status string
+}
+
+func (req *UpdateReviewStatusRequest) ToEntity() *entity.ReviewRequest {
+	return &entity.ReviewRequest{
+		Id: req.Id,
+		Status: req.Status,
+	}
 }

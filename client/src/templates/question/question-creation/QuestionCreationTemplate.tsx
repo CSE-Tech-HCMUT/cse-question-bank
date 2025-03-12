@@ -1,7 +1,7 @@
 import { LatexEditor, TextEditor } from "@/components";
 import PDFPreview from "@/components/pdf/PDFPreview";
 import PATH from "@/const/path";
-import { getLatexFromHtml, getTextFromHtml } from "@/helper";
+import { getTextFromHtml } from "@/helper";
 import { RootState, useAppDispatch } from "@/stores";
 import { editQuestionThunk, previewPDFFileThunk } from "@/stores/question/thunk";
 import { getAllTagsThunk } from "@/stores/tag-management/thunk";
@@ -29,12 +29,16 @@ export const QuestionCreationTemplate = () => {
   const { idQuestion } = useParams();
   const navigate = useNavigate();
 
-  const [mode, setMode] = useState<"auto" | "manual" | "import">("manual");
+  const [mode, setMode] = useState<"auto" | "manual" | "import" | "block">("manual");
 
   // general
   const [typeOfQuestion, setTypeOfQuestion] = useState<string>("");
   const [tagAssignments, setTagAssignments] = useState<TagAssignment[]>([]);
   const [contentQuestion, setContentQuestion] = useState<string>(""); 
+
+  // block question
+  const [isBlockQuestion, setIsBlockQuestion] = useState<boolean>(false);
+  const [subQuestions, setSubQuestions] = useState<Question[]>([]);
 
   // pdf
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -81,6 +85,66 @@ export const QuestionCreationTemplate = () => {
   const handleEditorChangeContentQuestion = (content: string) => {
     setContentQuestion(getTextFromHtml(content));
     // setContentQuestion(getLatexFromHtml(content));   
+  };
+
+  // Block question
+  const handleAddSubQuestion = () => {
+    setSubQuestions([...subQuestions, {
+      content: "",
+      type: typeOfQuestion,
+      answer: [],
+      isParent: false,
+      parentId: idQuestion,
+    }]);
+  };
+  const handleSubQuestionChange = (index: number, content: string) => {
+    const updatedSubQuestions = subQuestions.map((subQuestion, idx) => {
+      if (idx === index) {
+        return { ...subQuestion, content: getTextFromHtml(content) };
+      }
+      return subQuestion;
+    });
+    setSubQuestions(updatedSubQuestions);
+  };
+  const handleSubQuestionAnswerChange = (subQuestionIndex: number, answerIndex: number, content: string) => {
+    const updatedSubQuestions = subQuestions.map((subQuestion, idx) => {
+      if (idx === subQuestionIndex) {
+        const updatedAnswers = subQuestion.answer?.map((answer, ansIdx) => {
+          if (ansIdx === answerIndex) {
+            return { ...answer, content: getTextFromHtml(content) };
+          }
+          return answer;
+        });
+        return { ...subQuestion, answer: updatedAnswers };
+      }
+      return subQuestion;
+    });
+    setSubQuestions(updatedSubQuestions);
+  };
+  const handleSubQuestionAnswerCheckChange = (subQuestionIndex: number, answerIndex: number, isTrue: boolean) => {
+    const updatedSubQuestions = subQuestions.map((subQuestion, idx) => {
+      if (idx === subQuestionIndex) {
+        const updatedAnswers = subQuestion.answer?.map((answer, ansIdx) => {
+          if (ansIdx === answerIndex) {
+            return { ...answer, isTrue };
+          }
+          return answer;
+        });
+        return { ...subQuestion, answer: updatedAnswers };
+      }
+      return subQuestion;
+    });
+    setSubQuestions(updatedSubQuestions);
+  };
+  const handleAddAnswerToSubQuestion = (subQuestionIndex: number) => {
+    const updatedSubQuestions = subQuestions.map((subQuestion, idx) => {
+      if (idx === subQuestionIndex) {
+        const newAnswer = { content: "", isTrue: false };
+        return { ...subQuestion, answer: [...(subQuestion.answer || []), newAnswer] };
+      }
+      return subQuestion;
+    });
+    setSubQuestions(updatedSubQuestions);
   };
 
   // Pdf
@@ -247,6 +311,12 @@ export const QuestionCreationTemplate = () => {
                   setTypeOfQuestion(event.target.value);
                 }} />
               </Col>
+
+              <Col xs={24}>
+                <Checkbox checked={isBlockQuestion} onChange={(e) => setIsBlockQuestion(e.target.checked)}>
+                  {t("isBlockQuestion")}
+                </Checkbox>
+              </Col>
             </Row>
           </Card>
         </Col>
@@ -303,6 +373,12 @@ export const QuestionCreationTemplate = () => {
                   className="ml-2"
                   onClick={() => setMode("manual")}> 
                   { t("manual") }
+                </Button>
+                <Button
+                  type={mode === "block" ? "primary" : "default"}
+                  className="ml-2"
+                  onClick={() => setMode("block")}>
+                  {t("block")}
                 </Button>
                 <Button 
                   type={mode === "import" ? "primary" : "default"} 
@@ -403,6 +479,65 @@ export const QuestionCreationTemplate = () => {
                     > 
                       {t("addAnswer")}
                     </Button>
+                  </>
+                ) : mode === "block" ? (
+                  <>
+                    <Col xs={24}>
+                      <label className="ant-form-item-label">
+                        <span>{t("contentQuestion")}</span>
+                      </label>
+                      <TextEditor onChange={handleEditorChangeContentQuestion} placeholder={t("placeholderContentQuestion")} />
+                    </Col>
+
+                    {subQuestions.map((subQuestion, subQuestionIndex) => (
+                    <Col xs={24} key={subQuestionIndex}>
+                      <Card title={`Câu hỏi con ${subQuestionIndex + 1}`}>
+                        <Row gutter={[16, 16]}>
+                          <Col xs={24}>
+                            <label className="ant-form-item-label">
+                              <span>{t("contentQuestion")}</span>
+                            </label>
+                            <TextEditor
+                              value={subQuestion.content}
+                              onChange={(content) => handleSubQuestionChange(subQuestionIndex, content)}
+                              placeholder={t("placeholderContentQuestion")}
+                            />
+                          </Col>
+
+                          {subQuestion.answer?.map((answer, answerIndex) => (
+                            <Col xs={24} key={answerIndex}>
+                              <label className="ant-form-item-label">
+                                <span>{t("answer")} {answerIndex + 1}</span>
+                              </label>
+                              <TextEditor
+                                value={answer.content}
+                                onChange={(content) => handleSubQuestionAnswerChange(subQuestionIndex, answerIndex, content)}
+                                placeholder={t("placeholderAnswer")}
+                              />
+                              <Checkbox
+                                checked={answer.isTrue}
+                                onChange={(e) => handleSubQuestionAnswerCheckChange(subQuestionIndex, answerIndex, e.target.checked)}
+                              >
+                                {t("correct")}
+                              </Checkbox>
+                            </Col>
+                          ))}
+
+                          <Col xs={24}>
+                            <Button type="dashed" onClick={() => handleAddAnswerToSubQuestion(subQuestionIndex)}>
+                              {t("addAnswer")}
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Col>
+                  ))}
+
+                  <Col xs={24}>
+                    <Button type="dashed" onClick={handleAddSubQuestion}>
+                      {t("addSubQuestion")}
+                    </Button>
+                  </Col>
                   </>
                 ) : (
                   <>

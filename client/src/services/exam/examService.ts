@@ -5,6 +5,7 @@ import { Question } from "@/types/question";
 
 const examService = {
     // exam
+    getAllExams: (): Promise<AxiosResponse<{ data: Exam[] }>> => apiInstance.get('/exams'),
     createExam: (payload: Exam): Promise<AxiosResponse<{ data: Question }>> => apiInstance.post('/exams', payload),
     getExamById: (id: string): Promise<AxiosResponse<{ data: Exam }>> => apiInstance.get(`/exams/${id}`),
     editExam: (payload: Exam): Promise<AxiosResponse<{ data: Exam }>> => apiInstance.put(`/exams`, payload),

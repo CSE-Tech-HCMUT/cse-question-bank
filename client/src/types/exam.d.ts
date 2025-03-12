@@ -4,7 +4,10 @@ import { TagAssignment } from "./tagOption"
 
 export type Exam = {
     id?: string,
+    name?: string,
     semester?: string,
+    date?: Date,
+    duration?: number,
     subject?: Subject,
     numberQuestion?: number,
     totalQuestion?: number,

@@ -2,6 +2,16 @@ import examService from "@/services/exam/examService";
 import { Exam } from "@/types/exam";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+export const getAllExamsThunk = createAsyncThunk('exam/getAllExamsThunk', async (_, { rejectWithValue }) => {
+    try {
+        const response = await examService.getAllExams();
+
+        return response.data.data;
+    } catch (error) {
+        return rejectWithValue(error);
+    }
+})
+
 export const createExamThunk = createAsyncThunk('exam/createExamThunk', async (payload: Exam, { rejectWithValue }) => { 
     try {
         const response = await examService.createExam(payload);

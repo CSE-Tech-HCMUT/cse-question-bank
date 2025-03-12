@@ -1,7 +1,7 @@
 import { Exam } from "@/types/exam";
 import { ReduxState } from "@/types/reduxState";
 import { createSlice } from "@reduxjs/toolkit";
-import { createExamThunk, editExamThunk, generateAutoExamThunk, previewPDFFileThunk } from "./thunk";
+import { createExamThunk, editExamThunk, generateAutoExamThunk, getAllExamsThunk, previewPDFFileThunk } from "./thunk";
 import { Id, toast } from "react-toastify";
 
 const initialState: ReduxState<Exam> = {
@@ -35,6 +35,10 @@ export const examSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(getAllExamsThunk.fulfilled, (state, {payload}) => {
+                state.data = payload
+            })
+
             .addCase(createExamThunk.fulfilled, (state, {payload}) => {
                 state.data?.push(payload);
                 state.createModalShow = false;

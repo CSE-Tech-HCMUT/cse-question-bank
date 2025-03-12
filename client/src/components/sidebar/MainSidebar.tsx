@@ -65,6 +65,9 @@ export const MainSidebar: React.FC<MainSidebarProps> = ({ collapsed }) => {
       case "2-3":
         navigate(PATH.TAG_MANAGEMENT.replace(':subjectName', subjectName!)); 
         break;
+      case "3-1":
+        navigate(PATH.EXAM_MANAGEMENT.replace(':subjectName', subjectName!)); 
+        break;
       default:
         navigate(PATH.DASHBOARD)
         break;

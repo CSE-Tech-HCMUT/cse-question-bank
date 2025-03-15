@@ -72,8 +72,7 @@ type MultipleChoiceAnswer struct {
 }
 
 func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (string, error) {
-	result := "\\begin{vnmultiplechoice}\n"
-
+	result := ""
 	if question.IsParent {
 		subQuestions, err := u.questionRepository.Find(nil, nil, map[string]interface{}{
 			"parent_id": question.Id,
@@ -107,7 +106,6 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (
 		}
 		result += answerContent + "\n\\end{question}\n"
 	}
-	result += "\\end{vnmultiplechoice}\n"
 	return result, nil
 }
 

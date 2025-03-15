@@ -84,7 +84,7 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (
 		}
 		subQuestionsCount := len(subQuestions)
 
-		result += fmt.Sprintf("\\begin{block}[questions=%d]\nĐoạn mô tả sau được áp dụng cho các câu \\thefirst-\\thelast.\n\n%s", subQuestionsCount, question.Content)
+		result += fmt.Sprintf("\\begin{block}[questions=%d]\nĐoạn mô tả sau được áp dụng cho các câu \\thefirst-\\thelast.\n\n%s\n", subQuestionsCount, question.Content)
 		for _, subQuestion := range subQuestions {
 
 			subQuestionContent, err := u.GenerateQuestionContent(subQuestion)

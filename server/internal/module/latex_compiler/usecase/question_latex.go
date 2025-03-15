@@ -68,7 +68,7 @@ func deleteFolder(folderPath string) error {
 
 type MultipleChoiceAnswer struct {
 	Content   string `json:"content"`
-	IsCorrect bool	`json:"is-correct"`
+	IsCorrect bool   `json:"isCorrect"`
 }
 
 func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (string, error) {
@@ -98,9 +98,9 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (
 		result += "\\end{block}"
 	} else {
 		question.Content = strings.ReplaceAll(question.Content, "\\n", "\n")
-		
+
 		result += "\\begin{question}\n" + question.Content + "\n"
-		
+
 		answerContent, err := u.GenerateAnswerContent(question.Answer.Content)
 		if err != nil {
 			return "", err

@@ -11,6 +11,7 @@ type UpdateExamRequest struct {
 	TotalQuestion    int                `json:"numberQuestion"`
 	SubjectId        uuid.UUID          `json:"subjectId"`
 	FilterConditions []*FilterCondition `json:"filterConditions"`
+	QuestionIdList []string `json:"questionIdList"`
 }
 
 func (req UpdateExamRequest) ToEntity() *entity.Exam {
@@ -32,10 +33,22 @@ func (req UpdateExamRequest) ToEntity() *entity.Exam {
 		})
 	}
 
+	questionList := make([]*entity.Question, 0)
+	for _, questionId := range req.QuestionIdList {
+		questionUUID, err := uuid.Parse(questionId)
+		if err != nil {
+			continue
+		}
+		questionList = append(questionList, &entity.Question{
+			Id: questionUUID,
+		})
+	}
+
 	return &entity.Exam{
 		Id:               req.Id,
 		TotalQuestion:    req.TotalQuestion,
 		SubjectId:        &req.SubjectId,
 		FilterConditions: filterConditionsList,
+		Questions: questionList,
 	}
 }

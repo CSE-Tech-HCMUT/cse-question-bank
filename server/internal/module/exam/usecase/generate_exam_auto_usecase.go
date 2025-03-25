@@ -2,116 +2,114 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/database/entity"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
-	"math/rand"
-	"strconv"
 
 	"github.com/google/uuid"
 )
 
 func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID) (*exam_res.ExamResponse, error) {
-	// call tag usecase to verify filtertag.
-	exams, err := u.examRepostiroy.Find(ctx, nil, map[string]interface{}{
-		"id": examId,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	exam := exams[0]
-	checkQuestion := make(map[uuid.UUID]struct{})
-	for _, filterCondition := range exam.FilterConditions {
-		for _, question := range filterCondition.Questions {
-			// TODO: convert all uuid to string or string to uuid
-			checkQuestion[question.Id] = struct{}{}
-		}
-	}
-	// call question usecase to get question by filtertag => handle it with groutine?
-	// questionsLists, err := u.GetExamFilteredQuestionsList(ctx, examId)
+	// // call tag usecase to verify filtertag.
+	// exams, err := u.examRepostiroy.Find(ctx, nil, map[string]interface{}{
+	// 	"id": examId,
+	// })
 	// if err != nil {
 	// 	return nil, err
 	// }
 
-	for _, filterCondition := range exam.FilterConditions {
-		currentCount := len(filterCondition.Questions)
-		if currentCount >= filterCondition.ExpectedCount {
-			continue
-		}
+	// exam := exams[0]
+	// checkQuestion := make(map[uuid.UUID]struct{})
+	// for _, filterCondition := range exam.FilterConditions {
+	// 	for _, question := range filterCondition.Questions {
+	// 		// TODO: convert all uuid to string or string to uuid
+	// 		checkQuestion[question.Id] = struct{}{}
+	// 	}
+	// }
+	// // call question usecase to get question by filtertag => handle it with groutine?
+	// // questionsLists, err := u.GetExamFilteredQuestionsList(ctx, examId)
+	// // if err != nil {
+	// // 	return nil, err
+	// // }
 
-		for _, tagAssignment := range filterCondition.FilterTagAssignments {
-			questions, err := u.questionRepository.FindWithTag(ctx, nil, map[string]interface{}{
-				"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
-				"tag_assignment.option_id": strconv.Itoa(tagAssignment.OptionId),
-				"subject_id":               exam.SubjectId,
-			})
-			if err != nil {
-				return nil, err
-			}
+	// for _, filterCondition := range exam.FilterConditions {
+	// 	currentCount := len(filterCondition.Questions)
+	// 	if currentCount >= filterCondition.ExpectedCount {
+	// 		continue
+	// 	}
 
-			rand.Shuffle(len(questions), func(i, j int) {
-				questions[i], questions[j] = questions[j], questions[i]
-			})
+	// 	for _, tagAssignment := range filterCondition.FilterTagAssignments {
+	// 		questions, err := u.questionRepository.FindWithTag(ctx, nil, map[string]interface{}{
+	// 			"tag_assignment.tag_id":    strconv.Itoa(tagAssignment.TagId),
+	// 			"tag_assignment.option_id": strconv.Itoa(tagAssignment.OptionId),
+	// 			"subject_id":               exam.SubjectId,
+	// 		})
+	// 		if err != nil {
+	// 			return nil, err
+	// 		}
 
-			for _, question := range questions {
-				if currentCount >= filterCondition.ExpectedCount {
-					break
-				}
+	// 		rand.Shuffle(len(questions), func(i, j int) {
+	// 			questions[i], questions[j] = questions[j], questions[i]
+	// 		})
 
-				if _, exists := checkQuestion[question.Id]; exists {
-					continue
-				}
+	// 		for _, question := range questions {
+	// 			if currentCount >= filterCondition.ExpectedCount {
+	// 				break
+	// 			}
 
-				filterCondition.Questions = append(filterCondition.Questions, question)
-				checkQuestion[question.Id] = struct{}{}
-				currentCount++
-			}
-		}
-	}
+	// 			if _, exists := checkQuestion[question.Id]; exists {
+	// 				continue
+	// 			}
 
-	if len(checkQuestion) < exam.TotalQuestion {
-		var otherFilterCondition entity.FilterCondition	
+	// 			filterCondition.Questions = append(filterCondition.Questions, question)
+	// 			checkQuestion[question.Id] = struct{}{}
+	// 			currentCount++
+	// 		}
+	// 	}
+	// }
 
-		excludedIDs := make([]string, 0, len(checkQuestion))
-		for id := range checkQuestion {
-			excludedIDs = append(excludedIDs, id.String())
-		}
+	// if len(checkQuestion) < exam.TotalQuestion {
+	// 	var otherFilterCondition entity.FilterCondition
 
-		randomQuestions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
-			"subject_id": exam.SubjectId,
-		})
-		if err != nil {
-			return nil, err
-		}
+	// 	excludedIDs := make([]string, 0, len(checkQuestion))
+	// 	for id := range checkQuestion {
+	// 		excludedIDs = append(excludedIDs, id.String())
+	// 	}
 
-		rand.Shuffle(len(randomQuestions), func(i, j int) {
-			randomQuestions[i], randomQuestions[j] = randomQuestions[j], randomQuestions[i]
-		})
+	// 	randomQuestions, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
+	// 		"subject_id": exam.SubjectId,
+	// 	})
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
 
-		for _, question := range randomQuestions {
-			if len(checkQuestion) >= exam.TotalQuestion {
-				break
-			}
-			if _, exists := checkQuestion[question.Id]; exists {
-				continue
-			}
-			checkQuestion[question.Id] = struct{}{}
-			otherFilterCondition.Questions = append(otherFilterCondition.Questions, question)
-			checkQuestion[question.Id] = struct{}{}
-			otherFilterCondition.ExpectedCount++
-		}
+	// 	rand.Shuffle(len(randomQuestions), func(i, j int) {
+	// 		randomQuestions[i], randomQuestions[j] = randomQuestions[j], randomQuestions[i]
+	// 	})
 
-		exam.FilterConditions = append(exam.FilterConditions, &otherFilterCondition)
-	}
+	// 	for _, question := range randomQuestions {
+	// 		if len(checkQuestion) >= exam.TotalQuestion {
+	// 			break
+	// 		}
+	// 		if _, exists := checkQuestion[question.Id]; exists {
+	// 			continue
+	// 		}
+	// 		checkQuestion[question.Id] = struct{}{}
+	// 		otherFilterCondition.Questions = append(otherFilterCondition.Questions, question)
+	// 		checkQuestion[question.Id] = struct{}{}
+	// 		otherFilterCondition.ExpectedCount++
+	// 	}
 
-	err = u.examRepostiroy.Update(ctx, nil, exam)
-	if err != nil {
-		return nil, err
-	}
+	// 	exam.FilterConditions = append(exam.FilterConditions, &otherFilterCondition)
+	// }
 
-	// TODO: rollbakc
+	// err = u.examRepostiroy.Update(ctx, nil, exam)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	return exam_res.EntityToResponse(exam), nil
+	// // TODO: rollbakc
+
+	// return exam_res.EntityToResponse(exam), nil
+	return nil, nil
 }
 
 // func (u *examUsecaseImpl) verifyFilterTags(

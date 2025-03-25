@@ -22,10 +22,8 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 	exam := examList[0]
 
 	existingQuestions := make(map[uuid.UUID]struct{})
-	for _, filterCondition := range exam.FilterConditions {
-		for _, question := range filterCondition.Questions {
+	for _, question := range exam.Questions {
 			existingQuestions[question.Id] = struct{}{}
-		}
 	}
 
 	filteredQuestionsList := make([]*exam_res.FilterQuestionsList, 0)

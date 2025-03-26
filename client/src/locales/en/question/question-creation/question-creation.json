@@ -23,5 +23,12 @@
     "correct": "Correct",
     "addAnswer": "Add answer",
     "selectFile": "Select file to import (Word or Excel)",
-    "uploadFile": "Upload file"
+    "uploadFile": "Upload file",
+    "blockQuestion": "Block question",
+    "singleQuestion": "Single question",
+    "addSubQuestion": "Add sub question",
+    "instructionalQuestion": "Instructional question",
+    "subQuestions": "Sub questions",
+    "tag": "Tag",
+    "actions": "Action"
 }

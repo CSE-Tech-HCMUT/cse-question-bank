@@ -13,6 +13,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
+import { ExamDeleteModal } from "./modal";
 
 
 export const ExamManagementTemplate = () => {
@@ -42,7 +43,7 @@ export const ExamManagementTemplate = () => {
     setIsModalOpen(false);
     }
 
-    const { data } = useSelector((state: RootState) => state.examReducer);
+    const { data, deleteModalShow } = useSelector((state: RootState) => state.examReducer);
     const dispatch = useAppDispatch();
 
     const handleClickCreateExam = () => {
@@ -62,15 +63,15 @@ export const ExamManagementTemplate = () => {
     };
 
     // Delete Modal
-    const [_deleteQuestion, setDeleteQuestion] = useState<Exam>();
+    const [deleteExam, setDeleteExam] = useState<Exam>();
 
     const handleModalDeleteOpen = () => {
         dispatch(examActions.setDeleteModalVisibility(true));
     };
 
-    // const handleModalDeleteClose = () => {
-    //     dispatch(examActions.setDeleteModalVisibility(false));
-    // };
+    const handleModalDeleteClose = () => {
+        dispatch(examActions.setDeleteModalVisibility(false));
+    };
     
     const handlePreviewPdf = (id: string) => {
         dispatch(previewPDFFileThunk(id)).then((actionResult) => {
@@ -179,7 +180,7 @@ export const ExamManagementTemplate = () => {
                           <AiFillDelete
                             className="custom-icon"
                             onClick={() => { 
-                              setDeleteQuestion(record);
+                              setDeleteExam(record);
                               handleModalDeleteOpen();
                             }}
                           />
@@ -232,7 +233,7 @@ export const ExamManagementTemplate = () => {
             </div>
 
             {/* Modal */}
-            {/* <QuestionDeleteModal isModalOpen={deleteModalShow!} onClose={handleModalDeleteClose} questionData={deleteQuestion!} /> */}
+            <ExamDeleteModal isModalOpen={deleteModalShow!} onClose={handleModalDeleteClose} examData={deleteExam!} />
 
             <PDFPreview urlPDF={pdfUrl} isModalOpen={isModalOpen} onClose={onClose} />
         </main>

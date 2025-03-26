@@ -1,12 +1,16 @@
 import { RootState, useAppDispatch } from "@/stores";
 import { questionActions } from "@/stores/question/slice";
-import { createQuestionThunk, getAllQuestionsThunk, previewPDFFileThunk } from "@/stores/question/thunk";
+import {
+  createQuestionThunk,
+  getAllQuestionsThunk,
+  previewPDFFileThunk,
+} from "@/stores/question/thunk";
 import { Question } from "@/types/question";
 import { TagAssignment } from "@/types/tagOption";
-import { Button, Space, TableProps, Tag, Tooltip } from "antd"
+import { Button, Space, TableProps, Tag, Tooltip, Menu, Dropdown } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next";
 import { AiFillDelete, AiFillEye } from "react-icons/ai";
 import { FaPlusCircle } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
@@ -18,7 +22,7 @@ import PDFPreview from "@/components/pdf/PDFPreview";
 import { Subject } from "@/types/subject";
 
 export const QuestionManagementTemplate = () => {
-  const { t } = useTranslation('question_management')
+  const { t } = useTranslation("question_management");
 
   const navigate = useNavigate();
 
@@ -35,35 +39,63 @@ export const QuestionManagementTemplate = () => {
   const handlePagination: TableProps<Question>["onChange"] = (pagination) => {
     if (pagination?.current !== current) setCurrent(pagination.current!);
     if (pagination?.pageSize !== pageSize) {
-        setPageSize(pagination.pageSize!);
-        setCurrent(1);
+      setPageSize(pagination.pageSize!);
+      setCurrent(1);
     }
   };
-  
+
   // pdf
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const onClose = () => { 
+  const onClose = () => {
     setIsModalOpen(false);
-  }
+  };
 
-  const { data, deleteModalShow } = useSelector((state: RootState) => state.questionReducer);
+  const { data, deleteModalShow } = useSelector(
+    (state: RootState) => state.questionReducer
+  );
   const dispatch = useAppDispatch();
 
-  const handleClickCreateQuestion = () => {
-    dispatch(createQuestionThunk({
-      subjectId: subjectAuthen?.id
-    }))
-      .then((actionResult) => {
-        if (actionResult.meta.requestStatus === 'fulfilled') {
-          const idQuestion = (actionResult.payload as Question).id;
-  
-          if (idQuestion) {
-            navigate(PATH.QUESTION_CREATION.replace(':subjectName', subjectAuthen?.name!) + '/' + idQuestion);
-          } 
+  const handleClickCreateQuestion = (isParent: boolean) => {
+    dispatch(
+      createQuestionThunk({
+        subjectId: subjectAuthen?.id,
+        isParent: isParent,
+      })
+    ).then((actionResult) => {
+      if (actionResult.meta.requestStatus === "fulfilled") {
+        const idQuestion = (actionResult.payload as Question).id;
+
+        if (idQuestion) {
+          navigate(
+            PATH.QUESTION_CREATION.replace(
+              ":subjectName",
+              subjectAuthen?.name!
+            ) +
+              "/" +
+              idQuestion,
+            {
+              state: { isParent },
+            }
+          );
         }
       }
-    )
+    });
   };
+
+  const handleMenuClick = (e: any) => {
+    if (e.key === "single") {
+      handleClickCreateQuestion(false);
+    } else if (e.key === "block") {
+      handleClickCreateQuestion(true);
+    }
+  };
+
+  const menu = (
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="single">{t("single question")}</Menu.Item>
+      <Menu.Item key="block">{t("block question")}</Menu.Item>
+    </Menu>
+  );
 
   // Delete Modal
   const [deleteQuestion, setDeleteQuestion] = useState<Question>();
@@ -79,17 +111,14 @@ export const QuestionManagementTemplate = () => {
   const TitleTable = () => (
     <div className="flex sm:justify-end">
       <Space wrap>
-        <Button
-            type="primary"
-            icon={<FaPlusCircle />}
-            size={'middle'}
-            onClick={handleClickCreateQuestion}
-        >
-            { t("create question") }
-        </Button>
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <Button type="primary" icon={<FaPlusCircle />} size={"middle"}>
+            {t("create question")}
+          </Button>
+        </Dropdown>
       </Space>
     </div>
-  )
+  );
 
   const columns: ColumnsType<Question> = [
     {
@@ -97,27 +126,33 @@ export const QuestionManagementTemplate = () => {
       dataIndex: "id",
       key: "id",
       className: "!text-center",
-      render: (_text, _record, index: number) => <span className="text-primary">{index + pageSize*(current - 1) + 1}</span>
+      render: (_text, _record, index: number) => (
+        <span className="text-primary">
+          {index + pageSize * (current - 1) + 1}
+        </span>
+      ),
     },
     {
       title: t("content"),
       dataIndex: "content",
       key: "content",
-      render: (text: string) => <span className="text-primary">{text}</span>
+      render: (text: string) => <span className="text-primary">{text}</span>,
     },
     {
       title: t("type"),
       dataIndex: "type",
       key: "type",
       width: 150,
-      render: (text: string) => <span className="text-primary">{text}</span>
+      render: (text: string) => <span className="text-primary">{text}</span>,
     },
     {
       title: t("subject"),
       dataIndex: "subject",
       key: "subject",
       width: 150,
-      render: (subject: Subject) => <span className="text-primary">{subject?.name}</span>
+      render: (subject: Subject) => (
+        <span className="text-primary">{subject?.name}</span>
+      ),
     },
     {
       title: t("tag"),
@@ -129,105 +164,105 @@ export const QuestionManagementTemplate = () => {
         const MAX_OPTIONS = 3;
         const visibleTagAssignments = tagAssignments.slice(0, MAX_OPTIONS);
         const hiddenTagAssignments = tagAssignments.slice(MAX_OPTIONS);
-    
+
         // Hàm để xác định màu của tag dựa trên vị trí của nó
         const getTagColor = (index: number) => {
-          switch(index) {
+          switch (index) {
             case 0:
-              return 'red';
+              return "red";
             case 1:
-              return 'blue';
+              return "blue";
             case 2:
-              return 'green';
+              return "green";
             default:
-              return 'cyan';
+              return "cyan";
           }
         };
-    
+
         return (
           <>
-            {
-              visibleTagAssignments.map((tagAssignment, index) => (
-                <Tag color={getTagColor(index)} key={tagAssignment.id} className="mb-1">
-                  {tagAssignment.option?.name}
-                </Tag>
-              ))
-            }
+            {visibleTagAssignments.map((tagAssignment, index) => (
+              <Tag
+                color={getTagColor(index)}
+                key={tagAssignment.id}
+                className="mb-1"
+              >
+                {tagAssignment.option?.name}
+              </Tag>
+            ))}
             {hiddenTagAssignments.length > 0 && (
               <Tag color="cyan">+{hiddenTagAssignments.length} more</Tag>
             )}
           </>
-        )
-      }
-    },    
+        );
+      },
+    },
     {
       title: t("actions"),
       key: "actions",
       className: "!text-center",
       render: (record: Question) => (
         <Space>
-            <Tooltip title={t("view details")}>
-                <span>
-                    <AiFillEye
-                      className="custom-icon"
-                      onClick={() => { 
-                        dispatch(previewPDFFileThunk(record.id!)).then((actionResult) => { 
-                          if (actionResult.meta.requestStatus === 'fulfilled') {
-                            setIsModalOpen(true);
-                          }
-                        })
-                        // setViewTagQuestion(record);
-                        // handleModalViewOpen();
-                      }}
-                    />
-                </span>
-            </Tooltip>
-            <Tooltip title={t("edit")}>
-                <span>
-                    <FiEdit 
-                      className="custom-icon" 
-                      onClick={() => { 
-                        // setEditTagQuestion(record);
-                        // handleModalEditOpen();
-                      }}
-                    />
-                </span>
-            </Tooltip>
-            <Tooltip title={t("delete")}>
-                <span>
-                    <AiFillDelete
-                      className="custom-icon"
-                      onClick={() => { 
-                        setDeleteQuestion(record);
-                        handleModalDeleteOpen();
-                      }}
-                    />
-                </span>
-            </Tooltip>
+          <Tooltip title={t("view details")}>
+            <span>
+              <AiFillEye
+                className="custom-icon"
+                onClick={() => {
+                  dispatch(previewPDFFileThunk(record.id!)).then(
+                    (actionResult) => {
+                      if (actionResult.meta.requestStatus === "fulfilled") {
+                        setIsModalOpen(true);
+                      }
+                    }
+                  );
+                }}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip title={t("edit")}>
+            <span>
+              <FiEdit
+                className="custom-icon"
+                onClick={() => {
+                  // setEditTagQuestion(record);
+                  // handleModalEditOpen();
+                }}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip title={t("delete")}>
+            <span>
+              <AiFillDelete
+                className="custom-icon"
+                onClick={() => {
+                  setDeleteQuestion(record);
+                  handleModalDeleteOpen();
+                }}
+              />
+            </span>
+          </Tooltip>
         </Space>
       ),
-    }
-  ]
+    },
+  ];
 
-  useEffect(() => { 
-    const storedSubject = localStorage.getItem('subjectAuthen'); 
-    if (storedSubject) { 
-      setSubjectAuthen(JSON.parse(storedSubject)); 
-    } 
+  useEffect(() => {
+    const storedSubject = localStorage.getItem("subjectAuthen");
+    if (storedSubject) {
+      setSubjectAuthen(JSON.parse(storedSubject));
+    }
 
     dispatch(getAllQuestionsThunk()).then((actionResult) => {
-      if(actionResult.meta.requestStatus === "fulfilled"){
+      if (actionResult.meta.requestStatus === "fulfilled") {
         setTotal(data?.length!);
         setLoading(false);
       }
     });
   }, []);
-  
+
   return (
     <main className="bg-gray-100 rounded-md">
-      <h1 className="text-3xl font-bold mb-4">
-        { t("question management") }
-      </h1>
+      <h1 className="text-3xl font-bold mb-4">{t("question management")}</h1>
 
       {/* table */}
       <div className="bg-white p-4 rounded-md shadow-md">
@@ -236,7 +271,9 @@ export const QuestionManagementTemplate = () => {
           loading={loading}
           title={TitleTable}
           columns={columns}
-          dataSource={data?.filter((question) => question.subject?.id === subjectAuthen?.id)}
+          dataSource={data?.filter(
+            (question) => question.subject?.id === subjectAuthen?.id
+          )}
           onChange={handlePagination}
           scroll={{ x: 1000 }}
           size="middle"
@@ -251,11 +288,15 @@ export const QuestionManagementTemplate = () => {
       </div>
 
       {/* Modal */}
-      <QuestionDeleteModal isModalOpen={deleteModalShow!} onClose={handleModalDeleteClose} questionData={deleteQuestion!} />
+      <QuestionDeleteModal
+        isModalOpen={deleteModalShow!}
+        onClose={handleModalDeleteClose}
+        questionData={deleteQuestion!}
+      />
 
       <PDFPreview urlPDF={pdfUrl} isModalOpen={isModalOpen} onClose={onClose} />
     </main>
-  )
-}
+  );
+};
 
-export default QuestionManagementTemplate
+export default QuestionManagementTemplate;

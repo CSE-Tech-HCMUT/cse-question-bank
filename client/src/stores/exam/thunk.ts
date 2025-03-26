@@ -51,3 +51,23 @@ export const generateAutoExamThunk = createAsyncThunk('exam/generateAutoExamThun
         rejectWithValue(error);
     }
 })
+
+export const filterExamThunk = createAsyncThunk('exam/filterExamThunk', async (id: string, {rejectWithValue}) => {
+    try {
+        const response = await examService.getFilterListQuestions(id);
+
+        return response.data.data;
+    } catch (error) {
+        rejectWithValue(error); 
+    }
+})
+
+export const deleteExamThunk = createAsyncThunk('exam/deleteExamThunk', async (id: string, { rejectWithValue }) => {
+    try {
+        await examService.deleteExam(id);
+
+        return id;
+    } catch (error) {
+        rejectWithValue(error);
+    }
+})

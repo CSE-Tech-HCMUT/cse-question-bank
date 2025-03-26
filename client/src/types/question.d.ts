@@ -5,7 +5,7 @@ import { TagAssignment } from "./tagOption"
 export type Question = {
     id?: string,
     content?: string,
-    subQuestion?: Question[],
+    subQuestions?: Question[],
     tagAssignments?: TagAssignment[],
     type?: string,
     subjectId?: string,

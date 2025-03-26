@@ -49,8 +49,9 @@ export const questionSlice = createSlice({
                 toast.error("Hệ thống đang quá tải! Bạn vui lòng thử lại");
             })  
 
-            .addCase(getQuestionByIdThunk.fulfilled, (state, {payload}) => {
+            .addCase(getQuestionByIdThunk.fulfilled, (state, {payload}) => {        
                 state.dataById = payload;
+                console.log(state.dataById);
             })
 
             .addCase(editQuestionThunk.pending, () => {

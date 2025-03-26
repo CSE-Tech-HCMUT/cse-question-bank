@@ -14,3 +14,8 @@
 .custom-icon:hover {
   background-color: #026b92; 
 }
+
+.row-disabled {
+  background-color: #f0f0f0 !important;  /* Màu xám cho dòng đã chọn */
+  color: #a0a0a0;  /* Màu chữ xám nhạt */
+}

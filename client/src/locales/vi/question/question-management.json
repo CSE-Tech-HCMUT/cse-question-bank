@@ -9,5 +9,7 @@
     "view details": "Thông tin chi thiết",
     "edit": "Cập nhật",
     "delete": "Xóa",
-    "question management": "Quản lý câu hỏi"
+    "question management": "Quản lý câu hỏi",
+    "single question": "Câu hỏi đơn",
+    "block question": "Khối câu hỏi"
 }

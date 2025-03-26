@@ -23,5 +23,12 @@
     "correct": "Đúng",
     "addAnswer": "Thêm câu trả lời",
     "selectFile": "Chọn file để nhập (Word hoặc Excel)",
-    "uploadFile": "Tải file lên"
+    "uploadFile": "Tải file lên",
+    "blockQuestion": "Nhóm câu hỏi",
+    "singleQuestion": "Câu hỏi đơn",
+    "addSubQuestion": "Thêm câu hỏi con",
+    "instructionalQuestion": "Hướng dẫn chung",
+    "subQuestions": "Các câu hỏi con",
+    "tag": "Nhãn",
+    "actions": "Thao tác"
 }

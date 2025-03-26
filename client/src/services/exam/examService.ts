@@ -11,7 +11,7 @@ const examService = {
     editExam: (payload: Exam): Promise<AxiosResponse<{ data: Exam }>> => apiInstance.put(`/exams`, payload),
     deleteExam: (id: string) => apiInstance.delete(`/exams/${id}`),
     generateAutoExam: (id: string): Promise<AxiosResponse<{ data: Exam }>> => apiInstance.post(`/exams/${id}/generate-auto`),
-    getFilterListExams: (id: string): Promise<AxiosResponse<{ data: Exam }>> => apiInstance.get(`/exams/${id}/get-filter-list`),
+    getFilterListQuestions: (id: string): Promise<AxiosResponse<{ data: Question[] }>> => apiInstance.get(`/exams/${id}/get-filtered-questions`),
 
     // latex compile
     compileLatexExam: (id: string) => apiInstance.get<Blob>(`/compile-latex/exams/${id}`, {

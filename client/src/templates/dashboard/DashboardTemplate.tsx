@@ -18,7 +18,8 @@ export const DashboardTemplate: React.FC = () => {
   const { t } = useTranslation('dashboard');
 
   const [subjectAuthen, setSubjectAuthen] = useState<Subject>();
-  const { data: listOfQuestions } = useSelector((state: RootState) => state.questionReducer)
+  const { data: listOfQuestions } = useSelector((state: RootState) => state.questionReducer);
+  const { data: listOfExams } = useSelector((state: RootState) => state.examReducer)
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -84,7 +85,7 @@ export const DashboardTemplate: React.FC = () => {
     {
       key: '2',
       title: t("examCount"),
-      count: 0,
+      count: listOfExams?.filter(exam => exam.subject?.id === subjectAuthen?.id)?.length,
     }
   ];
 

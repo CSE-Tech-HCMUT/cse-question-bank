@@ -9,5 +9,7 @@
     "view details": "View details",
     "edit": "Edit",
     "delete": "Delete",
-    "question management": "Question management"
+    "question management": "Question management",
+    "single question": "Single question",
+    "block question": "Block question"
 }

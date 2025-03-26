@@ -1,7 +1,7 @@
 import { Exam } from "@/types/exam";
 import { ReduxState } from "@/types/reduxState";
 import { createSlice } from "@reduxjs/toolkit";
-import { createExamThunk, editExamThunk, generateAutoExamThunk, previewPDFFileThunk } from "./thunk";
+import { createExamThunk, deleteExamThunk, editExamThunk, filterExamThunk, generateAutoExamThunk, getAllExamsThunk, previewPDFFileThunk } from "./thunk";
 import { Id, toast } from "react-toastify";
 
 const initialState: ReduxState<Exam> = {
@@ -11,6 +11,7 @@ const initialState: ReduxState<Exam> = {
     viewModalShow: false,
     data: [],
     dataById: undefined,
+    dataFilterList: [],
     pdfUrl: ""
 }
 
@@ -35,6 +36,10 @@ export const examSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(getAllExamsThunk.fulfilled, (state, {payload}) => {
+                state.data = payload
+            })
+
             .addCase(createExamThunk.fulfilled, (state, {payload}) => {
                 state.data?.push(payload);
                 state.createModalShow = false;
@@ -64,6 +69,15 @@ export const examSlice = createSlice({
                 toast.error("Cập nhật đề thi thất bại");
             })
 
+            .addCase(deleteExamThunk.fulfilled, (state, {payload}) => {
+                toast.dismiss(toastId);
+                toast.success("Xóa đề thi thành công");
+                console.log(payload);
+                
+                state.data = state.data!.filter(item => item.id!== payload);
+                state.deleteModalShow = false;
+            })
+
             .addCase(generateAutoExamThunk.rejected, () => {
                 toast.error("Tạo đề thi tự động thất bại");
             })
@@ -72,6 +86,17 @@ export const examSlice = createSlice({
                 state.data?.push(payload!);
                 state.createModalShow = false;
 
+            })
+
+            .addCase(filterExamThunk.fulfilled, (state, {payload}) => {
+                toast.success("Dach sách các câu hỏi được lọc thành công");
+                if(payload){
+                    state.dataFilterList = payload;
+                    console.log(state.dataFilterList);
+                }
+            })
+            .addCase(filterExamThunk.rejected, () => {
+                toast.error("Danh sách câu hỏi không tìm thấy");
             })
     }
 })

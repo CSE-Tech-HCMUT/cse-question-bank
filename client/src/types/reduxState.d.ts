@@ -1,4 +1,5 @@
 import { Department } from "./department"
+import { Question } from "./question"
 import { Subject } from "./subject"
 import { TagQuestion } from "./tagQuestion"
 
@@ -13,8 +14,9 @@ export export interface ReduxState<T> {
     // option
     relatedQuestions?: []
 
-    // question
+    // question && exam
     pdfUrl?: string
+    dataFilterList?: Question[],
 
     // pagination
 }

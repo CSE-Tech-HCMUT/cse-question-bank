@@ -45,5 +45,10 @@ func getQuestionRoutes(h handler.QuestionHandler) []Route {
 			Path: "",
 			Handler: h.GetAllQuestions,
 		},
+		{
+			Method: "GET",
+			Path: "/filter_question",
+			Handler: h.FilterQuestion,
+		},
 	}
 }

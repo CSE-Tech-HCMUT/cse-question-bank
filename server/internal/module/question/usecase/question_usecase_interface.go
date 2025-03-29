@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"cse-question-bank/internal/database/entity"
+	"cse-question-bank/internal/module/question/model/req"
 	res "cse-question-bank/internal/module/question/model/res"
 	"cse-question-bank/internal/module/question/repository"
 )
@@ -13,6 +14,7 @@ type QuestionUsecase interface {
 	DeleteQuestion(ctx context.Context, questionId string) error
 	EditQuestion(ctx context.Context, question *entity.Question) error
 	GetAllQuestions(ctx context.Context) ([]*res.QuestionResponse, error)
+	FilterQuestion(ctx context.Context, filterCondition req.FilterQuestionRequest) ([]*res.QuestionResponse, error)
 }
 
 func NewQuestionUsecase(repo repository.QuestionRepository) QuestionUsecase {

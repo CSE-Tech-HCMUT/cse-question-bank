@@ -11,6 +11,7 @@ type QuestionHandler interface {
 	DeleteQuestion(c *gin.Context)
 	EditQuestion(c *gin.Context)
 	GetAllQuestions(c *gin.Context)
+	FilterQuestion(c *gin.Context)
 }
 
 type questionHandlerImpl struct {

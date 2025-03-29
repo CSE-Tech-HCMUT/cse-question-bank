@@ -71,7 +71,6 @@ func (r *examRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap
 	if err := tx.Preload(clause.Associations).
 	Preload("Questions." + clause.Associations).
 	Preload("Questions.TagAssignments." + clause.Associations).
-	Preload("FilterConditions.TagAssignments." + clause.Associations).
 	Preload("FilterConditions.FilterTagAssignments." + clause.Associations).
 	Where(conditionMap).Find(&exams).Error; err != nil {
 		return nil, err

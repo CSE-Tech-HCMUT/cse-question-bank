@@ -69,8 +69,9 @@ func (r *examRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap
 	var exams []*entity.Exam
 	tx := r.getDB(ctx, db)
 	if err := tx.Preload(clause.Associations).
-	Preload("FilterConditions.Questions." + clause.Associations).
-	Preload("FilterConditions.Questions.TagAssignments." + clause.Associations).
+	Preload("Questions." + clause.Associations).
+	Preload("Questions.TagAssignments." + clause.Associations).
+	Preload("FilterConditions.TagAssignments." + clause.Associations).
 	Preload("FilterConditions.FilterTagAssignments." + clause.Associations).
 	Where(conditionMap).Find(&exams).Error; err != nil {
 		return nil, err

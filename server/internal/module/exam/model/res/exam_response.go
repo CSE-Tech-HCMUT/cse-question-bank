@@ -16,6 +16,7 @@ type ExamResponse struct {
 	Semester         string             `json:"semester"`
 	Subject          SubjectResponse    `json:"subject"`
 	FilterConditions []*FilterCondition `json:"filterConditions"`
+	Questions      []*question_res.QuestionResponse `json:"questions"`
 }
 
 type SubjectResponse struct {
@@ -28,7 +29,6 @@ type FilterCondition struct {
 	Id             int                              `json:"id"`
 	ExpectedCount  int                              `json:"numberQuestion"`
 	TagAssignments []*TagAssignment                 `json:"tagAssignments"`
-	Questions      []*question_res.QuestionResponse `json:"questions"`
 }
 
 type TagAssignment struct {
@@ -48,6 +48,7 @@ func EntityToResponse(exam *entity.Exam) *ExamResponse {
 			Code: exam.Subject.Code,
 		},
 		FilterConditions: convertFilterTags(exam.FilterConditions),
+		Questions: convertQuestions(exam.Questions),
 	}
 }
 
@@ -66,7 +67,6 @@ func convertFilterTags(filterConditions []*entity.FilterCondition) []*FilterCond
 			Id:             filterCondition.Id,
 			ExpectedCount:  filterCondition.ExpectedCount,
 			TagAssignments: convertTagAssignments(filterCondition.FilterTagAssignments),
-			Questions:      convertQuestions(filterCondition.Questions),
 		})
 	}
 	return filterConditionListRes

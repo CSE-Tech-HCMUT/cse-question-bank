@@ -14,6 +14,8 @@ type Exam struct {
 	Subject          Subject    `gorm:"foreignKey:SubjectId"`
 	TotalQuestion    int
 	FilterConditions []*FilterCondition `gorm:"foreignKey:ExamID;constraint:OnDelete:CASCADE;"`
+	Questions []*Question `gorm:"many2many:exam_questions;constraint:OnDelete:CASCADE;"`
+	// TODO: add filtercondition for exam to monitor
 }
 
 type FilterCondition struct {
@@ -21,7 +23,7 @@ type FilterCondition struct {
 	ExamID               uuid.UUID `gorm:"type:uuid"`
 	ExpectedCount        int
 	FilterTagAssignments []*FilterTagAssignment `gorm:"foreignKey:FilterConditionID;constraint:OnDelete:CASCADE;"`
-	Questions            []*Question            `gorm:"many2many:filter_condition_questions;constraint:OnDelete:CASCADE;"`
+	// Questions            []*Question            `gorm:"many2many:filter_condition_questions;constraint:OnDelete:CASCADE;"`
 	Note                 string
 }
 

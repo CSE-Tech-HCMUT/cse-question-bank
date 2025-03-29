@@ -57,15 +57,13 @@ func (u *latexCompilerImpl) createExamLatexFile(folderPath string, exam *entity.
 func (u *latexCompilerImpl) generateExamContent(exam *entity.Exam) (string, error) {
 	examContent := ""
 
-	for _, filterCondition := range exam.FilterConditions {
-		for _, question := range filterCondition.Questions {
-			questionContent, err := u.GenerateQuestionContent(question)
-			if err != nil {
-				return "", err
-			}
-
-			examContent += questionContent
+	for _, question := range exam.Questions {
+		questionContent, err := u.GenerateQuestionContent(question)
+		if err != nil {
+			return "", err
 		}
+
+		examContent += questionContent
 	}
 
 	return examContent, nil

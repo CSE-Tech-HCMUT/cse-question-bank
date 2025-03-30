@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"cse-question-bank/internal/database/entity"
 	"cse-question-bank/internal/module/question/model/req"
 	res "cse-question-bank/internal/module/question/model/res"
 	"strconv"
@@ -15,7 +16,7 @@ func (u *questionBaseUsecaseImpl) FilterQuestion(ctx context.Context, filterCond
 		return nil, err
 	}
 
-	questionCount := make(map[uuid.UUID]int)
+	questionCount := make(map[uuid.UUID]int, 0)
 
 	totalTags := len(filterCondition.TagAssignments)
 
@@ -34,7 +35,7 @@ func (u *questionBaseUsecaseImpl) FilterQuestion(ctx context.Context, filterCond
 		}
 	}
 
-	filteredQuestions := questionBank[:0]
+	filteredQuestions := make([]*entity.Question, 0)
 	for _, question := range questionBank {
 		if questionCount[question.Id] == totalTags {
 			filteredQuestions = append(filteredQuestions, question)

@@ -90,7 +90,6 @@ func (u *latexCompilerImpl) GenerateQuestionContent(question *entity.Question) (
 			if err != nil {
 				return "", err
 			}
-			print("3")
 			result += subQuestionContent + "\n"
 		}
 

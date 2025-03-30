@@ -58,12 +58,13 @@ func (u *latexCompilerImpl) generateExamContent(exam *entity.Exam) (string, erro
 	examContent := ""
 
 	for _, question := range exam.Questions {
+		temp := "\\begin{vnmultiplechoice}\n"
 		questionContent, err := u.GenerateQuestionContent(question)
 		if err != nil {
 			return "", err
 		}
-
-		examContent += questionContent
+		temp += questionContent + "\\end{vnmultiplechoice}\n"
+		examContent += temp
 	}
 
 	return examContent, nil

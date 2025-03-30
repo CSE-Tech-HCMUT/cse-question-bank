@@ -18,7 +18,7 @@ import (
 // @Param			CreateQuestionRequest	body		req.FilterQuestionRequest	true	"FilterQuestionRequest JSON"
 // @Success		200	{object}	response.SuccessResponse{data=[]question_res.QuestionResponse}
 // @Failure	400 {object} response.ErrorResponse
-// @Router			/questions/filter_question [get]
+// @Router			/questions/filter_question [post]
 func (h *questionHandlerImpl) FilterQuestion(c *gin.Context) {
 	var request req.FilterQuestionRequest
 

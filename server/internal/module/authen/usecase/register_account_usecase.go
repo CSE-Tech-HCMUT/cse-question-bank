@@ -2,11 +2,11 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/auth/model/req"
+	"cse-question-bank/internal/module/authen/model/req"
 	"cse-question-bank/pkg/hash"
 )
 
-func (u *authUsecaseImpl) RegisterAccount(ctx context.Context, request req.RegisterAccountRequest) error {
+func (u *authenUsecaseImpl) RegisterAccount(ctx context.Context, request req.RegisterAccountRequest) error {
 	userAccount := request.ToEntity()
 
 	hashPassword, err := hash.Generate(request.Password)

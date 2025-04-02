@@ -1,21 +1,21 @@
 package handler
 
 import (
-	"cse-question-bank/internal/module/auth/usecase"
+	"cse-question-bank/internal/module/authen/usecase"
 
 	"github.com/gin-gonic/gin"
 )
 
-type AuthHandler interface {
+type AuthenHandler interface {
 	Login(c *gin.Context)
 	RegisterAccount(c *gin.Context)
 }
 
 type authHandlerImpl struct {
-	authUsecase usecase.AuthUsecase
+	authUsecase usecase.AuthenUsecase
 }
 
-func NewAuthHandler(authUsecase usecase.AuthUsecase) AuthHandler {
+func NewAuthenHandler(authUsecase usecase.AuthenUsecase) AuthenHandler {
 	return &authHandlerImpl{
 		authUsecase: authUsecase,
 	}

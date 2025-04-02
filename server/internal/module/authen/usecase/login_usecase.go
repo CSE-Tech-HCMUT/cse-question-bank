@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/module/auth/model/req"
+	"cse-question-bank/internal/module/authen/model/req"
 	"cse-question-bank/pkg/hash"
 	"cse-question-bank/pkg/jwt"
 	"errors"
@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (u *authUsecaseImpl) Login(ctx context.Context, request *req.LoginRequest) (string, string, error) {
+func (u *authenUsecaseImpl) Login(ctx context.Context, request *req.LoginRequest) (string, string, error) {
 
 	userAccount, err := u.userRepository.Find(ctx, nil, map[string]interface{}{
 		"username": request.Username,

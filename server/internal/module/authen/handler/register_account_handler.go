@@ -3,7 +3,7 @@ package handler
 import (
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
-	"cse-question-bank/internal/module/auth/model/req"
+	"cse-question-bank/internal/module/authen/model/req"
 
 	"github.com/gin-gonic/gin"
 )

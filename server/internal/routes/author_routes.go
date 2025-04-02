@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func initAuthorGroupRoutes(casbin casbin.CasbinService, api *gin.RouterGroup) {
+func initAuthorGroupRoutes(casbin *casbin.CasbinService, api *gin.RouterGroup) {
 	authUsecase := usecase.NewAuthorUsecase(casbin)
 	authHandler := handler.NewAuthorHandler(authUsecase)
 	authRoutes := api.Group("/author")

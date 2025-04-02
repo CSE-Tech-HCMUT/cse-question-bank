@@ -3,11 +3,13 @@ package routes
 import (
 	"net/http"
 
+	_ "cse-question-bank/docs"
+	"cse-question-bank/internal/core/casbin"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "cse-question-bank/docs"
 	"gorm.io/gorm"
 )
 
@@ -19,6 +21,11 @@ type Route struct {
 
 func RegisterRoutes(db *gorm.DB) http.Handler {
 	r := gin.Default()
+
+	casbin, err := casbin.NewCasbinService(db)
+	if err != nil {
+		panic("fail to init casbin service")
+	}
 
 	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
 	
@@ -39,6 +46,7 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		iniTagOptionGroupRoutes(db, api)
 		initExamGroupRoutes(db, api)
 		initAuthenGroupRoutes(db, api)
+		initAuthorGroupRoutes(casbin, api)
 		initSubjectGroupRoutes(db, api)
 		initDepartmentGroupRoutes(db, api)
 	}

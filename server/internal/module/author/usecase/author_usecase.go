@@ -14,10 +14,10 @@ type AuthorUsecase interface {
 }
 
 type authorUsecaseImpl struct {
-	casbinService casbin.CasbinService
+	casbinService *casbin.CasbinService
 }
 
-func NewAuthorUsecase(casbinService casbin.CasbinService) AuthorUsecase {
+func NewAuthorUsecase(casbinService *casbin.CasbinService) AuthorUsecase {
 	return &authorUsecaseImpl{
 		casbinService: casbinService,
 	}

@@ -23,11 +23,15 @@ func NewCasbinService(db *gorm.DB) (*CasbinService, error) {
 	[policy_definition]
 	p = sub, obj, act
 
+	[role_definition]
+	g = _, _           
+	g2 = _, _
+
 	[policy_effect]
 	e = some(where (p.eft == allow))
 
 	[matchers]
-	m = r.sub == p.sub && r.obj == p.obj && r.act == p.act
+	m = g(r.sub, p.sub) && ( r.obj == p.obj || (r.obj ~= "question:*" && g2(r.obj, p.obj) && p.obj ~= "subject:*")) && r.act == p.act
 	`)
 	if err != nil {
 		return nil, err
@@ -38,10 +42,12 @@ func NewCasbinService(db *gorm.DB) (*CasbinService, error) {
 		username = os.Getenv("DB_USERNAME")
 		port     = os.Getenv("DB_PORT")
 		host     = os.Getenv("DB_HOST")
+		database = os.Getenv("DB_DATABASE")
 	)
 
 	// Use the Gorm adapter for storing policies
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/", username, password, host, port)
+	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+	host, port, username, password, database)
 	adapter, err := gormadapter.NewAdapter("postgres", dataSourceName)
 	if err != nil {
 		return nil, err
@@ -92,6 +98,16 @@ func (s *CasbinService) GetAllRoles() ([]string, error) {
 }
 
 // AddGroupingPolicy add user to group role policy
-func (s *CasbinService) AddGroupingPolicy(userId uuid.UUID, role string) (bool, error) {
+func (s *CasbinService) AddUserRole(userId uuid.UUID, role string) (bool, error) {
 	return s.Enforcer.AddGroupingPolicy(userId, role)
+}
+
+// AddGroupingPolicy add user to group role policy
+func (s *CasbinService) AddGroupingPolicy(role1, role2 string) (bool, error) {
+	return s.Enforcer.AddGroupingPolicy(role1, role2)
+}
+
+// add question to subject id for manage
+func (s *CasbinService) AddQuestionToSubjectGroup(questionObj, subjectObj string) (bool, error) {
+	return s.Enforcer.AddNamedGroupingPolicy("g2", questionObj, subjectObj)
 }

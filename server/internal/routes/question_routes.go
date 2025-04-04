@@ -1,16 +1,18 @@
 package routes
 
 import (
+	"cse-question-bank/internal/core/casbin"
 	"cse-question-bank/internal/module/question/handler"
 	"cse-question-bank/internal/module/question/repository"
 	"cse-question-bank/internal/module/question/usecase"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-func iniQuestionGroupRoutes(db *gorm.DB, api *gin.RouterGroup) {
+func iniQuestionGroupRoutes(db *gorm.DB, casbin *casbin.CasbinService, api *gin.RouterGroup) {
 	questionRepository := repository.NewQuestionRepository(db)
-	questionUsecase := usecase.NewQuestionUsecase(questionRepository)
+	questionUsecase := usecase.NewQuestionUsecase(casbin, questionRepository)
 	questionHandler := handler.NewQuestionHandler(questionUsecase)
 	questionRoutes := api.Group("/questions")
 	{

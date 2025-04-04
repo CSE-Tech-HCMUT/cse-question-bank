@@ -7,7 +7,7 @@ import (
 )
 
 func (u *authorUsecaseImpl) AssignRole(ctx context.Context, request *req.AssignRoleRequest) error {
-	ok, err := u.casbinService.AddGroupingPolicy(request.UserId, request.Role)
+	ok, err := u.casbinService.AddGroupingPolicy(request.UserId.String(), request.Role)
 	if err != nil {
 		return err
 	}

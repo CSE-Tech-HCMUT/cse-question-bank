@@ -1,7 +1,7 @@
 import { ReduxState } from "@/types/reduxState";
 import { createSlice } from "@reduxjs/toolkit";
 import { Question } from "@/types/question";
-import { createQuestionThunk, deleteQuestionThunk, editQuestionThunk, getAllQuestionsThunk, getQuestionByIdThunk, previewPDFFileThunk } from "./thunk";
+import { createQuestionThunk, deleteQuestionThunk, editQuestionThunk, filterQuestionThunk, getAllQuestionsThunk, getQuestionByIdThunk, previewPDFFileThunk } from "./thunk";
 import { Id, toast } from "react-toastify";
 
 const initialState: ReduxState<Question> = {
@@ -11,7 +11,8 @@ const initialState: ReduxState<Question> = {
     viewModalShow: false,
     data: [],
     dataById: undefined,
-    pdfUrl: ""
+    pdfUrl: "",
+    dataFilterList: []
 }
 
 let toastId: Id;
@@ -87,6 +88,15 @@ export const questionSlice = createSlice({
             })
             .addCase(previewPDFFileThunk.rejected, () => {
                 toast.error("Hệ thống đang quá tải! Bạn vui lòng thử lại");
+            })
+
+            .addCase(filterQuestionThunk.fulfilled, (state, {payload}) => {
+                toast.success("Bộ câu hỏi được lọc thành công");
+                state.dataFilterList = payload;
+            })
+            .addCase(filterQuestionThunk.rejected, (state) => {
+                toast.error("Bộ câu hỏi không tìm thấy");
+                state.dataFilterList = [];
             })
     }
 })

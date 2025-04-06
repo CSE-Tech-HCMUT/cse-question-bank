@@ -1,5 +1,5 @@
 import questionService from "@/services/question/questionService";
-import { Question } from "@/types/question";
+import { Question, QuestionFilter } from "@/types/question";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getAllQuestionsThunk = createAsyncThunk('question/getAllQuestionsThunk', async (_, { rejectWithValue }) => {
@@ -62,3 +62,12 @@ export const deleteQuestionThunk = createAsyncThunk('question/deleteQuestionThun
     }
 })
 
+export const filterQuestionThunk = createAsyncThunk('question/filterQuestion', async (payload: QuestionFilter, { rejectWithValue }) => {
+    try {
+        const response = await questionService.filterQuestion(payload);
+
+        return response.data.data;
+    } catch (error) {
+        return rejectWithValue(error);
+    }
+})

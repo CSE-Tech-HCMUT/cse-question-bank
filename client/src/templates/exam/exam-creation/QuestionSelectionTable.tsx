@@ -1,15 +1,18 @@
-import { Table, Input, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-import { Question } from '@/types/question';
-import { FilterCondition } from '@/types/exam';
+import { Table, Input, Button, Space, Tooltip } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { Question } from "@/types/question";
+import PDFPreview from "@/components/pdf/PDFPreview";
+import { useAppDispatch } from "@/stores";
+import { previewPDFFileThunk } from "@/stores/question/thunk";
+import "../../../styles/table/QuestionSelectionTable.scss";
+import { AiFillEye } from "react-icons/ai";
 
 interface QuestionSelectionTableProps {
-  questions: any[]; // Dữ liệu truyền vào sẽ là kiểu mảng bao gồm các đối tượng như bạn đã cung cấp
+  questions: Question[];
   onSelectQuestion: (question: Question) => void;
-  onRemoveQuestion: (question: Question) => void; // Hàm để xóa câu hỏi khỏi selectedQuestions
-  selectedQuestions: Question[];  // Truyền selectedQuestions vào để đồng bộ
-  filterConditions: FilterCondition[];  // Truyền filterConditions vào
+  onRemoveQuestion: (question: Question) => void;
+  selectedQuestions: Question[];
 }
 
 const QuestionSelectionTable: React.FC<QuestionSelectionTableProps> = ({
@@ -17,92 +20,102 @@ const QuestionSelectionTable: React.FC<QuestionSelectionTableProps> = ({
   onSelectQuestion,
   onRemoveQuestion,
   selectedQuestions,
-  filterConditions
 }) => {
-  const [searchText, setSearchText] = useState('');
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]); // Lưu trạng thái các câu hỏi đã chọn
+  const [searchText, setSearchText] = useState("");
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState("");
+  const dispatch = useAppDispatch();
 
-  const handleSearch = (content: string) => {
-    setSearchText(content);
-  };
-
-  // Giải nén tất cả câu hỏi từ các đối tượng trong questions
-  const allQuestions: Question[] = questions.reduce((acc: Question[], curr: any) => {
-    return [...acc, ...curr.questions];
-  }, []);
-
-  // Lọc câu hỏi theo các điều kiện từ filterConditions và tìm kiếm
-  const filteredQuestions = allQuestions.filter((question) => {
-    return filterConditions.every((condition) => {
-      return condition.tagAssignments!.every((tagAssignment: any) => {
-        return question.content?.toLowerCase().includes(searchText.toLowerCase());
-      });
-    });
-  });
-
-  const handleRowSelect = (selectedKeys: React.Key[]) => {
-    setSelectedRowKeys(selectedKeys);  // Cập nhật các câu hỏi đã chọn
-  };
-
-  // Hàm xử lý khi chọn câu hỏi
-  const handleSelect = (question: Question) => {
-    if (selectedQuestions.find(q => q.id === question.id)) {
-      onRemoveQuestion(question);  // Nếu đã chọn, gọi hàm xóa câu hỏi khỏi selectedQuestions
-    } else {
-      onSelectQuestion(question);  // Nếu chưa chọn, gọi hàm thêm câu hỏi vào selectedQuestions
+  const handlePreview = async (questionId: string) => {
+    const result = await dispatch(previewPDFFileThunk(questionId));
+    if (result.meta.requestStatus === "fulfilled") {
+      setPdfUrl(result.payload as string);
+      setPreviewVisible(true);
     }
   };
 
-  // Cập nhật cột "Hành động"
+  const filteredQuestions = questions.filter((question) =>
+    question.content?.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   const columns = [
     {
-      title: 'Nội dung câu hỏi',
-      dataIndex: 'content',
-      key: 'content',
+      title: "Nội dung câu hỏi",
+      dataIndex: "content",
+      key: "content",
+      render: (text: string) => (
+        <div
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: 300,
+          }}
+        >
+          {text}
+        </div>
+      ),
     },
     {
-      title: 'Hành động',
-      key: 'action',
+      title: "Hành động",
+      key: "action",
+      width: 200,
       render: (_: any, record: Question) => (
-        <Button
-          type="primary"
-          onClick={() => handleSelect(record)}  // Gọi hàm handleSelect khi chọn câu hỏi
-          disabled={selectedQuestions.some(q => q.id === record.id)}  // Disable button nếu câu hỏi đã được chọn
-        >
-          {selectedQuestions.some(q => q.id === record.id) ? 'Đã chọn' : 'Chọn'}
-        </Button>
+        <Space>
+          <Tooltip title="Xem chi tiết">
+            <Button
+              icon={<AiFillEye />}
+              onClick={() => handlePreview(record.id!)}
+            />
+          </Tooltip>
+          <Button
+            type={
+              selectedQuestions.some((q) => q.id === record.id)
+                ? "default"
+                : "primary"
+            }
+            onClick={() =>
+              selectedQuestions.some((q) => q.id === record.id)
+                ? onRemoveQuestion(record)
+                : onSelectQuestion(record)
+            }
+          >
+            {selectedQuestions.some((q) => q.id === record.id)
+              ? "Bỏ chọn"
+              : "Chọn"}
+          </Button>
+        </Space>
       ),
     },
   ];
 
-  // Thêm class để thay đổi màu sắc dòng khi đã chọn
-  const rowClassName = (record: Question) => {
-    return selectedQuestions.some(q => q.id === record.id) ? 'row-disabled' : '';  
-  };
-
   return (
-    <div>
+    <div className="QuestionSelectionTable">
       <Input
         placeholder="Tìm kiếm câu hỏi"
         prefix={<SearchOutlined />}
         value={searchText}
-        onChange={(e) => handleSearch(e.target.value)}
+        onChange={(e) => setSearchText(e.target.value)}
         style={{ marginBottom: 16 }}
       />
+
       <Table
         dataSource={filteredQuestions}
         columns={columns}
         rowKey="id"
-        rowSelection={{
-          selectedRowKeys,
-          onChange: handleRowSelect,
-        }}
-        rowClassName={rowClassName}  
+        pagination={{ pageSize: 5 }}
+        rowClassName={(record) =>
+          selectedQuestions.some((q) => q.id === record.id)
+            ? "selected-row"
+            : ""
+        }
       />
- 
-      <div>
-        <span>Tổng số câu hỏi đã lọc: {filteredQuestions.length}</span>
-      </div>
+
+      <PDFPreview
+        urlPDF={pdfUrl}
+        isModalOpen={previewVisible}
+        onClose={() => setPreviewVisible(false)}
+      />
     </div>
   );
 };

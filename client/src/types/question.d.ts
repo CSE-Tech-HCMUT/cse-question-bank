@@ -19,3 +19,8 @@ export type Question = {
     // auto
     numberOfDistractionAnswers?: number
 }
+
+export type QuestionFilter = {
+    subjectId?: string,
+    tagAssignments?: TagAssignment[]
+}

@@ -1,13 +1,13 @@
 import PATH from "@/const/path";
 import { RootState, useAppDispatch } from "@/stores";
+import { editExamThunk, generateAutoExamThunk } from "@/stores/exam/thunk";
 import {
-  editExamThunk,
-  filterExamThunk,
-  generateAutoExamThunk,
-} from "@/stores/exam/thunk";
+  filterQuestionThunk,
+  previewPDFFileThunk,
+} from "@/stores/question/thunk";
 import { getAllTagsThunk } from "@/stores/tag-management/thunk";
 import { Exam, FilterCondition } from "@/types/exam";
-import { Question } from "@/types/question";
+import { Question, QuestionFilter } from "@/types/question";
 import { Subject } from "@/types/subject";
 import { TagQuestion } from "@/types/tagQuestion";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -20,13 +20,16 @@ import {
   Modal,
   Row,
   Select,
+  Space,
   Table,
   Tooltip,
 } from "antd";
 import { useEffect, useState } from "react";
-import { AiFillDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import QuestionSelectionTable from "./QuestionSelectionTable";
+import PDFPreview from "@/components/pdf/PDFPreview";
+import { AiFillEye } from "react-icons/ai";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -40,73 +43,84 @@ export const ExamCreationTemplate = () => {
   const [tagDisplay, setTagDisplay] = useState<TagQuestion[]>([]);
   const [mode, setMode] = useState<"auto" | "manual">("manual");
 
+  // pdf question
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewPdfUrl, setPreviewPdfUrl] = useState("");
+
+  const handlePreviewQuestion = async (questionId: string) => {
+    const result = await dispatch(previewPDFFileThunk(questionId));
+    if (result.meta.requestStatus === "fulfilled") {
+      setPreviewPdfUrl(result.payload as string);
+      setPreviewVisible(true);
+    }
+  };
+
+  const handlePreviewClose = () => {
+    setPreviewVisible(false);
+  };
+
   // general
   const [filterConditions, setFilterConditions] = useState<FilterCondition[]>([
-    { numberQuestion: 0, tagAssignments: [] },
+    { tagAssignments: [] },
   ]);
   const [totalQuestion, setTotalQuestion] = useState<number>(0);
   const [semester, setSemester] = useState<string>("");
   const [examDate, setExamDate] = useState<Date>();
   const [time, setTime] = useState<number>(0);
-  const [note, setNote] = useState<string>("");
+  const [_note, setNote] = useState<string>("");
 
   // modal state
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentFilterIndex, setCurrentFilterIndex] = useState(0);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
+  const [currentTagsSelection, setCurrentTagsSelection] = useState<
+    { tagId: number; optionId: number }[]
+  >([]);
 
   const { data: tagData } = useSelector(
     (state: RootState) => state.tagManagementReducer
   );
-  const { pdfUrl, dataFilterList } = useSelector(
-    (state: RootState) => state.examReducer
-  );
+  const { pdfUrl } = useSelector((state: RootState) => state.examReducer);
 
   const dispatch = useAppDispatch();
 
-  const addFilterConditionGroup = () => {
-    setFilterConditions((prev) => [
-      ...prev,
-      { numberQuestion: 0, tagAssignments: [] },
-    ]);
-  };
-
-  const handleFilterConditionChange = (
-    index: number,
-    tagId: number,
-    optionId: number
-  ) => {
-    setFilterConditions((prev) => {
-      const newConditions = [...prev];
-      newConditions[index] = {
-        ...newConditions[index],
-        tagAssignments: [{ tagId, optionId }],
-      };
-      return newConditions;
+  const handleFilterConditionChange = (tagId: number, optionId: number) => {
+    setCurrentTagsSelection((prev) => {
+      const existingIndex = prev.findIndex((a) => a.tagId === tagId);
+      if (existingIndex >= 0) {
+        const newSelection = [...prev];
+        newSelection[existingIndex].optionId = optionId;
+        return newSelection;
+      }
+      return [...prev, { tagId, optionId }];
     });
-  };
-
-  const handleExpectCountChange = (index: number, numberQuestion: number) => {
-    setFilterConditions((prev) => {
-      const newConditions = [...prev];
-      newConditions[index] = {
-        ...newConditions[index],
-        numberQuestion,
-      };
-      return newConditions;
-    });
-  };
-
-  const removeFilterConditionGroup = (index: number) => {
-    setFilterConditions((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSelectQuestion = (question: Question) => {
+    setFilterConditions((prev) => {
+      const newConditions = [...prev];
+      const currentFilter = newConditions[currentFilterIndex];
+
+      newConditions[currentFilterIndex] = {
+        ...currentFilter,
+        questions: [...(currentFilter.questions || []), question],
+      };
+
+      return newConditions;
+    });
+
     setSelectedQuestions((prev) => [...prev, question]);
   };
 
   const handleRemoveQuestion = (question: Question) => {
+    setFilterConditions((prev) => {
+      return prev.map((filter) => ({
+        ...filter,
+        questions: filter.questions?.filter((q) => q.id !== question.id) || [],
+      }));
+    });
+
     setSelectedQuestions((prev) => prev.filter((q) => q.id !== question.id));
   };
 
@@ -133,40 +147,91 @@ export const ExamCreationTemplate = () => {
   };
 
   const handleModalCancel = () => {
-    setFilteredQuestions([]); // Clear filtered questions when modal is canceled
+    setFilteredQuestions([]);
     setIsModalVisible(false);
+    setCurrentTagsSelection([]);
   };
 
-  const handleFilter = async (index: number) => {
-    setCurrentFilterIndex(index);
-    const currentFilter = filterConditions[index];
+  const handleCreateExamFromSelected = () => {
+    if (selectedQuestions.length === 0) {
+      Modal.warning({
+        title: "Cảnh báo",
+        content: "Vui lòng chọn ít nhất một câu hỏi để tạo đề thi",
+      });
+      return;
+    }
+
+    // Tạo filterConditions mới chỉ chứa các filter có câu hỏi đã chọn
+    const validFilterConditions = filterConditions.filter(
+      (filter) => filter.questions && filter.questions.length > 0
+    );
+
+    const questionIdList = selectedQuestions.map((q) => q.id!);
 
     let payload: Exam = {
       id: idExam,
       semester: semester,
-      numberQuestion: currentFilter.numberQuestion,
-      filterConditions: [currentFilter],
+      numberQuestion: selectedQuestions.length,
+      filterConditions: validFilterConditions,
       subjectId: subjectAuthen?.id,
+      questionIdList: questionIdList,
+      duration: time,
+      date: examDate,
+    };
+    console.log(payload);
+
+    dispatch(editExamThunk(payload)).then((actionResult) => {
+      if (actionResult.meta.requestStatus === "fulfilled") {
+        navigate(
+          PATH.EXAM_MANAGEMENT.replace(":subjectName", subjectAuthen?.name!)
+        );
+      }
+    });
+  };
+
+  const handleFilter = async (index: number) => {
+    setCurrentFilterIndex(index);
+
+    // Tạo bộ lọc mới từ currentTagsSelection
+    const newFilterCondition: FilterCondition = {
+      tagAssignments: [...currentTagsSelection],
+      questions: [],
     };
 
-    const actionResult = await dispatch(editExamThunk(payload));
+    // Cập nhật filterConditions với bộ lọc mới
+    setFilterConditions((prev) => {
+      const newConditions = [...prev];
+      newConditions[index] = newFilterCondition;
+      return newConditions;
+    });
+
+    let payload: QuestionFilter = {
+      subjectId: subjectAuthen?.id,
+      tagAssignments: currentTagsSelection,
+    };
+
+    const actionResult = await dispatch(filterQuestionThunk(payload));
     if (actionResult.meta.requestStatus === "fulfilled") {
-      const filterResult = await dispatch(filterExamThunk(idExam!));
-      if (filterResult.meta.requestStatus === "fulfilled") {
-        // Only set filtered questions if we get valid data
-        if (dataFilterList && dataFilterList.length > 0) {
-          setFilteredQuestions(dataFilterList);
-          setIsModalVisible(true);
-        } else {
-          // Optionally show a message that no questions were found
-          setFilteredQuestions([]);
-        }
+      const filteredData = actionResult.payload as Question[];
+      if (filteredData && filteredData.length > 0) {
+        setFilteredQuestions(filteredData);
+        setIsModalVisible(true);
+      } else {
+        setFilteredQuestions([]);
+        Modal.info({
+          title: "Thông báo",
+          content: "Không tìm thấy câu hỏi nào phù hợp với bộ lọc này",
+        });
       }
     }
+
+    // Reset selection sau khi lọc
+    setCurrentTagsSelection([]);
   };
 
   const handleModalOk = () => {
     setIsModalVisible(false);
+    setCurrentTagsSelection([]);
   };
 
   useEffect(() => {
@@ -201,7 +266,6 @@ export const ExamCreationTemplate = () => {
           <QuestionCircleOutlined className="text-xl pb-3" />
         </Tooltip>
       </div>
-
       {/* Step 1 */}
       <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
         <Col xs={24}>
@@ -310,7 +374,6 @@ export const ExamCreationTemplate = () => {
           </Card>
         </Col>
       </Row>
-
       {/* Step 2 */}
       <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
         <Col xs={24}>
@@ -318,7 +381,7 @@ export const ExamCreationTemplate = () => {
             style={{ height: "100%" }}
             title={`2. Chọn các yêu cầu cho câu hỏi trong đề thi`}
           >
-            {filterConditions.map((filterGroup, groupIndex) => (
+            {filterConditions.map((_filterGroup, groupIndex) => (
               <Row
                 gutter={[16, 16]}
                 style={{ marginBottom: "24px" }}
@@ -334,9 +397,12 @@ export const ExamCreationTemplate = () => {
                         <Select
                           placeholder={"Chọn thông tin nhãn"}
                           style={{ width: "100%" }}
+                          value={
+                            currentTagsSelection.find((a) => a.tagId === tag.id)
+                              ?.optionId
+                          }
                           onChange={(value) =>
                             handleFilterConditionChange(
-                              groupIndex,
                               tag.id!,
                               value as number
                             )
@@ -392,9 +458,16 @@ export const ExamCreationTemplate = () => {
                   <Button
                     type="primary"
                     onClick={() => handleFilter(groupIndex)}
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", marginBottom: 16 }}
+                    disabled={currentTagsSelection.length === 0}
                   >
                     Lọc câu hỏi cho bộ lọc này
+                  </Button>
+                  <Button
+                    onClick={() => setCurrentTagsSelection([])}
+                    style={{ width: "100%" }}
+                  >
+                    Reset bộ lọc
                   </Button>
                 </Col>
               </Row>
@@ -402,7 +475,6 @@ export const ExamCreationTemplate = () => {
           </Card>
         </Col>
       </Row>
-
       {/* Step 3 */}
       <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
         <Col xs={24}>
@@ -425,33 +497,53 @@ export const ExamCreationTemplate = () => {
                     </div>
 
                     {selectedQuestions.length > 0 ? (
-                      <Table
-                        dataSource={selectedQuestions}
-                        rowKey="id"
-                        pagination={{
-                          pageSize: 5,
-                        }}
-                        columns={[
-                          {
-                            title: "Câu hỏi",
-                            dataIndex: "content",
-                            key: "content",
-                          },
-                          {
-                            title: "Hành động",
-                            key: "action",
-                            render: (_, record) => (
-                              <Button
-                                type="primary"
-                                danger
-                                onClick={() => handleRemoveQuestion(record)}
-                              >
-                                Xóa
-                              </Button>
-                            ),
-                          },
-                        ]}
-                      />
+                      <>
+                        <Table
+                          dataSource={selectedQuestions}
+                          rowKey="id"
+                          pagination={{
+                            pageSize: 5,
+                          }}
+                          columns={[
+                            {
+                              title: "Câu hỏi",
+                              dataIndex: "content",
+                              key: "content",
+                            },
+                            {
+                              title: "Hành động",
+                              key: "action",
+                              render: (_, record) => (
+                                <Space>
+                                  <Tooltip title="Xem chi tiết">
+                                    <Button
+                                      icon={<AiFillEye />}
+                                      onClick={() =>
+                                        handlePreviewQuestion(record.id!)
+                                      }
+                                    />
+                                  </Tooltip>
+                                  <Button
+                                    type="primary"
+                                    danger
+                                    onClick={() => handleRemoveQuestion(record)}
+                                  >
+                                    Xóa
+                                  </Button>
+                                </Space>
+                              ),
+                            },
+                          ]}
+                        />
+                        <div style={{ textAlign: "right", marginTop: 16 }}>
+                          <Button
+                            type="primary"
+                            onClick={handleCreateExamFromSelected}
+                          >
+                            Tạo đề thi từ các câu hỏi đã chọn
+                          </Button>
+                        </div>
+                      </>
                     ) : (
                       <p>Chưa có câu hỏi nào được chọn.</p>
                     )}
@@ -462,8 +554,8 @@ export const ExamCreationTemplate = () => {
           </Card>
         </Col>
       </Row>
-
       {/* Modal for filtered questions */}
+
       <Modal
         title={`Chọn câu hỏi cho bộ lọc ${currentFilterIndex + 1}`}
         visible={isModalVisible}
@@ -476,40 +568,19 @@ export const ExamCreationTemplate = () => {
           </Button>,
         ]}
       >
-        {filteredQuestions.length > 0 ? (
-          <Table
-            dataSource={filteredQuestions}
-            rowKey="id"
-            pagination={{
-              pageSize: 5,
-            }}
-            columns={[
-              {
-                title: "Câu hỏi",
-                dataIndex: "content",
-                key: "content",
-              },
-              {
-                title: "Hành động",
-                key: "action",
-                render: (_, record) => (
-                  <Button
-                    type="primary"
-                    disabled={selectedQuestions.some((q) => q.id === record.id)}
-                    onClick={() => handleSelectQuestion(record)}
-                  >
-                    {selectedQuestions.some((q) => q.id === record.id)
-                      ? "Đã chọn"
-                      : "Chọn"}
-                  </Button>
-                ),
-              },
-            ]}
-          />
-        ) : (
-          <p>Không tìm thấy câu hỏi nào phù hợp với bộ lọc này.</p>
-        )}
+        <QuestionSelectionTable
+          questions={filteredQuestions}
+          onSelectQuestion={handleSelectQuestion}
+          onRemoveQuestion={handleRemoveQuestion}
+          selectedQuestions={selectedQuestions}
+        />
       </Modal>
+
+      <PDFPreview
+        urlPDF={previewPdfUrl}
+        isModalOpen={previewVisible}
+        onClose={handlePreviewClose}
+      />
     </Content>
   );
 };

@@ -14,6 +14,7 @@ export type Exam = {
     filterConditions?: FilterCondition[],
     questions?: Question[],
     subjectId?: string,
+    questionIdList?: string[]
 }
 
 export interface FilterCondition {

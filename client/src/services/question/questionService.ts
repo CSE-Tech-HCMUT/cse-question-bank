@@ -1,4 +1,4 @@
-import { Question } from "@/types/question";
+import { Question, QuestionFilter } from "@/types/question";
 import apiInstance from "../apiInstance";
 import { AxiosResponse } from 'axios';
 
@@ -9,11 +9,14 @@ const questionService = {
     getQuestionById: (id: string): Promise<AxiosResponse<{ data: Question }>> => apiInstance.get(`/questions/${id}`),
     editQuestion: (payload: Question): Promise<AxiosResponse<{ data: Question }>> => apiInstance.put(`/questions`, payload),
     deleteQuestion: (id: string) => apiInstance.delete(`/questions/${id}`),
-
+    
     // latex compile
     compileLatexQuestion: (id: string) => apiInstance.get<Blob>(`/compile-latex/questions/${id}`, {
         responseType: 'blob'
-    })
+    }),
+
+    // filter
+    filterQuestion: (payload: QuestionFilter): Promise<AxiosResponse<{ data: Question[] }>> => apiInstance.post(`/questions/filter_question`, payload)
 }
 
 export default questionService;

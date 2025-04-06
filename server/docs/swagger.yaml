@@ -27,6 +27,10 @@ definitions:
       numberQuestion:
         description: Questions        []*question_res.QuestionResponse `json:"questions"`
         type: integer
+      questions:
+        items:
+          $ref: '#/definitions/question_res.QuestionResponse'
+        type: array
       semester:
         type: string
       subject:
@@ -38,10 +42,6 @@ definitions:
         type: integer
       numberQuestion:
         type: integer
-      questions:
-        items:
-          $ref: '#/definitions/question_res.QuestionResponse'
-        type: array
       tagAssignments:
         items:
           $ref: '#/definitions/exam_res.TagAssignment'
@@ -104,6 +104,22 @@ definitions:
         $ref: '#/definitions/option_res.OptionResponse'
       tag:
         $ref: '#/definitions/tag_res.TagResponse'
+    type: object
+  internal_module_exam_model_req.TagAssignment:
+    properties:
+      id:
+        type: integer
+      optionId:
+        type: integer
+      tagId:
+        type: integer
+    type: object
+  internal_module_question_model_req.TagAssignment:
+    properties:
+      optionId:
+        type: integer
+      tagId:
+        type: integer
     type: object
   internal_module_tag_model_req.UpdateOptionRequest:
     properties:
@@ -179,11 +195,16 @@ definitions:
   req.CreateExamRequest:
     properties:
       filterConditions:
+        description: 'TODO: add filtercondition for exam to monitor'
         items:
           $ref: '#/definitions/req.FilterCondition'
         type: array
       numberQuestion:
         type: integer
+      questionIdList:
+        items:
+          type: string
+        type: array
       subjectId:
         type: string
     type: object
@@ -278,17 +299,17 @@ definitions:
         type: integer
       tagAssignments:
         items:
-          $ref: '#/definitions/req.TagAssignment'
+          $ref: '#/definitions/internal_module_exam_model_req.TagAssignment'
         type: array
     type: object
-  req.TagAssignment:
+  req.FilterQuestionRequest:
     properties:
-      id:
-        type: integer
-      optionId:
-        type: integer
-      tagId:
-        type: integer
+      subjectId:
+        type: string
+      tagAssignments:
+        items:
+          $ref: '#/definitions/internal_module_question_model_req.TagAssignment'
+        type: array
     type: object
   req.UpdateExamRequest:
     properties:
@@ -300,6 +321,10 @@ definitions:
         type: string
       numberQuestion:
         type: integer
+      questionIdList:
+        items:
+          type: string
+        type: array
       subjectId:
         type: string
     type: object
@@ -481,6 +506,31 @@ paths:
       tags:
       - Department
   /exams:
+    get:
+      consumes:
+      - application/json
+      description: Show all exams
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/exam_res.ExamResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show all exams
+      tags:
+      - Exam
     post:
       consumes:
       - application/json
@@ -894,6 +944,39 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Show a question
+      tags:
+      - Question
+  /questions/filter_question:
+    post:
+      consumes:
+      - application/json
+      description: Get filtered questions
+      parameters:
+      - description: FilterQuestionRequest JSON
+        in: body
+        name: CreateQuestionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.FilterQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/question_res.QuestionResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get filtered questions
       tags:
       - Question
   /subjects:

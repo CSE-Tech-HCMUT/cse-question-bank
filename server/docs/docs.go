@@ -155,6 +155,48 @@ const docTemplate = `{
             }
         },
         "/exams": {
+            "get": {
+                "description": "Show all exams",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Show all exams",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/exam_res.ExamResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "Update a exam",
                 "consumes": [
@@ -750,6 +792,61 @@ const docTemplate = `{
                 }
             }
         },
+        "/questions/filter_question": {
+            "post": {
+                "description": "Get filtered questions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "Get filtered questions",
+                "parameters": [
+                    {
+                        "description": "FilterQuestionRequest JSON",
+                        "name": "CreateQuestionRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.FilterQuestionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/question_res.QuestionResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/questions/{id}": {
             "get": {
                 "description": "Show a question",
@@ -1276,6 +1373,12 @@ const docTemplate = `{
                     "description": "Questions        []*question_res.QuestionResponse ` + "`" + `json:\"questions\"` + "`" + `",
                     "type": "integer"
                 },
+                "questions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/question_res.QuestionResponse"
+                    }
+                },
                 "semester": {
                     "type": "string"
                 },
@@ -1292,12 +1395,6 @@ const docTemplate = `{
                 },
                 "numberQuestion": {
                     "type": "integer"
-                },
-                "questions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/question_res.QuestionResponse"
-                    }
                 },
                 "tagAssignments": {
                     "type": "array",
@@ -1393,6 +1490,31 @@ const docTemplate = `{
                 },
                 "tag": {
                     "$ref": "#/definitions/tag_res.TagResponse"
+                }
+            }
+        },
+        "internal_module_exam_model_req.TagAssignment": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "optionId": {
+                    "type": "integer"
+                },
+                "tagId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_module_question_model_req.TagAssignment": {
+            "type": "object",
+            "properties": {
+                "optionId": {
+                    "type": "integer"
+                },
+                "tagId": {
+                    "type": "integer"
                 }
             }
         },
@@ -1510,6 +1632,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "filterConditions": {
+                    "description": "TODO: add filtercondition for exam to monitor",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/req.FilterCondition"
@@ -1517,6 +1640,12 @@ const docTemplate = `{
                 },
                 "numberQuestion": {
                     "type": "integer"
+                },
+                "questionIdList": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "subjectId": {
                     "type": "string"
@@ -1663,22 +1792,22 @@ const docTemplate = `{
                 "tagAssignments": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/req.TagAssignment"
+                        "$ref": "#/definitions/internal_module_exam_model_req.TagAssignment"
                     }
                 }
             }
         },
-        "req.TagAssignment": {
+        "req.FilterQuestionRequest": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
+                "subjectId": {
+                    "type": "string"
                 },
-                "optionId": {
-                    "type": "integer"
-                },
-                "tagId": {
-                    "type": "integer"
+                "tagAssignments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_module_question_model_req.TagAssignment"
+                    }
                 }
             }
         },
@@ -1696,6 +1825,12 @@ const docTemplate = `{
                 },
                 "numberQuestion": {
                     "type": "integer"
+                },
+                "questionIdList": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "subjectId": {
                     "type": "string"

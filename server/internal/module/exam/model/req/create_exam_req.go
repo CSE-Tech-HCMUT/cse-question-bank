@@ -7,12 +7,12 @@ import (
 )
 
 type CreateExamRequest struct {
-	TotalQuestion    int                `json:"numberQuestion"`
-	SubjectId        uuid.UUID          `json:"subjectId"`
+	TotalQuestion int       `json:"numberQuestion"`
+	SubjectId     uuid.UUID `json:"subjectId"`
 	// TODO: add filtercondition for exam to monitor
 	FilterConditions []*FilterCondition `json:"filterConditions"`
-
-	QuestionIdList []string `json:"questionIdList"`
+	Code         int                `json:"code"`
+	QuestionIdList   []string           `json:"questionIdList"`
 }
 
 func (req CreateExamRequest) ToEntity() entity.Exam {
@@ -31,7 +31,7 @@ func (req CreateExamRequest) ToEntity() entity.Exam {
 			FilterTagAssignments: tagAssignmentList,
 		})
 	}
-	
+
 	questionList := make([]*entity.Question, 0)
 	for _, questionId := range req.QuestionIdList {
 		questionUUID, err := uuid.Parse(questionId)
@@ -47,6 +47,6 @@ func (req CreateExamRequest) ToEntity() entity.Exam {
 		TotalQuestion:    req.TotalQuestion,
 		SubjectId:        &req.SubjectId,
 		FilterConditions: filterConditionsList,
-		Questions: questionList,
+		Questions:        questionList,
 	}
 }

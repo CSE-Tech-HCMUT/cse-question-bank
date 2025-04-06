@@ -21,6 +21,7 @@ type Question struct {
 	// LatexContent string       `gorm:"type:text"`
 	IsParent  bool         `gorm:"type:boolean"`
 	ParentId  *uuid.UUID   `gorm:"type:uuid;default:null"` // Nullable foreign key
+	CanShuffle bool	`gorm:"type:boolean"`
 	// RelateId  *uuid.UUID   `gorm:"type:uuid;default:null"` // Nullable foreign key
 	Type      QuestionType `gorm:"type:varchar(20)"`
 	Difficult int          `gorm:"type:int"`

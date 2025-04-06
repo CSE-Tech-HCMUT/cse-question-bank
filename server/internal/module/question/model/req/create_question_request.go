@@ -10,13 +10,13 @@ import (
 )
 
 type CreateQuestionRequest struct {
-	Content   string          `json:"content"`
-	Type      string          `json:"type"`
-	IsParent  bool            `json:"isParent"`
-	ParentId  *string         `json:"parentId"`
-	Answer    json.RawMessage `json:"answer" swaggertype:"array,object"`
-	SubjectId uuid.UUID       `json:"subjectId"`
-
+	Content           string                            `json:"content"`
+	Type              string                            `json:"type"`
+	IsParent          bool                              `json:"isParent"`
+	CanShuffle        bool                              `json:"canShuffle"`
+	ParentId          *string                           `json:"parentId"`
+	Answer            json.RawMessage                   `json:"answer" swaggertype:"array,object"`
+	SubjectId         uuid.UUID                         `json:"subjectId"`
 	TagAssignmentsReq []*req.CreateTagAssignmentRequest `json:"tagAssignments"`
 }
 
@@ -48,6 +48,7 @@ func CreateReqToQuestionModel(req *CreateQuestionRequest) *entity.Question {
 	return &entity.Question{
 		Content:        req.Content,
 		IsParent:       req.IsParent,
+		CanShuffle:     req.CanShuffle,
 		ParentId:       &parentUUID,
 		Type:           entity.QuestionType(req.Type),
 		Answer:         answer,

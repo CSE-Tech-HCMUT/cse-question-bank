@@ -15,11 +15,12 @@ import (
 // }
 
 type EditQuestionRequest struct {
-	Id        string          `json:"id" binding:"required"`
-	Content   string          `json:"content"`
-	Type      string          `json:"type"`
-	Answer    json.RawMessage `json:"answer" swaggertype:"array,object"`
-	SubjectId uuid.UUID       `json:"subjectId"`
+	Id         string          `json:"id" binding:"required"`
+	Content    string          `json:"content"`
+	CanShuffle bool            `json:"canShuffle"`
+	Type       string          `json:"type"`
+	Answer     json.RawMessage `json:"answer" swaggertype:"array,object"`
+	SubjectId  uuid.UUID       `json:"subjectId"`
 
 	TagAssignmentsReq []req.UpdateTagAssignmentRequest `json:"tagAssignments"`
 }
@@ -52,6 +53,7 @@ func EditReqToQuestionModel(req *EditQuestionRequest) *entity.Question {
 	return &entity.Question{
 		Id:             questionUUID,
 		Content:        req.Content,
+		CanShuffle:     req.CanShuffle,
 		Type:           entity.QuestionType(req.Type),
 		Answer:         &answer,
 		TagAssignments: tagAssignments,

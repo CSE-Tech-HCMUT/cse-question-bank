@@ -14,6 +14,7 @@ type ExamHandler interface {
 	GetExam(c *gin.Context)
 	UpdateExam(c *gin.Context)
 	GetAllExams(c *gin.Context)
+	ShuffleExam(c *gin.Context)
 }
 
 type examHandlerImpl struct {

@@ -19,6 +19,7 @@ type ExamUsecase interface {
 	DeleteExam(ctx context.Context, examId uuid.UUID) error
 	UpdateExam(ctx context.Context, request *req.UpdateExamRequest) (*exam_res.ExamResponse, error)
 	GetAllExams(ctx context.Context) ([]*exam_res.ExamResponse, error)
+	ShuffleExam(ctx context.Context, request req.ShuffleExamReq) ([]*exam_res.ExamResponse, error)
 }
 
 type examUsecaseImpl struct {

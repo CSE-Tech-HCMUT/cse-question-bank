@@ -11,6 +11,7 @@ type UpdateExamRequest struct {
 	TotalQuestion    int                `json:"numberQuestion"`
 	SubjectId        uuid.UUID          `json:"subjectId"`
 	FilterConditions []*FilterCondition `json:"filterConditions"`
+	Code         int                `json:"code"`
 	QuestionIdList []string `json:"questionIdList"`
 }
 

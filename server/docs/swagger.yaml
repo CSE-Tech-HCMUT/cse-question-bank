@@ -20,7 +20,7 @@ definitions:
     properties:
       filterConditions:
         items:
-          $ref: '#/definitions/exam_res.FilterCondition'
+          $ref: "#/definitions/exam_res.FilterCondition"
         type: array
       id:
         type: string
@@ -29,12 +29,12 @@ definitions:
         type: integer
       questions:
         items:
-          $ref: '#/definitions/question_res.QuestionResponse'
+          $ref: "#/definitions/question_res.QuestionResponse"
         type: array
       semester:
         type: string
       subject:
-        $ref: '#/definitions/exam_res.SubjectResponse'
+        $ref: "#/definitions/exam_res.SubjectResponse"
     type: object
   exam_res.FilterCondition:
     properties:
@@ -44,7 +44,7 @@ definitions:
         type: integer
       tagAssignments:
         items:
-          $ref: '#/definitions/exam_res.TagAssignment'
+          $ref: "#/definitions/exam_res.TagAssignment"
         type: array
     type: object
   exam_res.FilterQuestionsList:
@@ -55,11 +55,11 @@ definitions:
         type: integer
       questions:
         items:
-          $ref: '#/definitions/exam_res.QuestionFilterExam'
+          $ref: "#/definitions/exam_res.QuestionFilterExam"
         type: array
       tagAssignments:
         items:
-          $ref: '#/definitions/exam_res.TagAssignment'
+          $ref: "#/definitions/exam_res.TagAssignment"
         type: array
     type: object
   exam_res.QuestionFilterExam:
@@ -79,10 +79,10 @@ definitions:
           type: object
         type: array
       subject:
-        $ref: '#/definitions/question_res.SubjectResponse'
+        $ref: "#/definitions/question_res.SubjectResponse"
       tagAssignments:
         items:
-          $ref: '#/definitions/question_res.TagAssignmentResponse'
+          $ref: "#/definitions/question_res.TagAssignmentResponse"
         type: array
       type:
         type: string
@@ -101,9 +101,9 @@ definitions:
       id:
         type: integer
       option:
-        $ref: '#/definitions/option_res.OptionResponse'
+        $ref: "#/definitions/option_res.OptionResponse"
       tag:
-        $ref: '#/definitions/tag_res.TagResponse'
+        $ref: "#/definitions/tag_res.TagResponse"
     type: object
   internal_module_exam_model_req.TagAssignment:
     properties:
@@ -157,10 +157,10 @@ definitions:
           type: object
         type: array
       subject:
-        $ref: '#/definitions/question_res.SubjectResponse'
+        $ref: "#/definitions/question_res.SubjectResponse"
       tagAssignments:
         items:
-          $ref: '#/definitions/question_res.TagAssignmentResponse'
+          $ref: "#/definitions/question_res.TagAssignmentResponse"
         type: array
       type:
         type: string
@@ -179,9 +179,9 @@ definitions:
       id:
         type: integer
       option:
-        $ref: '#/definitions/question_res.OptionResponse'
+        $ref: "#/definitions/question_res.OptionResponse"
       tag:
-        $ref: '#/definitions/question_res.TagResponse'
+        $ref: "#/definitions/question_res.TagResponse"
     type: object
   question_res.TagResponse:
     properties:
@@ -195,9 +195,9 @@ definitions:
   req.CreateExamRequest:
     properties:
       filterConditions:
-        description: 'TODO: add filtercondition for exam to monitor'
+        description: "TODO: add filtercondition for exam to monitor"
         items:
-          $ref: '#/definitions/req.FilterCondition'
+          $ref: "#/definitions/req.FilterCondition"
         type: array
       numberQuestion:
         type: integer
@@ -231,7 +231,7 @@ definitions:
         type: string
       tagAssignments:
         items:
-          $ref: '#/definitions/req.CreateTagAssignmentRequest'
+          $ref: "#/definitions/req.CreateTagAssignmentRequest"
         type: array
       type:
         type: string
@@ -265,7 +265,7 @@ definitions:
         type: string
       options:
         items:
-          $ref: '#/definitions/req.CreateTagOptionRequest'
+          $ref: "#/definitions/req.CreateTagOptionRequest"
         type: array
       subjectId:
         type: string
@@ -284,12 +284,12 @@ definitions:
         type: string
       tagAssignments:
         items:
-          $ref: '#/definitions/req.UpdateTagAssignmentRequest'
+          $ref: "#/definitions/req.UpdateTagAssignmentRequest"
         type: array
       type:
         type: string
     required:
-    - id
+      - id
     type: object
   req.FilterCondition:
     properties:
@@ -299,7 +299,7 @@ definitions:
         type: integer
       tagAssignments:
         items:
-          $ref: '#/definitions/internal_module_exam_model_req.TagAssignment'
+          $ref: "#/definitions/internal_module_exam_model_req.TagAssignment"
         type: array
     type: object
   req.FilterQuestionRequest:
@@ -308,14 +308,14 @@ definitions:
         type: string
       tagAssignments:
         items:
-          $ref: '#/definitions/internal_module_question_model_req.TagAssignment'
+          $ref: "#/definitions/internal_module_question_model_req.TagAssignment"
         type: array
     type: object
   req.UpdateExamRequest:
     properties:
       filterConditions:
         items:
-          $ref: '#/definitions/req.FilterCondition'
+          $ref: "#/definitions/req.FilterCondition"
         type: array
       id:
         type: string
@@ -347,7 +347,7 @@ definitions:
         type: string
       options:
         items:
-          $ref: '#/definitions/internal_module_tag_model_req.UpdateOptionRequest'
+          $ref: "#/definitions/internal_module_tag_model_req.UpdateOptionRequest"
         type: array
       subjectId:
         type: string
@@ -370,14 +370,14 @@ definitions:
       code:
         type: string
       department:
-        $ref: '#/definitions/department_res.DepartmentResponse'
+        $ref: "#/definitions/department_res.DepartmentResponse"
       id:
         type: string
       name:
         type: string
       tags:
         items:
-          $ref: '#/definitions/tag_res.TagResponse'
+          $ref: "#/definitions/tag_res.TagResponse"
         type: array
     type: object
   tag_res.SubjectResponse:
@@ -385,7 +385,7 @@ definitions:
       code:
         type: string
       department:
-        $ref: '#/definitions/department_res.DepartmentResponse'
+        $ref: "#/definitions/department_res.DepartmentResponse"
       id:
         type: string
       name:
@@ -401,12 +401,12 @@ definitions:
         type: string
       options:
         items:
-          $ref: '#/definitions/option_res.OptionResponse'
+          $ref: "#/definitions/option_res.OptionResponse"
         type: array
       subject:
         allOf:
-        - $ref: '#/definitions/tag_res.SubjectResponse'
-        description: 'TODO: Add table subject -> model subject'
+          - $ref: "#/definitions/tag_res.SubjectResponse"
+        description: "TODO: Add table subject -> model subject"
     type: object
 externalDocs:
   description: OpenAPI
@@ -428,16 +428,16 @@ paths:
   /compile-latex/exams/{id}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get exam PDF preview
       parameters:
-      - description: Exam Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Exam Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/pdf
+        - application/pdf
       responses:
         "200":
           description: OK
@@ -446,771 +446,771 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get exam PDF preview
       tags:
-      - Latex Compile
+        - Latex Compile
   /compile-latex/questions/{id}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get question pdf preview
       parameters:
-      - description: Question Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Question Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data: {}
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get question pdf preview
       tags:
-      - Latex Compile
+        - Latex Compile
   /departments:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show all departments
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/department_res.DepartmentResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/department_res.DepartmentResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Show all departments
       tags:
-      - Department
+        - Department
   /exams:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show all exams
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/exam_res.ExamResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/exam_res.ExamResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Show all exams
       tags:
-      - Exam
+        - Exam
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a exam
       parameters:
-      - description: CreateExamRequest JSON
-        in: body
-        name: CreateExamRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateExamRequest'
+        - description: CreateExamRequest JSON
+          in: body
+          name: CreateExamRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.CreateExamRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/exam_res.ExamResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/exam_res.ExamResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Create a exam
       tags:
-      - Exam
+        - Exam
     put:
       consumes:
-      - application/json
+        - application/json
       description: Update a exam
       parameters:
-      - description: UpdateExamRequest JSON
-        in: body
-        name: UpdateExamRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.UpdateExamRequest'
+        - description: UpdateExamRequest JSON
+          in: body
+          name: UpdateExamRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.UpdateExamRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/exam_res.ExamResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/exam_res.ExamResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Update a exam
       tags:
-      - Exam
+        - Exam
   /exams/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a exam
       parameters:
-      - description: Exam Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Exam Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data: {}
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Delete a exam
       tags:
-      - Exam
+        - Exam
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get exam
       parameters:
-      - description: Exam Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Exam Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/exam_res.FilterQuestionsList'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/exam_res.FilterQuestionsList"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get exam
       tags:
-      - Exam
+        - Exam
   /exams/{id}/generate-auto:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Generate exam auto
       parameters:
-      - description: Exam Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Exam Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/exam_res.ExamResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/exam_res.ExamResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Generate exam auto
       tags:
-      - Exam
+        - Exam
   /exams/{id}/get-filter-list:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get exam filter questions list
       parameters:
-      - description: Exam Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Exam Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/exam_res.FilterQuestionsList'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/exam_res.FilterQuestionsList"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get exam filter questions list
       tags:
-      - Exam
+        - Exam
   /options:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a option
       parameters:
-      - description: CreateOptionRequest JSON
-        in: body
-        name: CreateOptionRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateOptionRequest'
+        - description: CreateOptionRequest JSON
+          in: body
+          name: CreateOptionRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.CreateOptionRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/entity.Option'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/entity.Option"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Create a option
       tags:
-      - Option
+        - Option
   /options/{id}:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Delete a option
       parameters:
-      - description: Id int
-        in: path
-        name: id
-        required: true
-        type: integer
+        - description: Id int
+          in: path
+          name: id
+          required: true
+          type: integer
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data: {}
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Delete a option
       tags:
-      - Option
+        - Option
   /options/{id}/get-used:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Check option is used or not
       parameters:
-      - description: Id int
-        in: path
-        name: Id
-        required: true
-        type: integer
+        - description: Id int
+          in: path
+          name: Id
+          required: true
+          type: integer
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  type: integer
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    type: integer
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Check option is used or not
       tags:
-      - Option
+        - Option
   /questions:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get all questions
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/question_res.QuestionResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/question_res.QuestionResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get all questions
       tags:
-      - Question
+        - Question
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a question
       parameters:
-      - description: CreateQuestionRequest JSON
-        in: body
-        name: CreateQuestionRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateQuestionRequest'
+        - description: CreateQuestionRequest JSON
+          in: body
+          name: CreateQuestionRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.CreateQuestionRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/question_res.QuestionResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/question_res.QuestionResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Create a question
       tags:
-      - Question
+        - Question
     put:
       consumes:
-      - application/json
+        - application/json
       description: Edit a question
       parameters:
-      - description: EditQuestionReq JSON
-        in: body
-        name: EditQuestionRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.EditQuestionRequest'
+        - description: EditQuestionReq JSON
+          in: body
+          name: EditQuestionRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.EditQuestionRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data: {}
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Edit a question
       tags:
-      - Question
+        - Question
   /questions/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a question
       parameters:
-      - description: Question ID
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Question ID
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data: {}
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Delete a question
       tags:
-      - Question
+        - Question
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show a question
       parameters:
-      - description: Question ID
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Question ID
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/question_res.QuestionResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/question_res.QuestionResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Show a question
       tags:
-      - Question
+        - Question
   /questions/filter_question:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Get filtered questions
       parameters:
-      - description: FilterQuestionRequest JSON
-        in: body
-        name: CreateQuestionRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.FilterQuestionRequest'
+        - description: FilterQuestionRequest JSON
+          in: body
+          name: CreateQuestionRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.FilterQuestionRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/question_res.QuestionResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/question_res.QuestionResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get filtered questions
       tags:
-      - Question
+        - Question
   /subjects:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show all subjects
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/subject_res.SubjectResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/subject_res.SubjectResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Show all subjects
       tags:
-      - Subject
+        - Subject
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a subject
       parameters:
-      - description: CreateSubjectRequest JSON
-        in: body
-        name: CreateSubjectRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateSubjectRequest'
+        - description: CreateSubjectRequest JSON
+          in: body
+          name: CreateSubjectRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.CreateSubjectRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/subject_res.SubjectResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/subject_res.SubjectResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Create a subject
       tags:
-      - Subject
+        - Subject
   /subjects/{id}:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Get subject by id
       parameters:
-      - description: Subject Id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Subject Id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/subject_res.SubjectResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/subject_res.SubjectResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Get subject by id
       tags:
-      - Subject
+        - Subject
   /tags:
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show all tags
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/tag_res.TagResponse'
-                  type: array
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    items:
+                      $ref: "#/definitions/tag_res.TagResponse"
+                    type: array
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Show all tags
       tags:
-      - Tag
+        - Tag
     post:
       consumes:
-      - application/json
+        - application/json
       description: Create a tag
       parameters:
-      - description: CreateTagRequest JSON
-        in: body
-        name: CreateTagRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.CreateTagRequest'
+        - description: CreateTagRequest JSON
+          in: body
+          name: CreateTagRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.CreateTagRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/tag_res.TagResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/tag_res.TagResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Create a tag
       tags:
-      - Tag
+        - Tag
     put:
       consumes:
-      - application/json
+        - application/json
       description: Edit a tag
       parameters:
-      - description: UpdateTagRequest JSON
-        in: body
-        name: UpdateTagRequest
-        required: true
-        schema:
-          $ref: '#/definitions/req.UpdateTagRequest'
+        - description: UpdateTagRequest JSON
+          in: body
+          name: UpdateTagRequest
+          required: true
+          schema:
+            $ref: "#/definitions/req.UpdateTagRequest"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/tag_res.TagResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/tag_res.TagResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Edit a tag
       tags:
-      - Tag
+        - Tag
   /tags/{id}:
     delete:
       consumes:
-      - application/json
+        - application/json
       description: Delete a tag
       parameters:
-      - description: Id int
-        in: path
-        name: id
-        required: true
-        type: integer
+        - description: Id int
+          in: path
+          name: id
+          required: true
+          type: integer
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data: {}
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data: {}
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Delete a tag
       tags:
-      - Tag
+        - Tag
     get:
       consumes:
-      - application/json
+        - application/json
       description: Show a tag
       parameters:
-      - description: Id int
-        in: path
-        name: id
-        required: true
-        type: integer
+        - description: Id int
+          in: path
+          name: id
+          required: true
+          type: integer
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/response.SuccessResponse'
-            - properties:
-                data:
-                  $ref: '#/definitions/tag_res.TagResponse'
-              type: object
+              - $ref: "#/definitions/response.SuccessResponse"
+              - properties:
+                  data:
+                    $ref: "#/definitions/tag_res.TagResponse"
+                type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/response.ErrorResponse'
+            $ref: "#/definitions/response.ErrorResponse"
       summary: Show a tag
       tags:
-      - Tag
+        - Tag
 securityDefinitions:
   BasicAuth:
     type: basic

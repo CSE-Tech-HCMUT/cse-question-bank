@@ -15,6 +15,7 @@ type QuestionResponse struct {
 	Answer         json.RawMessage          `json:"answer" swaggertype:"array,object"`
 	TagAssignments []*TagAssignmentResponse `json:"tagAssignments"`
 	Subject        SubjectResponse          `json:"subject"`
+	CanShuffle     bool                     `json:"canShuffle"`
 }
 
 type SubjectResponse struct {
@@ -80,5 +81,6 @@ func EntityToResponse(question *entity.Question, childQuestion []*QuestionRespon
 			Name: question.Subject.Name,
 			Code: question.Subject.Code,
 		},
+		CanShuffle: question.CanShuffle,
 	}
 }

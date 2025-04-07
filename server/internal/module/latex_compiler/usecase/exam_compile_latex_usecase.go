@@ -20,9 +20,14 @@ func (u *latexCompilerImpl) CompileExamLatex(ctx context.Context, examId uuid.UU
 	exams, err := u.examRepository.Find(ctx, nil, map[string]interface{}{
 		"id": examId,
 	})
+	if err != nil {
+		slog.Error("fail to get exam in database", "error-message", err)
+		return nil, err
+	}
 	exam := exams[0]
 
 	if err := u.createExamLatexFile(folderPath, exam); err != nil {
+		slog.Error("fail to create exam latex file", "error-message", err)
 		return nil, err
 	}
 

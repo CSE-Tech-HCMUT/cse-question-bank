@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	_ "cse-question-bank/docs"
-	"cse-question-bank/internal/core/casbin"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -22,13 +21,13 @@ type Route struct {
 func RegisterRoutes(db *gorm.DB) http.Handler {
 	r := gin.Default()
 
-	casbin, err := casbin.NewCasbinService(db)
-	if err != nil {
-		panic("fail to init casbin service")
-	}
+	// casbin, err := casbin.NewCasbinService(db)
+	// if err != nil {
+	// 	panic("fail to init casbin service")
+	// }
 
 	// url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
-	
+
 	// domainName := os.Getenv("DOMAIN_NAME")
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
@@ -37,7 +36,7 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	
+
 	api := r.Group("/api")
 	{
 		initLatexCompileGroupRoutes(db, api)
@@ -46,11 +45,11 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		iniTagOptionGroupRoutes(db, api)
 		initExamGroupRoutes(db, api)
 		initAuthenGroupRoutes(db, api)
-		initAuthorGroupRoutes(casbin, api)
+		// initAuthorGroupRoutes(casbin, api)
 		initSubjectGroupRoutes(db, api)
 		initDepartmentGroupRoutes(db, api)
 	}
-	
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r

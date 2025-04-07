@@ -14,7 +14,10 @@ export type Exam = {
     filterConditions?: FilterCondition[],
     questions?: Question[],
     subjectId?: string,
-    questionIdList?: string[]
+    questionIdList?: string[],
+    examCode?: number
+
+    shuffledExams?: Exam
 }
 
 export interface FilterCondition {
@@ -23,4 +26,10 @@ export interface FilterCondition {
     expectCount?: number,
     tagAssignments?: TagAssignment[],
     questions?: Question[]
+}
+
+export type ShuffleExamReq = {
+    examId: string
+    isShuffleInsideQuestions: boolean,
+    numberExams: number
 }

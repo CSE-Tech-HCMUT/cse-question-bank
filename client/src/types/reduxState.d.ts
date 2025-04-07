@@ -8,6 +8,8 @@ export export interface ReduxState<T> {
     deleteModalShow?: boolean,
     editModalShow?: boolean,
     viewModalShow?: boolean,
+    shuffleModalShow?: boolean,
+
     data?: T[],
     dataById?: T,
 

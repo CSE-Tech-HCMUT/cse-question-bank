@@ -54,9 +54,10 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
 
   const [mode, setMode] = useState<"auto" | "manual" | "import">("manual");
 
-  const [typeOfQuestion, setTypeOfQuestion] = useState<string>("");
+  const [typeOfQuestion, _setTypeOfQuestion] = useState<string>("Trắc nghiệm");
   const [tagAssignments, setTagAssignments] = useState<TagAssignment[]>([]);
   const [contentQuestion, setContentQuestion] = useState<string>("");
+  const [canShuffle, setCanShuffle] = useState<boolean>(false);
 
   // pdf
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -66,7 +67,7 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
 
   // import
   const [fileList, setFileList] = useState<any[]>([]);
-  const [_importedData, setImportedData] = useState<any>(null);
+  const [importedData, setImportedData] = useState<any>(null);
 
   // Auto
   const [contentAnswerAutoQuestion, setContentAnswerAutoQuestion] =
@@ -127,6 +128,7 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
           type: typeOfQuestion,
           tagAssignments: simplifiedTagAssignments,
           subjectId: subjectAuthen?.id,
+          canShuffle: canShuffle,
         }
       : {
           id: idQuestion,
@@ -134,6 +136,7 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
           type: typeOfQuestion,
           tagAssignments: simplifiedTagAssignments,
           subjectId: subjectAuthen?.id,
+          canShuffle: canShuffle,
         };
 
     if (mode === "auto") {
@@ -156,7 +159,7 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
 
     dispatch(editQuestionThunk(payload)).then((actionResult) => {
       if (actionResult.meta.requestStatus === "fulfilled") {
-        dispatch(previewPDFFileThunk(idQuestion!)).then((actionResult) => {
+        dispatch(previewPDFFileThunk(idQuestion)).then((actionResult) => {
           if (actionResult.meta.requestStatus === "fulfilled") {
             setIsModalOpen(true);
           }
@@ -206,6 +209,7 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
       tagAssignments: simplifiedTagAssignments,
       parentId: parentId,
       subjectId: subjectAuthen?.id,
+      canShuffle: canShuffle,
     };
 
     if (mode === "auto") {
@@ -225,8 +229,6 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
         answer: manualAnswers,
       };
     }
-
-    console.log(payload);
 
     dispatch(editQuestionThunk(payload)).then((actionResult) => {
       if (actionResult.meta.requestStatus === "fulfilled") {
@@ -271,33 +273,122 @@ const SingleQuestionTemplate: React.FC<QuestionCreationProp> = ({
       {/* Step 1 */}
       <Row gutter={[16, 16]} style={{ marginBottom: "24px" }}>
         <Col xs={24}>
-          <Card style={{ height: "100%" }} title={t("stepOne")}>
-            <Row gutter={[16, 16]} style={{ marginBottom: "12px" }}>
+          <Card
+            style={{
+              height: "100%",
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            }}
+            title={
+              <span style={{ fontSize: "18px", fontWeight: 600 }}>
+                {t("stepOne")}
+              </span>
+            }
+          >
+            <Row gutter={[24, 16]}>
+              {/* Department Field */}
               <Col xs={24} md={12}>
-                <label className="ant-form-item-label">
-                  <span> {t("department")} </span>
-                </label>
-                <Input disabled value={subjectAuthen?.department?.name} />
+                <div style={{ marginBottom: "8px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "4px",
+                      fontWeight: 500,
+                      color: "#333",
+                    }}
+                  >
+                    {t("department")}
+                  </label>
+                  <Input
+                    disabled
+                    value={subjectAuthen?.department?.name}
+                    style={{
+                      width: "100%",
+                      borderRadius: "6px",
+                      height: "40px",
+                    }}
+                  />
+                </div>
               </Col>
 
+              {/* Subject Field */}
               <Col xs={24} md={12}>
-                <label className="ant-form-item-label">
-                  <span> {t("subject")} </span>
-                </label>
-                <Input disabled value={subjectAuthen?.name} />
+                <div style={{ marginBottom: "8px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "4px",
+                      fontWeight: 500,
+                      color: "#333",
+                    }}
+                  >
+                    {t("subject")}
+                  </label>
+                  <Input
+                    disabled
+                    value={subjectAuthen?.name}
+                    style={{
+                      width: "100%",
+                      borderRadius: "6px",
+                      height: "40px",
+                    }}
+                  />
+                </div>
               </Col>
 
+              {/* Question Type Field */}
+              {/* <Col xs={24} md={12}>
+                <div style={{ marginBottom: "8px" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "4px",
+                      fontWeight: 500,
+                      color: "#333",
+                    }}
+                  >
+                    {t("typeQuestion")}
+                  </label>
+                  <Input
+                    placeholder={t("placeholderTypeQuestion")}
+                    name="type"
+                    onChange={(event) => setTypeOfQuestion(event.target.value)}
+                    style={{
+                      width: "100%",
+                      borderRadius: "6px",
+                      height: "40px",
+                    }}
+                  />
+                </div>
+              </Col> */}
+
+              {/* Can Shuffle Field */}
               <Col xs={24} md={12}>
-                <label className="ant-form-item-label">
-                  <span> {t("typeQuestion")} </span>
-                </label>
-                <Input
-                  placeholder={t("placeholderTypeQuestion")}
-                  name="type"
-                  onChange={(event) => {
-                    setTypeOfQuestion(event.target.value);
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    height: "100%",
                   }}
-                />
+                >
+                  <Checkbox
+                    checked={canShuffle}
+                    onChange={(e) => setCanShuffle(e.target.checked)}
+                    style={{
+                      marginRight: "8px",
+                      transform: "scale(1.2)",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontWeight: 500,
+                      color: "#333",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {t("allowAnswerShuffling")}
+                  </span>
+                </div>
               </Col>
             </Row>
           </Card>

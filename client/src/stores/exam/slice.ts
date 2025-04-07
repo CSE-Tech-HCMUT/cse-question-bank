@@ -1,7 +1,7 @@
 import { Exam } from "@/types/exam";
 import { ReduxState } from "@/types/reduxState";
 import { createSlice } from "@reduxjs/toolkit";
-import { createExamThunk, deleteExamThunk, editExamThunk, filterExamThunk, generateAutoExamThunk, getAllExamsThunk, previewPDFFileThunk } from "./thunk";
+import { createExamThunk, deleteExamThunk, editExamThunk, filterExamThunk, generateAutoExamThunk, getAllExamsThunk, previewPDFFileThunk, shuffleExamThunk } from "./thunk";
 import { Id, toast } from "react-toastify";
 
 const initialState: ReduxState<Exam> = {
@@ -9,6 +9,7 @@ const initialState: ReduxState<Exam> = {
     deleteModalShow: false,
     editModalShow: false,
     viewModalShow: false,
+    shuffleModalShow: false,
     data: [],
     dataById: undefined,
     dataFilterList: [],
@@ -33,6 +34,9 @@ export const examSlice = createSlice({
         setViewModalVisibility(state, action: { payload: boolean }){
             state.viewModalShow = action.payload;
         },
+        setShuffleModalVisibility(state, action: { payload: boolean }){
+            state.shuffleModalShow = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -97,6 +101,13 @@ export const examSlice = createSlice({
             })
             .addCase(filterExamThunk.rejected, () => {
                 toast.error("Danh sách câu hỏi không tìm thấy");
+            })
+
+            .addCase(shuffleExamThunk.fulfilled, (state, {payload}) => {
+                toast.success("Trộn đề thi thành công");
+            })
+            .addCase(shuffleExamThunk.rejected, () => {
+                toast.error("Trộn đề thi thất bại");
             })
     }
 })

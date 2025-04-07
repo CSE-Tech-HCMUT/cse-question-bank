@@ -68,6 +68,7 @@ export const ExamCreationTemplate = () => {
   const [examDate, setExamDate] = useState<Date>();
   const [time, setTime] = useState<number>(0);
   const [_note, setNote] = useState<string>("");
+  const [examCode, setExamCode] = useState<number>(0);
 
   // modal state
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -131,6 +132,7 @@ export const ExamCreationTemplate = () => {
       numberQuestion: totalQuestion,
       filterConditions: filterConditions,
       subjectId: subjectAuthen?.id,
+      examCode: examCode,
     };
 
     dispatch(editExamThunk(payload)).then((actionResult) => {
@@ -177,8 +179,8 @@ export const ExamCreationTemplate = () => {
       questionIdList: questionIdList,
       duration: time,
       date: examDate,
+      examCode: examCode,
     };
-    console.log(payload);
 
     dispatch(editExamThunk(payload)).then((actionResult) => {
       if (actionResult.meta.requestStatus === "fulfilled") {
@@ -293,16 +295,13 @@ export const ExamCreationTemplate = () => {
             <Row gutter={[16, 16]} style={{ marginBottom: "12px" }}>
               <Col xs={24} md={12}>
                 <label className="ant-form-item-label">
-                  <span> {"Khoa"} </span>
+                  <span> {"Mã đề"} </span>
                 </label>
-                <Input disabled value={subjectAuthen?.department?.name} />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <label className="ant-form-item-label">
-                  <span> {"Môn học"} </span>
-                </label>
-                <Input disabled value={subjectAuthen?.name} />
+                <Input
+                  placeholder={"Nhập mã đề thi"}
+                  value={examCode}
+                  onChange={(e) => setExamCode(+e.target.value)}
+                />
               </Col>
 
               <Col xs={24} md={12}>
@@ -467,7 +466,7 @@ export const ExamCreationTemplate = () => {
                     onClick={() => setCurrentTagsSelection([])}
                     style={{ width: "100%" }}
                   >
-                    Reset bộ lọc
+                    Xóa bộ lọc
                   </Button>
                 </Col>
               </Row>

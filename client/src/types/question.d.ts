@@ -11,6 +11,7 @@ export type Question = {
     subjectId?: string,
     answer?: Answer[]
     subject?: Subject
+    canShuffle?: boolean
 
     // block 
     isParent?: boolean,

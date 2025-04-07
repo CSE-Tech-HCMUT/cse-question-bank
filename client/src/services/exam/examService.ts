@@ -1,4 +1,4 @@
-import { Exam } from "@/types/exam";
+import { Exam, ShuffleExamReq } from "@/types/exam";
 import apiInstance from "../apiInstance";
 import { AxiosResponse } from 'axios';
 import { Question } from "@/types/question";
@@ -16,7 +16,11 @@ const examService = {
     // latex compile
     compileLatexExam: (id: string) => apiInstance.get<Blob>(`/compile-latex/exams/${id}`, {
         responseType: 'blob'
-    })
+    }),
+
+    // shuffle exam
+    shuffleExam: (payload: ShuffleExamReq): Promise<AxiosResponse<{ data: Exam[] }>> => apiInstance.post('/exams/shuffle', payload)
+
 }
 
 export default examService;

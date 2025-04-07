@@ -1,5 +1,5 @@
 import examService from "@/services/exam/examService";
-import { Exam } from "@/types/exam";
+import { Exam, ShuffleExamReq } from "@/types/exam";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getAllExamsThunk = createAsyncThunk('exam/getAllExamsThunk', async (_, { rejectWithValue }) => {
@@ -67,6 +67,16 @@ export const deleteExamThunk = createAsyncThunk('exam/deleteExamThunk', async (i
         await examService.deleteExam(id);
 
         return id;
+    } catch (error) {
+        rejectWithValue(error);
+    }
+})
+
+export const shuffleExamThunk = createAsyncThunk('exam/shuffleExamThunk', async (payload: ShuffleExamReq, { rejectWithValue }) => {
+    try {
+        const response = await examService.shuffleExam(payload);
+
+        return response.data.data;
     } catch (error) {
         rejectWithValue(error);
     }

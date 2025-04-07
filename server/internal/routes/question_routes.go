@@ -12,7 +12,7 @@ import (
 
 func iniQuestionGroupRoutes(db *gorm.DB, casbin *casbin.CasbinService, api *gin.RouterGroup) {
 	questionRepository := repository.NewQuestionRepository(db)
-	questionUsecase := usecase.NewQuestionUsecase(casbin, questionRepository)
+	questionUsecase := usecase.NewQuestionUsecase(questionRepository)
 	questionHandler := handler.NewQuestionHandler(questionUsecase)
 	questionRoutes := api.Group("/questions")
 	{
@@ -28,28 +28,28 @@ func getQuestionRoutes(h handler.QuestionHandler) []Route {
 			Handler: h.CreateQuestion,
 		},
 		{
-			Method: "DELETE",
-			Path: "/:id",
+			Method:  "DELETE",
+			Path:    "/:id",
 			Handler: h.DeleteQuestion,
 		},
 		{
-			Method: "PUT",
-			Path: "",
+			Method:  "PUT",
+			Path:    "",
 			Handler: h.EditQuestion,
 		},
 		{
-			Method: "GET",
-			Path: "/:id",
+			Method:  "GET",
+			Path:    "/:id",
 			Handler: h.GetQuestion,
 		},
 		{
-			Method: "GET",
-			Path: "",
+			Method:  "GET",
+			Path:    "",
 			Handler: h.GetAllQuestions,
 		},
 		{
-			Method: "POST",
-			Path: "/filter_question",
+			Method:  "POST",
+			Path:    "/filter_question",
 			Handler: h.FilterQuestion,
 		},
 	}

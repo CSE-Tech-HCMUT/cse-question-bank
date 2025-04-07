@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"cse-question-bank/internal/core/casbin"
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
 	"cse-question-bank/internal/module/subject/model/req"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,6 +25,12 @@ func (h *subjectHandlerImpl) CreateSubject(c *gin.Context) {
 	var request req.CreateSubjectRequest
 	if err := c.ShouldBind(&request); err != nil {
 		response.ResponseError(c, errors.ErrInvalidInput(err))
+		return
+	}
+
+	policyObject := fmt.Sprintf("department:%s", request.DepartmentCode)
+	if err := casbin.CasbinCheckPermission(c, policyObject, casbin.MANAGE_DEPARTMENT); err != nil {
+		response.ResponseError(c, err)
 		return
 	}
 

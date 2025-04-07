@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	_ "cse-question-bank/docs"
+	"cse-question-bank/internal/core/casbin"
+	"cse-question-bank/internal/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -39,6 +41,8 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
+
+	r.Use(middleware.CasbinMiddleware(cb))
 
 	api := r.Group("/api")
 	{

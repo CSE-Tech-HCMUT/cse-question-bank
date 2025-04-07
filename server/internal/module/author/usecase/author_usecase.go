@@ -11,6 +11,7 @@ type AuthorUsecase interface {
 	GetAllRoles(ctx context.Context) ([]string, error)
 	AssignRole(ctx context.Context, request *req.AssignRoleRequest) error
 	GetAllPolicies(ctx context.Context) ([][]string, error)
+	GetGroupingPolicy(ctx context.Context) ([][]string, error)
 }
 
 type authorUsecaseImpl struct {

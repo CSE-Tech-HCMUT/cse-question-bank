@@ -27,6 +27,10 @@ definitions:
       numberQuestion:
         description: Questions        []*question_res.QuestionResponse `json:"questions"`
         type: integer
+      questions:
+        items:
+          $ref: '#/definitions/question_res.QuestionResponse'
+        type: array
       semester:
         type: string
       subject:
@@ -38,10 +42,6 @@ definitions:
         type: integer
       numberQuestion:
         type: integer
-      questions:
-        items:
-          $ref: '#/definitions/question_res.QuestionResponse'
-        type: array
       tagAssignments:
         items:
           $ref: '#/definitions/exam_res.TagAssignment'
@@ -68,6 +68,8 @@ definitions:
         items:
           type: object
         type: array
+      canShuffle:
+        type: boolean
       content:
         type: string
       id:
@@ -105,6 +107,22 @@ definitions:
       tag:
         $ref: '#/definitions/tag_res.TagResponse'
     type: object
+  internal_module_exam_model_req.TagAssignment:
+    properties:
+      id:
+        type: integer
+      optionId:
+        type: integer
+      tagId:
+        type: integer
+    type: object
+  internal_module_question_model_req.TagAssignment:
+    properties:
+      optionId:
+        type: integer
+      tagId:
+        type: integer
+    type: object
   internal_module_tag_model_req.UpdateOptionRequest:
     properties:
       id:
@@ -132,6 +150,8 @@ definitions:
         items:
           type: object
         type: array
+      canShuffle:
+        type: boolean
       content:
         type: string
       id:
@@ -176,14 +196,37 @@ definitions:
       name:
         type: string
     type: object
+  req.AddPolicyRequest:
+    properties:
+      method:
+        type: string
+      object:
+        type: string
+      role:
+        type: string
+    type: object
+  req.AssignRoleRequest:
+    properties:
+      role:
+        type: string
+      userId:
+        type: string
+    type: object
   req.CreateExamRequest:
     properties:
+      code:
+        type: integer
       filterConditions:
+        description: 'TODO: add filtercondition for exam to monitor'
         items:
           $ref: '#/definitions/req.FilterCondition'
         type: array
       numberQuestion:
         type: integer
+      questionIdList:
+        items:
+          type: string
+        type: array
       subjectId:
         type: string
     type: object
@@ -200,6 +243,8 @@ definitions:
         items:
           type: object
         type: array
+      canShuffle:
+        type: boolean
       content:
         type: string
       isParent:
@@ -255,6 +300,8 @@ definitions:
         items:
           type: object
         type: array
+      canShuffle:
+        type: boolean
       content:
         type: string
       id:
@@ -278,20 +325,31 @@ definitions:
         type: integer
       tagAssignments:
         items:
-          $ref: '#/definitions/req.TagAssignment'
+          $ref: '#/definitions/internal_module_exam_model_req.TagAssignment'
         type: array
     type: object
-  req.TagAssignment:
+  req.FilterQuestionRequest:
     properties:
-      id:
-        type: integer
-      optionId:
-        type: integer
-      tagId:
+      subjectId:
+        type: string
+      tagAssignments:
+        items:
+          $ref: '#/definitions/internal_module_question_model_req.TagAssignment'
+        type: array
+    type: object
+  req.ShuffleExamReq:
+    properties:
+      examId:
+        type: string
+      isShuffleInsideQuestions:
+        type: boolean
+      numberExams:
         type: integer
     type: object
   req.UpdateExamRequest:
     properties:
+      code:
+        type: integer
       filterConditions:
         items:
           $ref: '#/definitions/req.FilterCondition'
@@ -300,6 +358,10 @@ definitions:
         type: string
       numberQuestion:
         type: integer
+      questionIdList:
+        items:
+          type: string
+        type: array
       subjectId:
         type: string
     type: object
@@ -400,6 +462,108 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /author/add-policy:
+    post:
+      consumes:
+      - application/json
+      description: Add policy for system to authen user
+      parameters:
+      - description: AddPolicyRequest JSON
+        in: body
+        name: AddPolicyRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.AddPolicyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Add policy for system to authen user
+      tags:
+      - Policy
+  /author/assign-role:
+    post:
+      consumes:
+      - application/json
+      description: Assign Role for user
+      parameters:
+      - description: AssignRoleRequest JSON
+        in: body
+        name: AssignRoleRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.AssignRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Assign Role for user
+      tags:
+      - Author
+  /author/get-all-policies:
+    get:
+      description: Get all policies of system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    items:
+                      type: string
+                    type: array
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get all policies of system
+      tags:
+      - Author
+  /author/get-all-roles:
+    get:
+      description: Get all roles of system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get all roles of system
+      tags:
+      - Author
   /compile-latex/exams/{id}:
     get:
       consumes:
@@ -481,6 +645,31 @@ paths:
       tags:
       - Department
   /exams:
+    get:
+      consumes:
+      - application/json
+      description: Show all exams
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/exam_res.ExamResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Show all exams
+      tags:
+      - Exam
     post:
       consumes:
       - application/json
@@ -661,6 +850,39 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Get exam filter questions list
+      tags:
+      - Exam
+  /exams/shuffle:
+    post:
+      consumes:
+      - application/json
+      description: Get all clone exams root exams, then shuffle question inside
+      parameters:
+      - description: ShuffleExamReq JSON
+        in: body
+        name: ShuffleExamReq
+        required: true
+        schema:
+          $ref: '#/definitions/req.ShuffleExamReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/exam_res.ExamResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get all clone exams root exams, then shuffle question inside
       tags:
       - Exam
   /options:
@@ -894,6 +1116,39 @@ paths:
           schema:
             $ref: '#/definitions/response.ErrorResponse'
       summary: Show a question
+      tags:
+      - Question
+  /questions/filter_question:
+    post:
+      consumes:
+      - application/json
+      description: Get filtered questions
+      parameters:
+      - description: FilterQuestionRequest JSON
+        in: body
+        name: CreateQuestionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.FilterQuestionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/question_res.QuestionResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get filtered questions
       tags:
       - Question
   /subjects:

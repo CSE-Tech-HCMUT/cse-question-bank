@@ -42,19 +42,25 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		AllowCredentials: true,
 	}))
 
+	// Apply Casbin middleware
 	r.Use(middleware.CasbinMiddleware(cb))
-
 	api := r.Group("/api")
+	{
+		initAuthenGroupRoutes(db, api)
+	}
+	// Authenticated API routes
+	authenApi := api.Group("")
+	authenApi.Use(middleware.AuthenMiddleware())
 	{
 		initLatexCompileGroupRoutes(db, api)
 		iniQuestionGroupRoutes(db, cb, api)
 		initTagGroupRoutes(db, api)
 		iniTagOptionGroupRoutes(db, api)
 		initExamGroupRoutes(db, api)
-		initAuthenGroupRoutes(db, api)
 		initAuthorGroupRoutes(cb, api)
 		initSubjectGroupRoutes(db, api)
 		initDepartmentGroupRoutes(db, api)
+
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

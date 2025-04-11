@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register godoc
+//
+// @Summary		User register account to system.
+// @Description	Register account to system.
+// @Tags			Policy
+// @Accept			json
+// @Produce		json
+// @Param			RegisterAccountRequest	body		req.RegisterAccountRequest	true	"RegisterAccountRequest JSON"
+// @Success		200	{object}	response.SuccessResponse{data=string}
+// @Failure	400 {object} response.ErrorResponse
+// @Router			/authen/login [post]
 func (h *authHandlerImpl) RegisterAccount(c *gin.Context) {
 	var request req.RegisterAccountRequest
 	if err := c.ShouldBind(&request); err != nil {

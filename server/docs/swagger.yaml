@@ -564,6 +564,32 @@ paths:
       summary: Get all roles of system
       tags:
       - Author
+  /author/get-grouping-policy:
+    get:
+      description: Get all group policies of system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    items:
+                      type: string
+                    type: array
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: Get all group policies of system
+      tags:
+      - Author
   /compile-latex/exams/{id}:
     get:
       consumes:

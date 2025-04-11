@@ -2,6 +2,7 @@ package database
 
 import (
 	"cse-question-bank/internal/database/entity"
+	"os"
 
 	"gorm.io/gorm"
 )
@@ -9,17 +10,18 @@ import (
 func InitData(db *gorm.DB) error {
 	initDepartmentData(db)
 	initSubjectData(db)
+	initAdminAccount(db)
 
 	return nil
-} 
+}
 
 func initDepartmentData(db *gorm.DB) error {
-	var count int64 
+	var count int64
 	db.Model(&entity.Department{}).Count(&count)
 	if count != 0 {
 		return nil
 	}
-	
+
 	departments := []entity.Department{
 		{Code: "CSE", Name: "Khoa khoa học và Kỹ thuật Máy tính"},
 		{Code: "1", Name: "Khoa Điện - Điện tử"},
@@ -43,7 +45,7 @@ func initDepartmentData(db *gorm.DB) error {
 }
 
 func initSubjectData(db *gorm.DB) error {
-	var count int64 
+	var count int64
 	db.Model(&entity.Subject{}).Count(&count)
 	if count != 0 {
 		return nil
@@ -57,6 +59,28 @@ func initSubjectData(db *gorm.DB) error {
 	}
 
 	if err := db.Create(&subjects).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func initAdminAccount(db *gorm.DB) error {
+	var count int64
+	db.Model(&entity.User{}).Count(&count)
+	if count != 0 {
+		return nil
+	}
+
+	adminAccount := os.Getenv("ADMIN_ACCOUNT")
+	adminPassword := os.Getenv("ADMIN_PASSWORD")
+
+	user := &entity.User{
+		Username: adminAccount,
+		Password: adminPassword,
+	}
+
+	if err := db.Create(&user).Error; err != nil {
 		return err
 	}
 

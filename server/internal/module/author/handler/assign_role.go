@@ -11,7 +11,9 @@ import (
 // AssignRole godoc
 //
 // @Summary		Assign Role for user
-// @Description	Assign Role for user
+// @Description	Assign Role for user.
+// @Description Using this API, you can assign a role to a user. The role is defined in the system and can be used to control access to resources.
+// @Description Using Get /author/get-all-roles to get all roles in system and /author/get-all-policies to get all policies in system.
 // @Tags			Author
 // @Accept			json
 // @Produce		json

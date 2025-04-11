@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Login godoc
+//
+// @Summary		User login, return access token to client.
+// @Description	Access token is used to access protected resources.
+// @Tags			Policy
+// @Accept			json
+// @Produce		json
+// @Param			LoginRequest	body		req.LoginRequest	true	"LoginRequest JSON"
+// @Success		200	{object}	response.SuccessResponse{data=string}
+// @Failure	400 {object} response.ErrorResponse
+// @Router			/authen/login [post]
 func (h *authHandlerImpl) Login(c *gin.Context) {
 	var request req.LoginRequest
 	if err := c.ShouldBind(&request); err != nil {

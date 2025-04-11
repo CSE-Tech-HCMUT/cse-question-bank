@@ -11,6 +11,7 @@ type AuthorHandler interface {
 	AssignRole(c *gin.Context)
 	GetAllPolicies(c *gin.Context)
 	GetAllRoles(c *gin.Context)
+	GetGroupingPolicy(c *gin.Context)
 }
 
 type authorHandlerImpl struct {

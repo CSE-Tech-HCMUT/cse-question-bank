@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"cse-question-bank/internal/core/casbin"
 	"cse-question-bank/internal/core/errors"
 	"cse-question-bank/internal/core/response"
 	"cse-question-bank/internal/module/question/model/req"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,6 +28,13 @@ func (h *questionHandlerImpl) FilterQuestion(c *gin.Context) {
 		response.ResponseError(c, errors.ErrInvalidInput(err))
 		return
 	}
+
+	policyObject := fmt.Sprintf("subject:%s", request.SubjectId.String())
+	if err := casbin.CasbinCheckPermission(c, policyObject, casbin.MANAGE_QUESTION); err != nil {
+		response.ResponseError(c, err)
+		return
+	}
+
 	data, err := h.questionUsecase.FilterQuestion(c, request)
 
 	if err != nil {

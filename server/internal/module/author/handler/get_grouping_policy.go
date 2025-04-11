@@ -9,7 +9,7 @@ import (
 // GetGroupingPolicy godoc
 //
 // @Summary		Get all group policies of system
-// @Description	Get all group policies of system
+// @Description	Get all group policies of system.
 // @Tags			Author
 // @Produce		json
 // @Success		200	{object}	response.SuccessResponse{data=[][]string}

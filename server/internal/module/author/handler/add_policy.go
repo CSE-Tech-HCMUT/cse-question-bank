@@ -11,7 +11,8 @@ import (
 // AddPolicy godoc
 //
 // @Summary		Add policy for system to authen user
-// @Description	Add policy for system to authen user
+// @Description	Add policy for system to authen user. Where "role" is the role of user, "object" is the resource user have permission to and "action" is the action user can do on that resource.
+// @Description	Example: role = "subject_manager:<subject-id>", object = "subject:<subject-id>", action = "manage_subject" means subject manager can do everything on subject resource.
 // @Tags			Policy
 // @Accept			json
 // @Produce		json

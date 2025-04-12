@@ -40,5 +40,10 @@ func getAuthRoutes(h handler.AuthorHandler) []Route {
 			Path:    "/get-all-roles",
 			Handler: h.GetAllRoles,
 		},
+		{
+			Method:  "GET",
+			Path:    "/get-grouping-policy",
+			Handler: h.GetGroupingPolicy,
+		},
 	}
 }

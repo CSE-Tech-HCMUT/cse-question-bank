@@ -2,18 +2,21 @@ package usecase
 
 import (
 	"context"
+	"cse-question-bank/internal/core/casbin"
 	"cse-question-bank/internal/database/entity"
 	"cse-question-bank/internal/module/question/constant"
 	"cse-question-bank/internal/module/question/model/req"
 	res "cse-question-bank/internal/module/question/model/res"
 	"cse-question-bank/internal/module/question/repository"
+	"fmt"
 	"log/slog"
 
 	"github.com/google/uuid"
 )
 
 type questionBaseUsecaseImpl struct {
-	repo repository.QuestionRepository
+	repo   repository.QuestionRepository
+	casbin *casbin.CasbinService
 }
 
 func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *entity.Question) error {
@@ -97,6 +100,12 @@ func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *
 	if err != nil {
 		slog.Error("Fail to create question", "error-message", err)
 		return nil, constant.ErrCreateQuestion(err)
+	}
+
+	questionObj := fmt.Sprintf("question:%d", question.Id)
+	subjectObj := fmt.Sprintf("subject:%d", *question.SubjectId)
+	if _, err := u.casbin.AddQuestionToSubjectGroup(questionObj, subjectObj); err != nil {
+		return nil, err
 	}
 	return res.EntityToResponse(question, nil), nil
 }

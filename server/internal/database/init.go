@@ -2,6 +2,8 @@ package database
 
 import (
 	"cse-question-bank/internal/database/entity"
+	"cse-question-bank/pkg/hash"
+	"errors"
 	"os"
 
 	"gorm.io/gorm"
@@ -74,10 +76,18 @@ func initAdminAccount(db *gorm.DB) error {
 
 	adminAccount := os.Getenv("ADMIN_ACCOUNT")
 	adminPassword := os.Getenv("ADMIN_PASSWORD")
+	hashPassword, err := hash.Generate(adminPassword)
+	if err != nil {
+		return err
+	}
+	// Check if hashPassword is empty
+	if hashPassword == "" {
+		return errors.New("failed to generate password hash")
+	}
 
 	user := &entity.User{
-		Username: adminAccount,
-		Password: adminPassword,
+		Username:       adminAccount,
+		Password:       hashPassword,
 		DepartmentCode: "CSE",
 	}
 

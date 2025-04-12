@@ -24,9 +24,61 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/authen/login": {
+            "post": {
+                "description": "Register account to system.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Policy"
+                ],
+                "summary": "User register account to system.",
+                "parameters": [
+                    {
+                        "description": "RegisterAccountRequest JSON",
+                        "name": "RegisterAccountRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.RegisterAccountRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/author/add-policy": {
             "post": {
-                "description": "Add policy for system to authen user",
+                "description": "Add policy for system to authen user. Where \"role\" is the role of user, \"object\" is the resource user have permission to and \"action\" is the action user can do on that resource.\nExample: role = \"subject_manager:\u003csubject-id\u003e\", object = \"subject:\u003csubject-id\u003e\", action = \"manage_subject\" means subject manager can do everything on subject resource.",
                 "consumes": [
                     "application/json"
                 ],
@@ -66,7 +118,7 @@ const docTemplate = `{
         },
         "/author/assign-role": {
             "post": {
-                "description": "Assign Role for user",
+                "description": "Assign Role for user.\nUsing this API, you can assign a role to a user. The role is defined in the system and can be used to control access to resources.\nUsing Get /author/get-all-roles to get all roles in system and /author/get-all-policies to get all policies in system.",
                 "consumes": [
                     "application/json"
                 ],
@@ -191,7 +243,7 @@ const docTemplate = `{
         },
         "/author/get-grouping-policy": {
             "get": {
-                "description": "Get all group policies of system",
+                "description": "Get all group policies of system.",
                 "produces": [
                     "application/json"
                 ],
@@ -2112,6 +2164,34 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/internal_module_question_model_req.TagAssignment"
                     }
+                }
+            }
+        },
+        "req.LoginRequest": {
+            "type": "object",
+            "properties": {
+                "mail": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "req.RegisterAccountRequest": {
+            "type": "object",
+            "properties": {
+                "mail": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },

@@ -1,7 +1,7 @@
 import { Exam } from "@/types/exam";
 import { ReduxState } from "@/types/reduxState";
 import { createSlice } from "@reduxjs/toolkit";
-import { createExamThunk, deleteExamThunk, editExamThunk, filterExamThunk, generateAutoExamThunk, getAllExamsThunk, previewPDFFileThunk, shuffleExamThunk } from "./thunk";
+import { createExamThunk, deleteExamThunk, editExamThunk, filterExamThunk, generateAutoExamThunk, getAllExamsThunk, getExamByIdThunk, previewPDFFileThunk, shuffleExamThunk } from "./thunk";
 import { Id, toast } from "react-toastify";
 
 const initialState: ReduxState<Exam> = {
@@ -43,6 +43,11 @@ export const examSlice = createSlice({
             .addCase(getAllExamsThunk.fulfilled, (state, {payload}) => {
                 state.data = payload
             })
+
+            .addCase(getExamByIdThunk.fulfilled, (state, {payload}) => {
+                state.dataById = payload
+            })
+            
 
             .addCase(createExamThunk.fulfilled, (state, {payload}) => {
                 state.data?.push(payload);

@@ -12,6 +12,16 @@ export const getAllExamsThunk = createAsyncThunk('exam/getAllExamsThunk', async 
     }
 })
 
+export const getExamByIdThunk = createAsyncThunk('exam/getExamByIdThunk', async (payload: string, { rejectWithValue }) => {
+    try {
+        const response = await examService.getExamById(payload);
+
+        return response.data.data;
+    } catch (error) {
+        return rejectWithValue(error);
+    }
+})
+
 export const createExamThunk = createAsyncThunk('exam/createExamThunk', async (payload: Exam, { rejectWithValue }) => { 
     try {
         const response = await examService.createExam(payload);

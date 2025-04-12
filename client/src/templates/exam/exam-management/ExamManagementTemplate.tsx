@@ -17,7 +17,7 @@ import { FaPlusCircle } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ExamDeleteModal, ExamShuffleModal } from "./modal";
+import { ExamDeleteModal, ExamEditModal, ExamShuffleModal } from "./modal";
 
 export const ExamManagementTemplate = () => {
   const navigate = useNavigate();
@@ -44,9 +44,8 @@ export const ExamManagementTemplate = () => {
     setIsModalOpen(false);
   };
 
-  const { data, deleteModalShow, pdfUrl, shuffleModalShow } = useSelector(
-    (state: RootState) => state.examReducer
-  );
+  const { data, deleteModalShow, pdfUrl, shuffleModalShow, editModalShow } =
+    useSelector((state: RootState) => state.examReducer);
   const dispatch = useAppDispatch();
 
   const handleClickCreateExam = () => {
@@ -78,6 +77,17 @@ export const ExamManagementTemplate = () => {
 
   const handleModalDeleteClose = () => {
     dispatch(examActions.setDeleteModalVisibility(false));
+  };
+
+  // Edit Modal
+  const [editExam, setEditExam] = useState<Exam>();
+
+  const handleModalEditOpen = () => {
+    dispatch(examActions.setEditModalVisibility(true));
+  };
+
+  const handleModalEditClose = () => {
+    dispatch(examActions.setEditModalVisibility(false));
   };
 
   // Shuffle Modal
@@ -211,8 +221,8 @@ export const ExamManagementTemplate = () => {
               <FiEdit
                 className="custom-icon"
                 onClick={() => {
-                  // setEditTagQuestion(record);
-                  // handleModalEditOpen();
+                  setEditExam(record);
+                  handleModalEditOpen();
                 }}
               />
             </span>
@@ -284,6 +294,15 @@ export const ExamManagementTemplate = () => {
         isModalOpen={shuffleModalShow!}
         onClose={handleModalShuffleClose}
         examData={shuffleExam!}
+      />
+      <ExamEditModal
+        visible={editModalShow!}
+        onCancel={handleModalEditClose}
+        examData={editExam!}
+        onSuccess={() => {
+          dispatch(getAllExamsThunk());
+        }}
+        subjectId={subjectAuthen?.id!}
       />
 
       <PDFPreview urlPDF={pdfUrl} isModalOpen={isModalOpen} onClose={onClose} />

@@ -337,6 +337,24 @@ definitions:
           $ref: '#/definitions/internal_module_question_model_req.TagAssignment'
         type: array
     type: object
+  req.LoginRequest:
+    properties:
+      mail:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  req.RegisterAccountRequest:
+    properties:
+      mail:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   req.ShuffleExamReq:
     properties:
       examId:
@@ -462,11 +480,44 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /authen/login:
+    post:
+      consumes:
+      - application/json
+      description: Register account to system.
+      parameters:
+      - description: RegisterAccountRequest JSON
+        in: body
+        name: RegisterAccountRequest
+        required: true
+        schema:
+          $ref: '#/definitions/req.RegisterAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: User register account to system.
+      tags:
+      - Policy
   /author/add-policy:
     post:
       consumes:
       - application/json
-      description: Add policy for system to authen user
+      description: |-
+        Add policy for system to authen user. Where "role" is the role of user, "object" is the resource user have permission to and "action" is the action user can do on that resource.
+        Example: role = "subject_manager:<subject-id>", object = "subject:<subject-id>", action = "manage_subject" means subject manager can do everything on subject resource.
       parameters:
       - description: AddPolicyRequest JSON
         in: body
@@ -492,7 +543,10 @@ paths:
     post:
       consumes:
       - application/json
-      description: Assign Role for user
+      description: |-
+        Assign Role for user.
+        Using this API, you can assign a role to a user. The role is defined in the system and can be used to control access to resources.
+        Using Get /author/get-all-roles to get all roles in system and /author/get-all-policies to get all policies in system.
       parameters:
       - description: AssignRoleRequest JSON
         in: body
@@ -566,7 +620,7 @@ paths:
       - Author
   /author/get-grouping-policy:
     get:
-      description: Get all group policies of system
+      description: Get all group policies of system.
       produces:
       - application/json
       responses:

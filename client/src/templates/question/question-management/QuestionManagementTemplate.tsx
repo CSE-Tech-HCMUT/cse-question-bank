@@ -15,7 +15,7 @@ import { AiFillDelete, AiFillEye } from "react-icons/ai";
 import { FaPlusCircle } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { useSelector } from "react-redux";
-import { QuestionDeleteModal } from "./modal";
+import { QuestionDeleteModal, QuestionUpdateModal } from "./modal";
 import { useNavigate } from "react-router-dom";
 import PATH from "@/const/path";
 import PDFPreview from "@/components/pdf/PDFPreview";
@@ -34,8 +34,6 @@ export const QuestionManagementTemplate = () => {
   const [total, setTotal] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const { pdfUrl } = useSelector((state: RootState) => state.questionReducer);
-
   const handlePagination: TableProps<Question>["onChange"] = (pagination) => {
     if (pagination?.current !== current) setCurrent(pagination.current!);
     if (pagination?.pageSize !== pageSize) {
@@ -50,7 +48,7 @@ export const QuestionManagementTemplate = () => {
     setIsModalOpen(false);
   };
 
-  const { data, deleteModalShow } = useSelector(
+  const { data, pdfUrl, deleteModalShow, editModalShow } = useSelector(
     (state: RootState) => state.questionReducer
   );
   const dispatch = useAppDispatch();
@@ -99,13 +97,20 @@ export const QuestionManagementTemplate = () => {
 
   // Delete Modal
   const [deleteQuestion, setDeleteQuestion] = useState<Question>();
-
   const handleModalDeleteOpen = () => {
     dispatch(questionActions.setDeleteModalVisibility(true));
   };
-
   const handleModalDeleteClose = () => {
     dispatch(questionActions.setDeleteModalVisibility(false));
+  };
+
+  // Update Modal
+  const [updateQuestion, setUpdateQuestion] = useState<Question>();
+  const handleModalEditOpen = () => {
+    dispatch(questionActions.setEditModalVisibility(true));
+  };
+  const handleModalEditClose = () => {
+    dispatch(questionActions.setEditModalVisibility(false));
   };
 
   const TitleTable = () => (
@@ -224,8 +229,8 @@ export const QuestionManagementTemplate = () => {
               <FiEdit
                 className="custom-icon"
                 onClick={() => {
-                  // setEditTagQuestion(record);
-                  // handleModalEditOpen();
+                  setUpdateQuestion(record);
+                  handleModalEditOpen();
                 }}
               />
             </span>
@@ -292,6 +297,16 @@ export const QuestionManagementTemplate = () => {
         isModalOpen={deleteModalShow!}
         onClose={handleModalDeleteClose}
         questionData={deleteQuestion!}
+      />
+
+      <QuestionUpdateModal
+        isModalOpen={editModalShow!}
+        onClose={handleModalEditClose}
+        questionData={updateQuestion!}
+        subjectAuthen={subjectAuthen}
+        onUpdateSuccess={() => {
+          dispatch(getAllQuestionsThunk());
+        }}
       />
 
       <PDFPreview urlPDF={pdfUrl} isModalOpen={isModalOpen} onClose={onClose} />

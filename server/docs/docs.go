@@ -24,6 +24,171 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/author/add-policy": {
+            "post": {
+                "description": "Add policy for system to authen user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Policy"
+                ],
+                "summary": "Add policy for system to authen user",
+                "parameters": [
+                    {
+                        "description": "AddPolicyRequest JSON",
+                        "name": "AddPolicyRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.AddPolicyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/author/assign-role": {
+            "post": {
+                "description": "Assign Role for user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Author"
+                ],
+                "summary": "Assign Role for user",
+                "parameters": [
+                    {
+                        "description": "AssignRoleRequest JSON",
+                        "name": "AssignRoleRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.AssignRoleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.SuccessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/author/get-all-policies": {
+            "get": {
+                "description": "Get all policies of system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Author"
+                ],
+                "summary": "Get all policies of system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/author/get-all-roles": {
+            "get": {
+                "description": "Get all roles of system",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Author"
+                ],
+                "summary": "Get all roles of system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/compile-latex/exams/{id}": {
             "get": {
                 "description": "Get exam PDF preview",
@@ -283,6 +448,61 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/exam_res.ExamResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/shuffle": {
+            "post": {
+                "description": "Get all clone exams root exams, then shuffle question inside",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "summary": "Get all clone exams root exams, then shuffle question inside",
+                "parameters": [
+                    {
+                        "description": "ShuffleExamReq JSON",
+                        "name": "ShuffleExamReq",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.ShuffleExamReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/exam_res.ExamResponse"
+                                            }
                                         }
                                     }
                                 }
@@ -1436,6 +1656,9 @@ const docTemplate = `{
                         "type": "object"
                     }
                 },
+                "canShuffle": {
+                    "type": "boolean"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -1560,6 +1783,9 @@ const docTemplate = `{
                         "type": "object"
                     }
                 },
+                "canShuffle": {
+                    "type": "boolean"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -1628,9 +1854,37 @@ const docTemplate = `{
                 }
             }
         },
+        "req.AddPolicyRequest": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "object": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "req.AssignRoleRequest": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
         "req.CreateExamRequest": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer"
+                },
                 "filterConditions": {
                     "description": "TODO: add filtercondition for exam to monitor",
                     "type": "array",
@@ -1671,6 +1925,9 @@ const docTemplate = `{
                     "items": {
                         "type": "object"
                     }
+                },
+                "canShuffle": {
+                    "type": "boolean"
                 },
                 "content": {
                     "type": "string"
@@ -1760,6 +2017,9 @@ const docTemplate = `{
                         "type": "object"
                     }
                 },
+                "canShuffle": {
+                    "type": "boolean"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -1811,9 +2071,26 @@ const docTemplate = `{
                 }
             }
         },
+        "req.ShuffleExamReq": {
+            "type": "object",
+            "properties": {
+                "examId": {
+                    "type": "string"
+                },
+                "isShuffleInsideQuestions": {
+                    "type": "boolean"
+                },
+                "numberExams": {
+                    "type": "integer"
+                }
+            }
+        },
         "req.UpdateExamRequest": {
             "type": "object",
             "properties": {
+                "code": {
+                    "type": "integer"
+                },
                 "filterConditions": {
                     "type": "array",
                     "items": {

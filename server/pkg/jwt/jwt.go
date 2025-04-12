@@ -40,25 +40,32 @@ func GenerateToken(secret string, expiry int, userID uuid.UUID, role string) (st
 }
 
 func VerifyToken(tokenString string, secret string) (*UserClaims, error) {
+	slog.Info("Verifying token", "token", tokenString)
+
 	token, err := jwt.ParseWithClaims(
 		tokenString,
 		&UserClaims{},
 		func(t *jwt.Token) (interface{}, error) {
 			// Ensure the signing method is HMAC (HS256)
 			if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+				slog.Error("Unexpected signing method", "method", t.Method.Alg())
 				return nil, errors.New("unexpected signing method")
 			}
+			slog.Info("Signing method verified", "method", t.Method.Alg())
 			return []byte(secret), nil
 		},
 	)
 	if err != nil {
+		slog.Error("Error parsing token", "error", err)
 		return nil, err
 	}
 
 	claims, ok := token.Claims.(*UserClaims)
 	if !ok || !token.Valid {
+		slog.Error("Invalid token or claims", "valid", token.Valid)
 		return nil, ErrInvalidToken
 	}
 
+	slog.Info("Token verified successfully", "user_id", claims.UserID, "role", claims.Role)
 	return claims, nil
 }

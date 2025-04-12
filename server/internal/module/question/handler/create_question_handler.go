@@ -23,12 +23,10 @@ import (
 // @Router			/questions [post]
 func (h *questionHandlerImpl) CreateQuestion(c *gin.Context) {
 	var request req.CreateQuestionRequest
-
-	if err := c.ShouldBind(&request); err != nil {
+	if err := c.ShouldBindJSON(&request); err != nil {
 		response.ResponseError(c, errors.ErrInvalidInput(err))
 		return
 	}
-	
 	policyObject := fmt.Sprintf("subject:%s", request.SubjectId.String())
 	if err := casbin.CasbinCheckPermission(c, policyObject, casbin.MANAGE_QUESTION); err != nil {
 		response.ResponseError(c, err)

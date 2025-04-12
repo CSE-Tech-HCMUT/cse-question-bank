@@ -78,6 +78,7 @@ func initAdminAccount(db *gorm.DB) error {
 	user := &entity.User{
 		Username: adminAccount,
 		Password: adminPassword,
+		DepartmentCode: "CSE",
 	}
 
 	if err := db.Create(&user).Error; err != nil {

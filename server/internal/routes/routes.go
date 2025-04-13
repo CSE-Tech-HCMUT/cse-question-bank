@@ -52,15 +52,14 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 	authenApi := api.Group("")
 	authenApi.Use(middleware.AuthenMiddleware())
 	{
-		initLatexCompileGroupRoutes(db, api)
-		iniQuestionGroupRoutes(db, cb, api)
-		initTagGroupRoutes(db, api)
-		iniTagOptionGroupRoutes(db, api)
-		initExamGroupRoutes(db, api)
-		initAuthorGroupRoutes(cb, api)
-		initSubjectGroupRoutes(db, api)
-		initDepartmentGroupRoutes(db, api)
-
+		initLatexCompileGroupRoutes(db, authenApi)
+		iniQuestionGroupRoutes(db, cb, authenApi)
+		initTagGroupRoutes(db, authenApi)
+		iniTagOptionGroupRoutes(db, authenApi)
+		initExamGroupRoutes(db, authenApi)
+		initAuthorGroupRoutes(cb, api) // TODO: move to authenApi
+		initSubjectGroupRoutes(db, authenApi)
+		initDepartmentGroupRoutes(db, authenApi)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

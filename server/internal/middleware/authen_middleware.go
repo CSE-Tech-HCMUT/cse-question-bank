@@ -12,30 +12,35 @@ import (
 
 func AuthenMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// check Authorization header
+		// Check Authorization header
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			response.ResponseError(c, errors.ErrUnauthorized())
+			c.Abort() // Stop further processing
 			return
 		}
 
-		// check Bearer prefix
+		// Check Bearer prefix
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 		if tokenString == authHeader {
 			response.ResponseError(c, errors.ErrUnauthorized())
+			c.Abort() // Stop further processing
 			return
 		}
 
-		// validate token
+		// Validate token
 		secretKey := os.Getenv("JWT_SECRET_ACCESS_KEY")
 		token, err := jwt.VerifyToken(tokenString, secretKey)
 		if err != nil {
 			response.ResponseError(c, errors.ErrUnauthorized())
+			c.Abort() // Stop further processing
 			return
 		}
 
-		c.Set("userId", token.UserID)
+		// Set user information in the context
+		c.Set("userId", token.UserID.String())
 		c.Set("userRole", token.Role)
+		// Proceed to the next middleware or handler
 		c.Next()
 	}
 }

@@ -15,7 +15,15 @@ type Exam struct {
 	TotalQuestion    int
 	FilterConditions []*FilterCondition `gorm:"foreignKey:ExamID;constraint:OnDelete:CASCADE;"`
 	Questions        []*Question        `gorm:"many2many:exam_questions;constraint:OnDelete:CASCADE;"`
-	Code         int
+	Code             int
+
+	// Reference to the parent exam (if cloned from another exam)
+	ParentExamId *uuid.UUID `gorm:"type:uuid;default:null"` // Foreign key to parent exam
+	ParentExam   *Exam      `gorm:"foreignKey:ParentExamId"`
+
+	// Reference to child exams (if this exam is cloned to others)
+	Children []*Exam `gorm:"foreignKey:ParentExamId;constraint:OnDelete:SET NULL;"`
+
 	// TODO: add filtercondition for exam to monitor
 }
 

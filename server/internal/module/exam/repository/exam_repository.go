@@ -49,9 +49,9 @@ func (r *examRepositoryImpl) Create(ctx context.Context, db *gorm.DB, exam *enti
 // Update
 func (r *examRepositoryImpl) Update(ctx context.Context, db *gorm.DB, exam *entity.Exam) error {
 	tx := r.getDB(ctx, db)
-		if err := tx.Session(&gorm.Session{FullSaveAssociations: true}).Updates(exam).Error; err != nil {
-			return err
-		}
+	if err := tx.Session(&gorm.Session{FullSaveAssociations: true}).Updates(exam).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -69,10 +69,12 @@ func (r *examRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap
 	var exams []*entity.Exam
 	tx := r.getDB(ctx, db)
 	if err := tx.Preload(clause.Associations).
-	Preload("Questions." + clause.Associations).
-	Preload("Questions.TagAssignments." + clause.Associations).
-	Preload("FilterConditions.FilterTagAssignments." + clause.Associations).
-	Where(conditionMap).Find(&exams).Error; err != nil {
+		Preload("Questions." + clause.Associations).
+		Preload("Questions.TagAssignments." + clause.Associations).
+		Preload("FilterConditions.FilterTagAssignments." + clause.Associations).
+		Preload("ParentExam"). // Preload parent exam
+		Preload("Children").   // Preload child exams
+		Where(conditionMap).Find(&exams).Error; err != nil {
 		return nil, err
 	}
 	return exams, nil

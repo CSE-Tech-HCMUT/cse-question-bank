@@ -101,12 +101,7 @@ func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *
 		slog.Error("Fail to create question", "error-message", err)
 		return nil, constant.ErrCreateQuestion(err)
 	}
-
-	questionObj := fmt.Sprintf("question:%d", question.Id)
-	subjectObj := fmt.Sprintf("subject:%d", *question.SubjectId)
-	if _, err := u.casbin.AddQuestionToSubjectGroup(questionObj, subjectObj); err != nil {
-		return nil, err
-	}
+	
 	return res.EntityToResponse(question, nil), nil
 }
 

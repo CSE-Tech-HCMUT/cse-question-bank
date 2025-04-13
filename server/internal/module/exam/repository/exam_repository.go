@@ -72,8 +72,8 @@ func (r *examRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap
 		Preload("Questions." + clause.Associations).
 		Preload("Questions.TagAssignments." + clause.Associations).
 		Preload("FilterConditions.FilterTagAssignments." + clause.Associations).
-		Preload("ParentExam"). // Preload parent exam
-		Preload("Children").   // Preload child exams
+		Preload("ParentExam." + clause.Associations). // Preload parent exam
+		Preload("Children." + clause.Associations).   // Preload child exams
 		Where(conditionMap).Find(&exams).Error; err != nil {
 		return nil, err
 	}

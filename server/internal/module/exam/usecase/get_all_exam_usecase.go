@@ -6,7 +6,9 @@ import (
 )
 
 func (u *examUsecaseImpl) GetAllExams(ctx context.Context) ([]*exam_res.ExamResponse, error) {
-	exams, err := u.examRepostiroy.Find(ctx, nil, nil)
+	exams, err := u.examRepostiroy.Find(ctx, nil, map[string]interface{}{
+		"parent_exam_id": nil,
+	})
 	if err != nil {
 		return nil, err
 	}

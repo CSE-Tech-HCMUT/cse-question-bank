@@ -56,7 +56,7 @@ func RegisterRoutes(db *gorm.DB) http.Handler {
 		iniQuestionGroupRoutes(db, cb, authenApi)
 		initTagGroupRoutes(db, authenApi)
 		iniTagOptionGroupRoutes(db, authenApi)
-		initExamGroupRoutes(db, authenApi)
+		initExamGroupRoutes(db, api) // TODO: move to authenApi
 		initAuthorGroupRoutes(cb, api) // TODO: move to authenApi
 		initSubjectGroupRoutes(db, authenApi)
 		initDepartmentGroupRoutes(db, authenApi)

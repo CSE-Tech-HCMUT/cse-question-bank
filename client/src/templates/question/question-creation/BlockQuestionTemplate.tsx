@@ -28,6 +28,11 @@ import SingleQuestionTemplate from "./SingleQuestionTemplate";
 import { TagAssignment } from "@/types/tagOption";
 import { AiFillDelete, AiFillEye } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
+import { questionActions } from "@/stores/question/slice";
+import {
+  QuestionDeleteModal,
+  QuestionUpdateModal,
+} from "../question-management";
 
 interface QuestionCreationProp {
   idQuestion: string;
@@ -42,16 +47,48 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [typeOfQuestion, setTypeOfQuestion] = useState<string>("");
+  const [typeOfQuestion, setTypeOfQuestion] = useState<string>("Trắc nghiệm");
   const [contentQuestion, setContentQuestion] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] =
     useState<boolean>(false);
   const [idQuestionChild, setIdQuestionChild] = useState<string>("");
+  const [modalKey, setModalKey] = useState(0);
 
   // Lấy dữ liệu câu hỏi cha từ reducer
-  const { pdfUrl } = useSelector((state: RootState) => state.questionReducer);
-  const { dataById } = useSelector((state: RootState) => state.questionReducer);
+  const { pdfUrl, dataById, deleteModalShow, editModalShow } = useSelector(
+    (state: RootState) => state.questionReducer
+  );
+
+  // Delete Modal
+  const [deleteQuestion, setDeleteQuestion] = useState<Question>();
+  const handleModalDeleteOpen = () => {
+    dispatch(questionActions.setDeleteModalVisibility(true));
+  };
+  const handleModalDeleteClose = () => {
+    dispatch(questionActions.setDeleteModalVisibility(false));
+  };
+
+  // Update Modal
+  const [updateQuestion, setUpdateQuestion] = useState<Question>();
+  const handleModalEditOpen = () => {
+    dispatch(questionActions.setEditModalVisibility(true));
+  };
+  const handleModalEditClose = () => {
+    dispatch(questionActions.setEditModalVisibility(false));
+  };
+
+  useEffect(() => {
+    if (!editModalShow) {
+      dispatch(getQuestionByIdThunk(idQuestion));
+    }
+  }, [editModalShow, dispatch, idQuestion]);
+
+  useEffect(() => {
+    if (!deleteModalShow) {
+      dispatch(getQuestionByIdThunk(idQuestion));
+    }
+  }, [deleteModalShow, dispatch, idQuestion]);
 
   // Xử lý preview PDF
   const handlePreviewPDF = () => {
@@ -95,7 +132,7 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
     });
   };
 
-  const handleCreateQuestion = () => {
+  const handleCreateQuestion = async () => {
     if (!subjectAuthen?.id) {
       console.error("Subject ID is missing");
       return;
@@ -106,22 +143,38 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
       parentId: idQuestion,
     };
 
-    dispatch(createQuestionThunk(payload)).then((actionResult) => {
-      if (actionResult.meta.requestStatus === "fulfilled") {
-        const idQuestion = (actionResult.payload as Question).id;
-        if (idQuestion) {
-          setIdQuestionChild(idQuestion);
-          setIsAddQuestionModalOpen(true);
-        }
+    const actionResult = await dispatch(createQuestionThunk(payload));
+
+    if (actionResult.meta.requestStatus === "fulfilled") {
+      const newQuestion = actionResult.payload as Question;
+      if (newQuestion.id) {
+        await dispatch(getQuestionByIdThunk(idQuestion));
+        setIdQuestionChild(newQuestion.id);
+        setModalKey((prev) => prev + 1);
+        setIsAddQuestionModalOpen(true);
       }
-    });
+    }
+  };
+
+  const handleCloseAddQuestionModal = (success = false) => {
+    setIsAddQuestionModalOpen(false);
+    if (success) {
+      setModalKey((prev) => prev + 1); // Reset modal khi đóng thành công
+      dispatch(getQuestionByIdThunk(idQuestion)); // Refresh dữ liệu
+    }
   };
 
   // Lấy dữ liệu câu hỏi cha khi component mount
   useEffect(() => {
     dispatch(getQuestionByIdThunk(idQuestion));
   }, [dispatch, idQuestion]);
-  console.log(dataById?.subQuestions);
+
+  useEffect(() => {
+    // Khi modal add question đóng, fetch lại dữ liệu
+    if (!isAddQuestionModalOpen) {
+      dispatch(getQuestionByIdThunk(idQuestion));
+    }
+  }, [isAddQuestionModalOpen, dispatch, idQuestion]);
 
   return (
     <div>
@@ -146,7 +199,7 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
                 <Input disabled value={subjectAuthen?.name} />
               </Col>
 
-              <Col xs={24} md={12}>
+              {/* <Col xs={24} md={12}>
                 <label className="ant-form-item-label">
                   <span>{t("typeQuestion")}</span>
                 </label>
@@ -155,7 +208,7 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
                   value={typeOfQuestion}
                   onChange={(e) => setTypeOfQuestion(e.target.value)}
                 />
-              </Col>
+              </Col> */}
 
               <Col xs={24}>
                 <label className="ant-form-item-label">
@@ -269,8 +322,8 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
                           <FiEdit
                             className="custom-icon"
                             onClick={() => {
-                              // setEditTagQuestion(record);
-                              // handleModalEditOpen();
+                              setUpdateQuestion(record);
+                              handleModalEditOpen();
                             }}
                           />
                         </span>
@@ -279,10 +332,10 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
                         <span>
                           <AiFillDelete
                             className="custom-icon"
-                            // onClick={() => {
-                            //   setDeleteQuestion(record);
-                            //   handleModalDeleteOpen();
-                            // }}
+                            onClick={() => {
+                              setDeleteQuestion(record);
+                              handleModalDeleteOpen();
+                            }}
                           />
                         </span>
                       </Tooltip>
@@ -322,20 +375,35 @@ const BlockQuestionTemplate: React.FC<QuestionCreationProp> = ({
 
       {/* Modal thêm câu hỏi đơn */}
       <Modal
+        key={`add-question-modal-${modalKey}`}
         title={t("addSubQuestion")}
         visible={isAddQuestionModalOpen}
-        onCancel={() => setIsAddQuestionModalOpen(false)}
+        onCancel={() => handleCloseAddQuestionModal()}
         footer={null}
         width="80%"
+        destroyOnClose
       >
         <SingleQuestionTemplate
+          key={`single-question-${modalKey}`}
           subjectAuthen={subjectAuthen}
           parentId={idQuestion}
           idQuestion={idQuestionChild}
           isParent={true}
-          onCloseModal={() => setIsAddQuestionModalOpen(false)}
+          onCloseModal={handleCloseAddQuestionModal}
         />
       </Modal>
+
+      <QuestionUpdateModal
+        isModalOpen={editModalShow!}
+        onClose={handleModalEditClose}
+        questionData={updateQuestion!}
+      />
+
+      <QuestionDeleteModal
+        isModalOpen={deleteModalShow!}
+        onClose={handleModalDeleteClose}
+        questionData={deleteQuestion!}
+      />
     </div>
   );
 };

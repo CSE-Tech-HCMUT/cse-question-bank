@@ -20,6 +20,12 @@ import { useNavigate } from "react-router-dom";
 import PATH from "@/const/path";
 import PDFPreview from "@/components/pdf/PDFPreview";
 import { Subject } from "@/types/subject";
+import {
+  DownOutlined,
+  FileTextOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
+import "@/styles/question/QuestionManagementTemplate.scss";
 
 export const QuestionManagementTemplate = () => {
   const { t } = useTranslation("question_management");
@@ -89,9 +95,20 @@ export const QuestionManagementTemplate = () => {
   };
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="single">{t("single question")}</Menu.Item>
-      <Menu.Item key="block">{t("block question")}</Menu.Item>
+    <Menu
+      onClick={handleMenuClick}
+      className="custom-question-menu" // Thêm class để style
+    >
+      <Menu.Item key="single" icon={<FileTextOutlined />}>
+        <div className="menu-item-content">
+          <div className="menu-item-title">{t("single question")}</div>
+        </div>
+      </Menu.Item>
+      <Menu.Item key="block" icon={<UnorderedListOutlined />}>
+        <div className="menu-item-content">
+          <div className="menu-item-title">{t("block question")}</div>
+        </div>
+      </Menu.Item>
     </Menu>
   );
 
@@ -116,9 +133,20 @@ export const QuestionManagementTemplate = () => {
   const TitleTable = () => (
     <div className="flex sm:justify-end">
       <Space wrap>
-        <Dropdown overlay={menu} trigger={["click"]}>
-          <Button type="primary" icon={<FaPlusCircle />} size={"middle"}>
+        <Dropdown
+          overlay={menu}
+          trigger={["click"]}
+          placement="bottomRight"
+          overlayClassName="question-type-dropdown"
+        >
+          <Button
+            type="primary"
+            icon={<FaPlusCircle />}
+            size="middle"
+            className="create-question-btn"
+          >
             {t("create question")}
+            <DownOutlined className="dropdown-arrow" />
           </Button>
         </Dropdown>
       </Space>
@@ -266,7 +294,7 @@ export const QuestionManagementTemplate = () => {
   }, []);
 
   return (
-    <main className="bg-gray-100 rounded-md">
+    <main className="QuestionManagementTemplate bg-gray-100 rounded-md">
       <h1 className="text-3xl font-bold mb-4">{t("question management")}</h1>
 
       {/* table */}

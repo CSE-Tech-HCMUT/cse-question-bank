@@ -99,6 +99,7 @@ export const ExamManagementTemplate = () => {
 
   const handleModalShuffleClose = () => {
     dispatch(examActions.setShuffleModalVisibility(false));
+    dispatch(getAllExamsThunk());
   };
 
   const handlePreviewPdf = (id: string) => {

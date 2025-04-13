@@ -5,6 +5,7 @@ import { departmentManagementReducer } from "./department-management/slice";
 import { subjectManagementReducer } from "./subject-management/slice";
 import { questionReducer } from "./question/slice";
 import { examReducer } from "./exam/slice";
+import { authReducer } from "./auth/slice";
 
 const rootReducer = combineReducers({
     tagManagementReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     departmentManagementReducer,
     subjectManagementReducer,
     questionReducer,
-    examReducer
+    examReducer,
+    authReducer
 })
 
 export default rootReducer;

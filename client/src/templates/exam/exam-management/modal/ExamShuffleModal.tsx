@@ -9,11 +9,7 @@ import {
   InputNumber,
   Form,
 } from "antd";
-import {
-  ExclamationCircleOutlined,
-  DownloadOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@/stores";
 import { Exam } from "@/types/exam";
 import { useState, useEffect } from "react";
@@ -54,19 +50,17 @@ export const ExamShuffleModal = ({
 
     setLoading(true);
     try {
-      // Gọi API trộn đề với số lượng = values.count
-      // const result = await dispatch(generateShuffledExamsThunk({
-      //   examId: examData.id,
-      //   count: values.count
-      // }));
-      await dispatch(
+      const actionResult = await dispatch(
         shuffleExamThunk({
           examId: examData.id,
           isShuffleInsideQuestions: true,
-          numberExams: 2,
+          numberExams: values.count,
         })
       );
 
+      if (actionResult.meta.requestStatus === "fulfilled") {
+        onClose();
+      }
       //   setShuffledExams((prev) => [...prev, ...newExams]);
       setShowShuffleForm(false);
     } catch (error) {
@@ -130,6 +124,14 @@ export const ExamShuffleModal = ({
             <Title level={4} className="mb-0">
               Quản lý việc trộn đề thi
             </Title>
+          </div>
+        }
+      >
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <Text strong>
+              Đề gốc: {examData?.examCode} ({examData?.numberQuestion} câu)
+            </Text>
             {!showShuffleForm && (
               <Button
                 type="primary"
@@ -140,13 +142,6 @@ export const ExamShuffleModal = ({
               </Button>
             )}
           </div>
-        }
-      >
-        <div className="mb-6">
-          <Text strong>Đề gốc: </Text>
-          <Text>
-            {examData?.examCode} ({examData?.numberQuestion} câu)
-          </Text>
         </div>
 
         {showShuffleForm ? (

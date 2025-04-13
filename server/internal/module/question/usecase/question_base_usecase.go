@@ -8,7 +8,6 @@ import (
 	"cse-question-bank/internal/module/question/model/req"
 	res "cse-question-bank/internal/module/question/model/res"
 	"cse-question-bank/internal/module/question/repository"
-	"fmt"
 	"log/slog"
 
 	"github.com/google/uuid"
@@ -101,7 +100,7 @@ func (u *questionBaseUsecaseImpl) CreateQuestion(ctx context.Context, question *
 		slog.Error("Fail to create question", "error-message", err)
 		return nil, constant.ErrCreateQuestion(err)
 	}
-	
+
 	return res.EntityToResponse(question, nil), nil
 }
 

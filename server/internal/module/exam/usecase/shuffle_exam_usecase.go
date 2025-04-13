@@ -32,18 +32,18 @@ func (u *examUsecaseImpl) ShuffleExam(ctx context.Context, request req.ShuffleEx
 		// Clone original questions
 		shuffledQuestions := make([]*entity.Question, len(exam.Questions))
 		for idx, q := range exam.Questions {
-			// clone question
+			// Clone question
 			clonedId := uuid.New()
 			cloned := &entity.Question{
-				Id:         clonedId,
-				IsParent:   q.IsParent,
-				CanShuffle: q.CanShuffle,
-				ParentId:   q.ParentId,
-				Type:       q.Type,
-				Difficult:  q.Difficult,
-				SubjectId:  q.SubjectId,
-				Subject:    q.Subject,
-				Content:    q.Content,
+				Id:             clonedId,
+				IsParent:       q.IsParent,
+				CanShuffle:     q.CanShuffle,
+				ParentId:       q.ParentId,
+				Type:           q.Type,
+				Difficult:      q.Difficult,
+				SubjectId:      q.SubjectId,
+				Subject:        q.Subject,
+				Content:        q.Content,
 				TagAssignments: q.TagAssignments,
 			}
 
@@ -56,12 +56,12 @@ func (u *examUsecaseImpl) ShuffleExam(ctx context.Context, request req.ShuffleEx
 				var options []MultipleChoiceAnswer
 				err := json.Unmarshal([]byte(clonedAnswer.Content), &options)
 				if err == nil {
-					// shuffle answer
+					// Shuffle answer
 					rand.Shuffle(len(options), func(i, j int) {
 						options[i], options[j] = options[j], options[i]
 					})
 
-					// assigne to clone answer
+					// Assign to cloned answer
 					shuffledContent, _ := json.Marshal(options)
 					clonedAnswer.Content = shuffledContent
 				}
@@ -70,7 +70,7 @@ func (u *examUsecaseImpl) ShuffleExam(ctx context.Context, request req.ShuffleEx
 			cloned.Answer = clonedAnswer
 
 			if err := u.questionRepository.Create(ctx, nil, cloned); err != nil {
-				slog.Error("fail to create question in database", "error-message", err)
+				slog.Error("Failed to create question in database", "error-message", err)
 				return nil, err
 			}
 
@@ -84,6 +84,7 @@ func (u *examUsecaseImpl) ShuffleExam(ctx context.Context, request req.ShuffleEx
 
 		newCode := exam.Code + i
 
+		// Create a new exam with a reference to the parent exam
 		newExam := &entity.Exam{
 			Semester:         exam.Semester,
 			SubjectId:        exam.SubjectId,
@@ -91,13 +92,16 @@ func (u *examUsecaseImpl) ShuffleExam(ctx context.Context, request req.ShuffleEx
 			FilterConditions: exam.FilterConditions,
 			Questions:        shuffledQuestions,
 			Code:             newCode,
+			ParentExamId:     &exam.Id, // Reference to the parent exam
 		}
 
 		err := u.examRepostiroy.Create(ctx, nil, newExam)
 		if err != nil {
+			slog.Error("Failed to create exam in database", "error-message", err)
 			return nil, err
 		}
 
+		// Convert the new exam to a response
 		res := exam_res.EntityToResponse(newExam)
 		responses = append(responses, res)
 	}

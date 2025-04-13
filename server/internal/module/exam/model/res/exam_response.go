@@ -10,13 +10,14 @@ import (
 )
 
 type ExamResponse struct {
-	Id uuid.UUID `json:"id"`
-	// Questions        []*question_res.QuestionResponse `json:"questions"`
-	TotalQuestion    int                `json:"numberQuestion"`
-	Semester         string             `json:"semester"`
-	Subject          SubjectResponse    `json:"subject"`
-	FilterConditions []*FilterCondition `json:"filterConditions"`
-	Questions      []*question_res.QuestionResponse `json:"questions"`
+	Id               uuid.UUID                        `json:"id"`
+	TotalQuestion    int                              `json:"numberQuestion"`
+	Semester         string                           `json:"semester"`
+	Subject          SubjectResponse                  `json:"subject"`
+	FilterConditions []*FilterCondition               `json:"filterConditions"`
+	Questions        []*question_res.QuestionResponse `json:"questions"`
+	ParentExam       *ParentExamResponse              `json:"parentExam,omitempty"` // Reference to the parent exam
+	Children         []*ChildExamResponse             `json:"children,omitempty"`   // List of child exams
 }
 
 type SubjectResponse struct {
@@ -26,15 +27,27 @@ type SubjectResponse struct {
 }
 
 type FilterCondition struct {
-	Id             int                              `json:"id"`
-	ExpectedCount  int                              `json:"numberQuestion"`
-	TagAssignments []*TagAssignment                 `json:"tagAssignments"`
+	Id             int              `json:"id"`
+	ExpectedCount  int              `json:"numberQuestion"`
+	TagAssignments []*TagAssignment `json:"tagAssignments"`
 }
 
 type TagAssignment struct {
 	Id     int                       `json:"id"`
 	Tag    tag_res.TagResponse       `json:"tag"`
 	Option option_res.OptionResponse `json:"option"`
+}
+
+type ParentExamResponse struct {
+	Id       uuid.UUID `json:"id"`
+	Semester string    `json:"semester"`
+	Code     int       `json:"code"`
+}
+
+type ChildExamResponse struct {
+	Id       uuid.UUID `json:"id"`
+	Semester string    `json:"semester"`
+	Code     int       `json:"code"`
 }
 
 func EntityToResponse(exam *entity.Exam) *ExamResponse {
@@ -48,7 +61,9 @@ func EntityToResponse(exam *entity.Exam) *ExamResponse {
 			Code: exam.Subject.Code,
 		},
 		FilterConditions: convertFilterTags(exam.FilterConditions),
-		Questions: convertQuestions(exam.Questions),
+		Questions:        convertQuestions(exam.Questions),
+		ParentExam:       convertParentExam(exam.ParentExam),
+		Children:         convertChildExams(exam.Children),
 	}
 }
 
@@ -89,4 +104,27 @@ func convertTagAssignments(tagAssignments []*entity.FilterTagAssignment) []*TagA
 		})
 	}
 	return tagAssignmentResponses
+}
+
+func convertParentExam(parentExam *entity.Exam) *ParentExamResponse {
+	if parentExam == nil {
+		return nil
+	}
+	return &ParentExamResponse{
+		Id:       parentExam.Id,
+		Semester: parentExam.Semester,
+		Code:     parentExam.Code,
+	}
+}
+
+func convertChildExams(children []*entity.Exam) []*ChildExamResponse {
+	childResponses := make([]*ChildExamResponse, 0)
+	for _, child := range children {
+		childResponses = append(childResponses, &ChildExamResponse{
+			Id:       child.Id,
+			Semester: child.Semester,
+			Code:     child.Code,
+		})
+	}
+	return childResponses
 }

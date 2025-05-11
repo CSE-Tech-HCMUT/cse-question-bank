@@ -15,9 +15,11 @@ export type Exam = {
     questions?: Question[],
     subjectId?: string,
     questionIdList?: string[],
-    examCode?: number
+    code?: number
+    parentExamId?: string,
+    children?: ExamChildren[]
 
-    shuffledExams?: Exam
+    shuffledExams?: Exam[]
 }
 
 export interface FilterCondition {
@@ -32,4 +34,10 @@ export type ShuffleExamReq = {
     examId: string
     isShuffleInsideQuestions: boolean,
     numberExams: number
+}
+
+export interface ExamChildren {
+    id: string,
+    semester: string,
+    code: number
 }

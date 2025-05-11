@@ -132,7 +132,7 @@ export const ExamCreationTemplate = () => {
       numberQuestion: totalQuestion,
       filterConditions: filterConditions,
       subjectId: subjectAuthen?.id,
-      examCode: examCode,
+      code: examCode,
     };
 
     dispatch(editExamThunk(payload)).then((actionResult) => {
@@ -179,7 +179,7 @@ export const ExamCreationTemplate = () => {
       questionIdList: questionIdList,
       duration: time,
       date: examDate,
-      examCode: examCode,
+      code: examCode,
     };
 
     dispatch(editExamThunk(payload)).then((actionResult) => {

@@ -217,7 +217,7 @@ export const ExamManagementTemplate = () => {
               />
             </span>
           </Tooltip>
-          <Tooltip title={"Chỉnh sửa"}>
+          {/* <Tooltip title={"Chỉnh sửa"}>
             <span>
               <FiEdit
                 className="custom-icon"
@@ -227,7 +227,7 @@ export const ExamManagementTemplate = () => {
                 }}
               />
             </span>
-          </Tooltip>
+          </Tooltip> */}
           <Tooltip title={"Xóa"}>
             <span>
               <AiFillDelete
@@ -250,9 +250,14 @@ export const ExamManagementTemplate = () => {
       setSubjectAuthen(JSON.parse(storedSubject));
     }
 
-    dispatch(getAllExamsThunk()).then((actionResult) => {
+    dispatch(getAllExamsThunk()).then((actionResult: any) => {
       if (actionResult.meta.requestStatus === "fulfilled") {
-        setTotal(data?.length!);
+        console.log(actionResult.payload);
+
+        const filteredData = actionResult.payload.filter(
+          (exam: Exam) => exam.parentExamId === null
+        );
+        setTotal(filteredData.length);
         setLoading(false);
       }
     });

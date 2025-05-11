@@ -5,6 +5,7 @@ import (
 	"cse-question-bank/internal/database/entity"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
 	"fmt"
+	"log/slog"
 	"math/rand/v2"
 	"sort"
 
@@ -87,6 +88,7 @@ func validateQuestionBank(questionBank []*Question, filterConditions []*FilterCo
 func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID) (*exam_res.ExamResponse, error) {
 	questionBank, err := u.questionRepository.Find(ctx, nil, nil)
 	if err != nil {
+		slog.Error("Failed to fetch question bank", "error-message", err)
 		return nil, err
 	}
 
@@ -94,6 +96,7 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 		"id": examId,
 	})
 	if err != nil {
+		slog.Error("Failed to fetch exam from repository", "error-message", err)
 		return nil, err
 	}
 	exam := exams[0]
@@ -140,7 +143,6 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 		})
 	}
 
-	
 	if err = validateQuestionBank(convertedQuestionBank, convertedFilterConditions); err != nil {
 		return nil, err
 	}
@@ -154,6 +156,7 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 	}
 
 	if err = u.examRepostiroy.Update(ctx, nil, exam); err != nil {
+		slog.Error("Failed to update exam in repository", "error-message", err)
 		return nil, err
 	}
 
@@ -364,182 +367,182 @@ func selectBest(population []*Exam, numBest int) []*Exam {
 
 // crossover performs a fitness-based crossover while ensuring filter conditions are satisfied
 func crossover(parent1, parent2 *Exam, questionCollection map[uuid.UUID]*Question, filterConditions []*FilterCondition) *Exam {
-    if len(parent1.QuestionList) == 0 || len(parent2.QuestionList) == 0 {
-        return &Exam{QuestionList: make([]uuid.UUID, 0)}
-    }
+	if len(parent1.QuestionList) == 0 || len(parent2.QuestionList) == 0 {
+		return &Exam{QuestionList: make([]uuid.UUID, 0)}
+	}
 
-    const maxRetries = 10 // Giới hạn số lần thử sửa chữa
+	const maxRetries = 10 // Giới hạn số lần thử sửa chữa
 
-    // Initialize child
-    child := &Exam{
-        QuestionList: make([]uuid.UUID, 0),
-    }
-    usedQuestions := make(map[uuid.UUID]bool)
+	// Initialize child
+	child := &Exam{
+		QuestionList: make([]uuid.UUID, 0),
+	}
+	usedQuestions := make(map[uuid.UUID]bool)
 
-    // Calculate fitness for questions in both parents
-    questionFitness := make(map[uuid.UUID]float64)
-    totalFitness := 0.0
-    for _, parent := range []*Exam{parent1, parent2} {
-        for _, qID := range parent.QuestionList {
-            if _, exists := usedQuestions[qID]; exists {
-                continue
-            }
-            question, exists := questionCollection[qID]
-            if !exists {
-                continue
-            }
-            fitness := 0.3*question.UsageCountScore + 0.4*question.LastUsedScore + 0.3*question.DiscriminationScore
-            questionFitness[qID] = fitness
-            totalFitness += fitness
-            usedQuestions[qID] = true
-        }
-    }
+	// Calculate fitness for questions in both parents
+	questionFitness := make(map[uuid.UUID]float64)
+	totalFitness := 0.0
+	for _, parent := range []*Exam{parent1, parent2} {
+		for _, qID := range parent.QuestionList {
+			if _, exists := usedQuestions[qID]; exists {
+				continue
+			}
+			question, exists := questionCollection[qID]
+			if !exists {
+				continue
+			}
+			fitness := 0.3*question.UsageCountScore + 0.4*question.LastUsedScore + 0.3*question.DiscriminationScore
+			questionFitness[qID] = fitness
+			totalFitness += fitness
+			usedQuestions[qID] = true
+		}
+	}
 
-    // Reset usedQuestions for child construction
-    usedQuestions = make(map[uuid.UUID]bool)
+	// Reset usedQuestions for child construction
+	usedQuestions = make(map[uuid.UUID]bool)
 
-    // Track filter condition counts
-    counts := make([]int, len(filterConditions))
-    targetSize := sumExpectedCounts(filterConditions)
-	i := 0 
-    // Select questions based on fitness
-    for len(child.QuestionList) < targetSize && totalFitness > 0 && i <= 10{
-        r := rand.Float64() * totalFitness
-        var selectedQID uuid.UUID
-        for qID, fitness := range questionFitness {
-            r -= fitness
-            if r <= 0 {
-                selectedQID = qID
-                break
-            }
-        }
-        if selectedQID == uuid.Nil {
-            continue
-        }
+	// Track filter condition counts
+	counts := make([]int, len(filterConditions))
+	targetSize := sumExpectedCounts(filterConditions)
+	i := 0
+	// Select questions based on fitness
+	for len(child.QuestionList) < targetSize && totalFitness > 0 && i <= 10 {
+		r := rand.Float64() * totalFitness
+		var selectedQID uuid.UUID
+		for qID, fitness := range questionFitness {
+			r -= fitness
+			if r <= 0 {
+				selectedQID = qID
+				break
+			}
+		}
+		if selectedQID == uuid.Nil {
+			continue
+		}
 
-        if !usedQuestions[selectedQID] {
-            child.QuestionList = append(child.QuestionList, selectedQID)
-            usedQuestions[selectedQID] = true
-            question, exists := questionCollection[selectedQID]
-            if exists {
-                for i, fc := range filterConditions {
-                    if satisfiesFilterCondition(question, fc) {
-                        counts[i]++
-                    }
-                }
-            }
-            totalFitness -= questionFitness[selectedQID]
-            delete(questionFitness, selectedQID)
-        }
+		if !usedQuestions[selectedQID] {
+			child.QuestionList = append(child.QuestionList, selectedQID)
+			usedQuestions[selectedQID] = true
+			question, exists := questionCollection[selectedQID]
+			if exists {
+				for i, fc := range filterConditions {
+					if satisfiesFilterCondition(question, fc) {
+						counts[i]++
+					}
+				}
+			}
+			totalFitness -= questionFitness[selectedQID]
+			delete(questionFitness, selectedQID)
+		}
 		i++
-    }
+	}
 
-    // Repair: Ensure exact ExpectedCount for each filter condition
-    for i, fc := range filterConditions {
-        retries := 0
-        // Add missing questions
-        for counts[i] < fc.ExpectedCount && retries < maxRetries {
-            questionScores := make(map[uuid.UUID]float64)
-            totalScore := 0.0
-            for qID, question := range questionCollection {
-                if usedQuestions[qID] {
-                    continue
-                }
-                if !satisfiesFilterCondition(question, fc) {
-                    continue
-                }
-                combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
-                questionScores[qID] = combinedScore
-                totalScore += combinedScore
-            }
-            if totalScore == 0 {
-                return parent1 // Fallback if no valid question
-            }
-            r := rand.Float64() * totalScore
-            var selectedQID uuid.UUID
-            for qID, score := range questionScores {
-                r -= score
-                if r <= 0 {
-                    selectedQID = qID
-                    break
-                }
-            }
-            if selectedQID != uuid.Nil {
-                child.QuestionList = append(child.QuestionList, selectedQID)
-                usedQuestions[selectedQID] = true
-                question, exists := questionCollection[selectedQID]
-                if exists {
-                    for j, fcOther := range filterConditions {
-                        if satisfiesFilterCondition(question, fcOther) {
-                            counts[j]++
-                        }
-                    }
-                }
-            }
-            retries++
-        }
+	// Repair: Ensure exact ExpectedCount for each filter condition
+	for i, fc := range filterConditions {
+		retries := 0
+		// Add missing questions
+		for counts[i] < fc.ExpectedCount && retries < maxRetries {
+			questionScores := make(map[uuid.UUID]float64)
+			totalScore := 0.0
+			for qID, question := range questionCollection {
+				if usedQuestions[qID] {
+					continue
+				}
+				if !satisfiesFilterCondition(question, fc) {
+					continue
+				}
+				combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
+				questionScores[qID] = combinedScore
+				totalScore += combinedScore
+			}
+			if totalScore == 0 {
+				return parent1 // Fallback if no valid question
+			}
+			r := rand.Float64() * totalScore
+			var selectedQID uuid.UUID
+			for qID, score := range questionScores {
+				r -= score
+				if r <= 0 {
+					selectedQID = qID
+					break
+				}
+			}
+			if selectedQID != uuid.Nil {
+				child.QuestionList = append(child.QuestionList, selectedQID)
+				usedQuestions[selectedQID] = true
+				question, exists := questionCollection[selectedQID]
+				if exists {
+					for j, fcOther := range filterConditions {
+						if satisfiesFilterCondition(question, fcOther) {
+							counts[j]++
+						}
+					}
+				}
+			}
+			retries++
+		}
 
-        // Remove excess questions
-        retries = 0
-        for counts[i] > fc.ExpectedCount && retries < maxRetries {
-            removed := false
-            for j := len(child.QuestionList) - 1; j >= 0; j-- {
-                qID := child.QuestionList[j]
-                question, exists := questionCollection[qID]
-                if !exists || !satisfiesFilterCondition(question, fc) {
-                    continue
-                }
-                // Simulate removal
-                newCounts := make([]int, len(filterConditions))
-                for k, qID2 := range child.QuestionList {
-                    if k == j {
-                        continue
-                    }
-                    q2, exists := questionCollection[qID2]
-                    if !exists {
-                        continue
-                    }
-                    for m, fc2 := range filterConditions {
-                        if satisfiesFilterCondition(q2, fc2) {
-                            newCounts[m]++
-                        }
-                    }
-                }
-                valid := true
-                for m, fc2 := range filterConditions {
-                    if newCounts[m] < fc2.ExpectedCount {
-                        valid = false
-                        break
-                    }
-                }
-                if valid {
-                    child.QuestionList = append(child.QuestionList[:j], child.QuestionList[j+1:]...)
-                    delete(usedQuestions, qID)
-                    for m, fc2 := range filterConditions {
-                        if satisfiesFilterCondition(question, fc2) {
-                            counts[m]--
-                        }
-                    }
-                    removed = true
-                    break
-                }
-            }
-            if !removed {
-                break // Avoid infinite loop if no question can be removed
-            }
-            retries++
-        }
-    }
+		// Remove excess questions
+		retries = 0
+		for counts[i] > fc.ExpectedCount && retries < maxRetries {
+			removed := false
+			for j := len(child.QuestionList) - 1; j >= 0; j-- {
+				qID := child.QuestionList[j]
+				question, exists := questionCollection[qID]
+				if !exists || !satisfiesFilterCondition(question, fc) {
+					continue
+				}
+				// Simulate removal
+				newCounts := make([]int, len(filterConditions))
+				for k, qID2 := range child.QuestionList {
+					if k == j {
+						continue
+					}
+					q2, exists := questionCollection[qID2]
+					if !exists {
+						continue
+					}
+					for m, fc2 := range filterConditions {
+						if satisfiesFilterCondition(q2, fc2) {
+							newCounts[m]++
+						}
+					}
+				}
+				valid := true
+				for m, fc2 := range filterConditions {
+					if newCounts[m] < fc2.ExpectedCount {
+						valid = false
+						break
+					}
+				}
+				if valid {
+					child.QuestionList = append(child.QuestionList[:j], child.QuestionList[j+1:]...)
+					delete(usedQuestions, qID)
+					for m, fc2 := range filterConditions {
+						if satisfiesFilterCondition(question, fc2) {
+							counts[m]--
+						}
+					}
+					removed = true
+					break
+				}
+			}
+			if !removed {
+				break // Avoid infinite loop if no question can be removed
+			}
+			retries++
+		}
+	}
 
-    // Final validation
-    finalCounts := countQuestionsPerFilter(child, questionCollection, filterConditions)
-    for i, fc := range filterConditions {
-        if finalCounts[i] != fc.ExpectedCount {
-            return parent1 // Fallback if repair fails
-        }
-    }
+	// Final validation
+	finalCounts := countQuestionsPerFilter(child, questionCollection, filterConditions)
+	for i, fc := range filterConditions {
+		if finalCounts[i] != fc.ExpectedCount {
+			return parent1 // Fallback if repair fails
+		}
+	}
 
-    return child
+	return child
 }
 
 // ----------------------- Đột biến -----------------------
@@ -580,370 +583,370 @@ func countQuestionsPerFilter(exam *Exam, questionCollection map[uuid.UUID]*Quest
 
 // mutate performs a strategic mutation while ensuring filter conditions are satisfied
 func mutate(exam *Exam, questionCollection map[uuid.UUID]*Question, filterConditions []*FilterCondition) *Exam {
-    if len(exam.QuestionList) == 0 || len(questionCollection) == 0 {
-        return exam
-    }
+	if len(exam.QuestionList) == 0 || len(questionCollection) == 0 {
+		return exam
+	}
 
-    const maxRetries = 20 // Giới hạn số lần thử sửa chữa
+	const maxRetries = 20 // Giới hạn số lần thử sửa chữa
 
-    // Create a copy of the exam
-    newExam := &Exam{
-        QuestionList: make([]uuid.UUID, len(exam.QuestionList)),
-    }
-    copy(newExam.QuestionList, exam.QuestionList)
+	// Create a copy of the exam
+	newExam := &Exam{
+		QuestionList: make([]uuid.UUID, len(exam.QuestionList)),
+	}
+	copy(newExam.QuestionList, exam.QuestionList)
 
-    // Count questions satisfying each filter condition
-    counts := countQuestionsPerFilter(newExam, questionCollection, filterConditions)
+	// Count questions satisfying each filter condition
+	counts := countQuestionsPerFilter(newExam, questionCollection, filterConditions)
 
-    // Select a question to replace
-    questionFitness := make(map[uuid.UUID]float64)
-    for _, qID := range newExam.QuestionList {
-        q, exists := questionCollection[qID]
-        if !exists {
-            continue
-        }
-        fitness := 0.3*q.UsageCountScore + 0.4*q.LastUsedScore + 0.3*q.DiscriminationScore
-        questionFitness[qID] = fitness
-    }
+	// Select a question to replace
+	questionFitness := make(map[uuid.UUID]float64)
+	for _, qID := range newExam.QuestionList {
+		q, exists := questionCollection[qID]
+		if !exists {
+			continue
+		}
+		fitness := 0.3*q.UsageCountScore + 0.4*q.LastUsedScore + 0.3*q.DiscriminationScore
+		questionFitness[qID] = fitness
+	}
 
-    // Identify redundant questions
-    redundantQuestions := make(map[uuid.UUID][]int)
-    for _, qID := range newExam.QuestionList {
-        question, exists := questionCollection[qID]
-        if !exists {
-            continue
-        }
-        for i, fc := range filterConditions {
-            if satisfiesFilterCondition(question, fc) && counts[i] > fc.ExpectedCount {
-                redundantQuestions[qID] = append(redundantQuestions[qID], i)
-            }
-        }
-    }
+	// Identify redundant questions
+	redundantQuestions := make(map[uuid.UUID][]int)
+	for _, qID := range newExam.QuestionList {
+		question, exists := questionCollection[qID]
+		if !exists {
+			continue
+		}
+		for i, fc := range filterConditions {
+			if satisfiesFilterCondition(question, fc) && counts[i] > fc.ExpectedCount {
+				redundantQuestions[qID] = append(redundantQuestions[qID], i)
+			}
+		}
+	}
 
-    var replaceIdx int
-    var replaceQID uuid.UUID
-    if len(redundantQuestions) > 0 {
-        questionIDs := make([]uuid.UUID, 0, len(redundantQuestions))
-        for qID := range redundantQuestions {
-            questionIDs = append(questionIDs, qID)
-        }
-        replaceQID = questionIDs[rand.IntN(len(questionIDs))]
-        for i, qID := range newExam.QuestionList {
-            if qID == replaceQID {
-                replaceIdx = i
-                break
-            }
-        }
-    } else {
-        var lowestFitness float64 = 1.0
-        for i, qID := range newExam.QuestionList {
-            fitness, exists := questionFitness[qID]
-            if !exists {
-                continue
-            }
-            if fitness < lowestFitness {
-                lowestFitness = fitness
-                replaceQID = qID
-                replaceIdx = i
-            }
-        }
-    }
+	var replaceIdx int
+	var replaceQID uuid.UUID
+	if len(redundantQuestions) > 0 {
+		questionIDs := make([]uuid.UUID, 0, len(redundantQuestions))
+		for qID := range redundantQuestions {
+			questionIDs = append(questionIDs, qID)
+		}
+		replaceQID = questionIDs[rand.IntN(len(questionIDs))]
+		for i, qID := range newExam.QuestionList {
+			if qID == replaceQID {
+				replaceIdx = i
+				break
+			}
+		}
+	} else {
+		var lowestFitness float64 = 1.0
+		for i, qID := range newExam.QuestionList {
+			fitness, exists := questionFitness[qID]
+			if !exists {
+				continue
+			}
+			if fitness < lowestFitness {
+				lowestFitness = fitness
+				replaceQID = qID
+				replaceIdx = i
+			}
+		}
+	}
 
-    // Identify filter conditions that the replaced question satisfies
-    replacedFCs := make([]int, 0)
-    question, exists := questionCollection[replaceQID]
-    if exists {
-        for i, fc := range filterConditions {
-            if satisfiesFilterCondition(question, fc) {
-                replacedFCs = append(replacedFCs, i)
-            }
-        }
-    }
+	// Identify filter conditions that the replaced question satisfies
+	replacedFCs := make([]int, 0)
+	question, exists := questionCollection[replaceQID]
+	if exists {
+		for i, fc := range filterConditions {
+			if satisfiesFilterCondition(question, fc) {
+				replacedFCs = append(replacedFCs, i)
+			}
+		}
+	}
 
-    // Create a set of questions already in the exam
-    questionSet := make(map[uuid.UUID]struct{})
-    for _, qID := range newExam.QuestionList {
-        questionSet[qID] = struct{}{}
-    }
+	// Create a set of questions already in the exam
+	questionSet := make(map[uuid.UUID]struct{})
+	for _, qID := range newExam.QuestionList {
+		questionSet[qID] = struct{}{}
+	}
 
-    // Try to find a replacement question
-    questionScores := make(map[uuid.UUID]float64)
-    totalScore := 0.0
-    for qID, question := range questionCollection {
-        if _, exists := questionSet[qID]; exists {
-            continue
-        }
-        satisfiesRelevantFC := false
-        for _, fcIdx := range replacedFCs {
-            if satisfiesFilterCondition(question, filterConditions[fcIdx]) {
-                satisfiesRelevantFC = true
-                break
-            }
-        }
-        if !satisfiesRelevantFC {
-            continue
-        }
-        combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
-        questionScores[qID] = combinedScore
-        totalScore += combinedScore
-    }
+	// Try to find a replacement question
+	questionScores := make(map[uuid.UUID]float64)
+	totalScore := 0.0
+	for qID, question := range questionCollection {
+		if _, exists := questionSet[qID]; exists {
+			continue
+		}
+		satisfiesRelevantFC := false
+		for _, fcIdx := range replacedFCs {
+			if satisfiesFilterCondition(question, filterConditions[fcIdx]) {
+				satisfiesRelevantFC = true
+				break
+			}
+		}
+		if !satisfiesRelevantFC {
+			continue
+		}
+		combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
+		questionScores[qID] = combinedScore
+		totalScore += combinedScore
+	}
 
-    if totalScore > 0 {
-        r := rand.Float64() * totalScore
-        for qID, score := range questionScores {
-            r -= score
-            if r <= 0 {
-                newExam.QuestionList[replaceIdx] = qID
-                counts = countQuestionsPerFilter(newExam, questionCollection, filterConditions)
-                questionSet[qID] = struct{}{}
-                delete(questionSet, replaceQID)
-                break
-            }
-        }
-    }
+	if totalScore > 0 {
+		r := rand.Float64() * totalScore
+		for qID, score := range questionScores {
+			r -= score
+			if r <= 0 {
+				newExam.QuestionList[replaceIdx] = qID
+				counts = countQuestionsPerFilter(newExam, questionCollection, filterConditions)
+				questionSet[qID] = struct{}{}
+				delete(questionSet, replaceQID)
+				break
+			}
+		}
+	}
 
-    // Repair: Ensure exact ExpectedCount for each filter condition
-    for i, fc := range filterConditions {
-        retries := 0
-        // Add missing questions
-        for counts[i] < fc.ExpectedCount && retries < maxRetries {
-            questionScores := make(map[uuid.UUID]float64)
-            totalScore := 0.0
-            for qID, question := range questionCollection {
-                if _, exists := questionSet[qID]; exists {
-                    continue
-                }
-                if !satisfiesFilterCondition(question, fc) {
-                    continue
-                }
-                combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
-                questionScores[qID] = combinedScore
-                totalScore += combinedScore
-            }
-            if totalScore == 0 {
-                return exam // Fallback if no valid question
-            }
-            r := rand.Float64() * totalScore
-            var selectedQID uuid.UUID
-            for qID, score := range questionScores {
-                r -= score
-                if r <= 0 {
-                    selectedQID = qID
-                    break
-                }
-            }
-            if selectedQID != uuid.Nil {
-                newExam.QuestionList = append(newExam.QuestionList, selectedQID)
-                questionSet[selectedQID] = struct{}{}
-                question, exists := questionCollection[selectedQID]
-                if exists {
-                    for j, fcOther := range filterConditions {
-                        if satisfiesFilterCondition(question, fcOther) {
-                            counts[j]++
-                        }
-                    }
-                }
-            }
-            retries++
-        }
+	// Repair: Ensure exact ExpectedCount for each filter condition
+	for i, fc := range filterConditions {
+		retries := 0
+		// Add missing questions
+		for counts[i] < fc.ExpectedCount && retries < maxRetries {
+			questionScores := make(map[uuid.UUID]float64)
+			totalScore := 0.0
+			for qID, question := range questionCollection {
+				if _, exists := questionSet[qID]; exists {
+					continue
+				}
+				if !satisfiesFilterCondition(question, fc) {
+					continue
+				}
+				combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
+				questionScores[qID] = combinedScore
+				totalScore += combinedScore
+			}
+			if totalScore == 0 {
+				return exam // Fallback if no valid question
+			}
+			r := rand.Float64() * totalScore
+			var selectedQID uuid.UUID
+			for qID, score := range questionScores {
+				r -= score
+				if r <= 0 {
+					selectedQID = qID
+					break
+				}
+			}
+			if selectedQID != uuid.Nil {
+				newExam.QuestionList = append(newExam.QuestionList, selectedQID)
+				questionSet[selectedQID] = struct{}{}
+				question, exists := questionCollection[selectedQID]
+				if exists {
+					for j, fcOther := range filterConditions {
+						if satisfiesFilterCondition(question, fcOther) {
+							counts[j]++
+						}
+					}
+				}
+			}
+			retries++
+		}
 
-        // Remove excess questions
-        retries = 0
-        for counts[i] > fc.ExpectedCount && retries < maxRetries {
-            removed := false
-            for j := len(newExam.QuestionList) - 1; j >= 0; j-- {
-                qID := newExam.QuestionList[j]
-                question, exists := questionCollection[qID]
-                if !exists || !satisfiesFilterCondition(question, fc) {
-                    continue
-                }
-                // Simulate removal
-                newCounts := make([]int, len(filterConditions))
-                for k, qID2 := range newExam.QuestionList {
-                    if k == j {
-                        continue
-                    }
-                    q2, exists := questionCollection[qID2]
-                    if !exists {
-                        continue
-                    }
-                    for m, fc2 := range filterConditions {
-                        if satisfiesFilterCondition(q2, fc2) {
-                            newCounts[m]++
-                        }
-                    }
-                }
-                valid := true
-                for m, fc2 := range filterConditions {
-                    if newCounts[m] < fc2.ExpectedCount {
-                        valid = false
-                        break
-                    }
-                }
-                if valid {
-                    newExam.QuestionList = append(newExam.QuestionList[:j], newExam.QuestionList[j+1:]...)
-                    delete(questionSet, qID)
-                    for m, fc2 := range filterConditions {
-                        if satisfiesFilterCondition(question, fc2) {
-                            counts[m]--
-                        }
-                    }
-                    removed = true
-                    break
-                }
-            }
-            if !removed {
-                break // Avoid infinite loop if no question can be removed
-            }
-            retries++
-        }
-    }
+		// Remove excess questions
+		retries = 0
+		for counts[i] > fc.ExpectedCount && retries < maxRetries {
+			removed := false
+			for j := len(newExam.QuestionList) - 1; j >= 0; j-- {
+				qID := newExam.QuestionList[j]
+				question, exists := questionCollection[qID]
+				if !exists || !satisfiesFilterCondition(question, fc) {
+					continue
+				}
+				// Simulate removal
+				newCounts := make([]int, len(filterConditions))
+				for k, qID2 := range newExam.QuestionList {
+					if k == j {
+						continue
+					}
+					q2, exists := questionCollection[qID2]
+					if !exists {
+						continue
+					}
+					for m, fc2 := range filterConditions {
+						if satisfiesFilterCondition(q2, fc2) {
+							newCounts[m]++
+						}
+					}
+				}
+				valid := true
+				for m, fc2 := range filterConditions {
+					if newCounts[m] < fc2.ExpectedCount {
+						valid = false
+						break
+					}
+				}
+				if valid {
+					newExam.QuestionList = append(newExam.QuestionList[:j], newExam.QuestionList[j+1:]...)
+					delete(questionSet, qID)
+					for m, fc2 := range filterConditions {
+						if satisfiesFilterCondition(question, fc2) {
+							counts[m]--
+						}
+					}
+					removed = true
+					break
+				}
+			}
+			if !removed {
+				break // Avoid infinite loop if no question can be removed
+			}
+			retries++
+		}
+	}
 
-    // Final validation
-    finalCounts := countQuestionsPerFilter(newExam, questionCollection, filterConditions)
-    for i, fc := range filterConditions {
-        if finalCounts[i] != fc.ExpectedCount {
-            return exam // Fallback if repair fails
-        }
-    }
+	// Final validation
+	finalCounts := countQuestionsPerFilter(newExam, questionCollection, filterConditions)
+	for i, fc := range filterConditions {
+		if finalCounts[i] != fc.ExpectedCount {
+			return exam // Fallback if repair fails
+		}
+	}
 
-    return newExam
+	return newExam
 }
 
 func repairExam(exam *Exam, questionCollection map[uuid.UUID]*Question, filterConditions []*FilterCondition, questionBank []*Question) *Exam {
-    const maxRetries = 100 // Giới hạn số lần thử để tránh lặp vô tận
+	const maxRetries = 100 // Giới hạn số lần thử để tránh lặp vô tận
 
-    // Tạo bản sao của exam để tránh sửa đổi trực tiếp
-    repairedExam := &Exam{
-        QuestionList: make([]uuid.UUID, len(exam.QuestionList)),
-        Fitness:      exam.Fitness,
-    }
-    copy(repairedExam.QuestionList, exam.QuestionList)
+	// Tạo bản sao của exam để tránh sửa đổi trực tiếp
+	repairedExam := &Exam{
+		QuestionList: make([]uuid.UUID, len(exam.QuestionList)),
+		Fitness:      exam.Fitness,
+	}
+	copy(repairedExam.QuestionList, exam.QuestionList)
 
-    // Tập hợp các câu hỏi đã sử dụng
-    usedQuestions := make(map[uuid.UUID]struct{})
-    for _, qID := range repairedExam.QuestionList {
-        usedQuestions[qID] = struct{}{}
-    }
+	// Tập hợp các câu hỏi đã sử dụng
+	usedQuestions := make(map[uuid.UUID]struct{})
+	for _, qID := range repairedExam.QuestionList {
+		usedQuestions[qID] = struct{}{}
+	}
 
-    // Đếm số câu hỏi thỏa mãn mỗi FilterCondition
-    counts := countQuestionsPerFilter(repairedExam, questionCollection, filterConditions)
-	target := 0 
-    // Sửa chữa: Thêm câu hỏi nếu thiếu
-    for i, fc := range filterConditions {
-        retries := 0
+	// Đếm số câu hỏi thỏa mãn mỗi FilterCondition
+	counts := countQuestionsPerFilter(repairedExam, questionCollection, filterConditions)
+	target := 0
+	// Sửa chữa: Thêm câu hỏi nếu thiếu
+	for i, fc := range filterConditions {
+		retries := 0
 		target += fc.ExpectedCount
-        for counts[i] < fc.ExpectedCount && retries < maxRetries {
-            // Tìm các câu hỏi thỏa mãn FilterCondition từ questionBank
-            questionScores := make(map[uuid.UUID]float64)
-            totalScore := 0.0
-            for _, question := range questionBank {
-                qID := question.Id
-                if _, exists := usedQuestions[qID]; exists {
-                    continue
-                }
-                if !satisfiesFilterCondition(question, fc) {
-                    continue
-                }
-                // Tính điểm fitness cho câu hỏi
-                combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
-                questionScores[qID] = combinedScore
-                totalScore += combinedScore
-            }
+		for counts[i] < fc.ExpectedCount && retries < maxRetries {
+			// Tìm các câu hỏi thỏa mãn FilterCondition từ questionBank
+			questionScores := make(map[uuid.UUID]float64)
+			totalScore := 0.0
+			for _, question := range questionBank {
+				qID := question.Id
+				if _, exists := usedQuestions[qID]; exists {
+					continue
+				}
+				if !satisfiesFilterCondition(question, fc) {
+					continue
+				}
+				// Tính điểm fitness cho câu hỏi
+				combinedScore := 0.4*question.DiscriminationScore + 0.3*question.LastUsedScore + 0.3*question.UsageCountScore
+				questionScores[qID] = combinedScore
+				totalScore += combinedScore
+			}
 
-            if totalScore == 0 {
-                // Không có câu hỏi phù hợp, trả về exam gốc
-                return exam
-            }
+			if totalScore == 0 {
+				// Không có câu hỏi phù hợp, trả về exam gốc
+				return exam
+			}
 
-            // Chọn ngẫu nhiên câu hỏi dựa trên fitness
-            r := rand.Float64() * totalScore
-            var selectedQID uuid.UUID
-            for qID, score := range questionScores {
-                r -= score
-                if r <= 0 {
-                    selectedQID = qID
-                    break
-                }
-            }
+			// Chọn ngẫu nhiên câu hỏi dựa trên fitness
+			r := rand.Float64() * totalScore
+			var selectedQID uuid.UUID
+			for qID, score := range questionScores {
+				r -= score
+				if r <= 0 {
+					selectedQID = qID
+					break
+				}
+			}
 
-            if selectedQID != uuid.Nil {
-                repairedExam.QuestionList = append(repairedExam.QuestionList, selectedQID)
-                usedQuestions[selectedQID] = struct{}{}
-                // Cập nhật counts
-                question, exists := questionCollection[selectedQID]
-                if exists {
-                    for j, fcOther := range filterConditions {
-                        if satisfiesFilterCondition(question, fcOther) {
-                            counts[j]++
-                        }
-                    }
-                }
-            }
-            retries++
-        }
-    }
+			if selectedQID != uuid.Nil {
+				repairedExam.QuestionList = append(repairedExam.QuestionList, selectedQID)
+				usedQuestions[selectedQID] = struct{}{}
+				// Cập nhật counts
+				question, exists := questionCollection[selectedQID]
+				if exists {
+					for j, fcOther := range filterConditions {
+						if satisfiesFilterCondition(question, fcOther) {
+							counts[j]++
+						}
+					}
+				}
+			}
+			retries++
+		}
+	}
 
-    // Kiểm tra tổng số câu hỏi (giả sử cần đúng 30 câu hỏi)
-    targetSize := target
-    if len(repairedExam.QuestionList) > targetSize {
-        // Xóa bớt câu hỏi dư thừa, ưu tiên giữ các FilterCondition
-        for len(repairedExam.QuestionList) > targetSize {
-            removed := false
-            for j := len(repairedExam.QuestionList) - 1; j >= 0; j-- {
-                qID := repairedExam.QuestionList[j]
-                _, exists := questionCollection[qID]
-                if !exists {
-                    continue
-                }
-                // Kiểm tra xem việc xóa câu hỏi này có làm vi phạm FilterCondition không
-                newCounts := make([]int, len(filterConditions))
-                for k, qID2 := range repairedExam.QuestionList {
-                    if k == j {
-                        continue
-                    }
-                    q2, exists := questionCollection[qID2]
-                    if !exists {
-                        continue
-                    }
-                    for m, fc2 := range filterConditions {
-                        if satisfiesFilterCondition(q2, fc2) {
-                            newCounts[m]++
-                        }
-                    }
-                }
-                valid := true
-                for m, fc2 := range filterConditions {
-                    if newCounts[m] < fc2.ExpectedCount {
-                        valid = false
-                        break
-                    }
-                }
-                if valid {
-                    repairedExam.QuestionList = append(repairedExam.QuestionList[:j], repairedExam.QuestionList[j+1:]...)
-                    delete(usedQuestions, qID)
-                    removed = true
-                    break
-                }
-            }
-            if !removed {
-                break // Thoát nếu không thể xóa thêm
-            }
-        }
-    }
+	// Kiểm tra tổng số câu hỏi (giả sử cần đúng 30 câu hỏi)
+	targetSize := target
+	if len(repairedExam.QuestionList) > targetSize {
+		// Xóa bớt câu hỏi dư thừa, ưu tiên giữ các FilterCondition
+		for len(repairedExam.QuestionList) > targetSize {
+			removed := false
+			for j := len(repairedExam.QuestionList) - 1; j >= 0; j-- {
+				qID := repairedExam.QuestionList[j]
+				_, exists := questionCollection[qID]
+				if !exists {
+					continue
+				}
+				// Kiểm tra xem việc xóa câu hỏi này có làm vi phạm FilterCondition không
+				newCounts := make([]int, len(filterConditions))
+				for k, qID2 := range repairedExam.QuestionList {
+					if k == j {
+						continue
+					}
+					q2, exists := questionCollection[qID2]
+					if !exists {
+						continue
+					}
+					for m, fc2 := range filterConditions {
+						if satisfiesFilterCondition(q2, fc2) {
+							newCounts[m]++
+						}
+					}
+				}
+				valid := true
+				for m, fc2 := range filterConditions {
+					if newCounts[m] < fc2.ExpectedCount {
+						valid = false
+						break
+					}
+				}
+				if valid {
+					repairedExam.QuestionList = append(repairedExam.QuestionList[:j], repairedExam.QuestionList[j+1:]...)
+					delete(usedQuestions, qID)
+					removed = true
+					break
+				}
+			}
+			if !removed {
+				break // Thoát nếu không thể xóa thêm
+			}
+		}
+	}
 
-    // // Kiểm tra cuối cùng
-    // finalCounts := countQuestionsPerFilter(repairedExam, questionCollection, filterConditions)
-	
-    // for i, fc := range filterConditions {
-    //     if finalCounts[i] != fc.ExpectedCount {
-    //         return exam // Trả về exam gốc nếu không sửa chữa được
-    //     }
-    // }
+	// // Kiểm tra cuối cùng
+	// finalCounts := countQuestionsPerFilter(repairedExam, questionCollection, filterConditions)
 
-    // Cập nhật fitness cho bài thi đã sửa chữa
-    repairedExam.Fitness = calculateFitness(repairedExam, filterConditions, questionCollection)
-    return repairedExam
+	// for i, fc := range filterConditions {
+	//     if finalCounts[i] != fc.ExpectedCount {
+	//         return exam // Trả về exam gốc nếu không sửa chữa được
+	//     }
+	// }
+
+	// Cập nhật fitness cho bài thi đã sửa chữa
+	repairedExam.Fitness = calculateFitness(repairedExam, filterConditions, questionCollection)
+	return repairedExam
 }
 
 // ----------------------- Thuật toán di truyền -----------------------
@@ -976,14 +979,14 @@ func GeneticAlgorithm(questionBank []*Question, filterConditions []*FilterCondit
 			p1, p2 := population[rand.IntN(len(population))], population[rand.IntN(len(population))]
 			child := crossover(p1, p2, questionCollection, filterConditions)
 			// Sửa chữa sau crossover
-            child = repairExam(child, questionCollection, filterConditions, questionBank)
-            
-            child = mutate(child, questionCollection, filterConditions)
-            
-            // Sửa chữa sau mutation
-            child = repairExam(child, questionCollection, filterConditions, questionBank)
+			child = repairExam(child, questionCollection, filterConditions, questionBank)
+
+			child = mutate(child, questionCollection, filterConditions)
+
+			// Sửa chữa sau mutation
+			child = repairExam(child, questionCollection, filterConditions, questionBank)
 			newPopulation = append(newPopulation, child)
-			if (len(child.QuestionList) != 30) {
+			if len(child.QuestionList) != 30 {
 				fmt.Println("Error: child has wrong number of questions")
 			}
 		}
@@ -992,4 +995,3 @@ func GeneticAlgorithm(questionBank []*Question, filterConditions []*FilterCondit
 	fmt.Println(calculateFitness(population[0], filterConditions, questionCollection))
 	return population[0]
 }
-

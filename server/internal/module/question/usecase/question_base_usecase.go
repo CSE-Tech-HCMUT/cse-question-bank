@@ -23,6 +23,11 @@ func (u *questionBaseUsecaseImpl) EditQuestion(ctx context.Context, question *en
 		"id": question.Id,
 	})
 
+	if len(q) == 0 {
+		slog.Error("Question is not exist in datbase", "error-message", err)
+		return constant.ErrQuestionNotFound(err)
+	}
+
 	// load id of answer from database
 	if q[0].Answer != nil {
 		question.Answer.Id = q[0].Answer.Id
@@ -145,7 +150,7 @@ func (u *questionBaseUsecaseImpl) GetAllQuestions(ctx context.Context) ([]*res.Q
 		"parent_id": uuid.Nil,
 	})
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	questionsRes := make([]*res.QuestionResponse, 0)

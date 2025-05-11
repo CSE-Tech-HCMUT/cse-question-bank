@@ -32,6 +32,11 @@ type Question struct {
 	Answer *Answer `gorm:"foreignKey:QuestionId;constraint:OnDelete:CASCADE"` // One-to-many relationship
 
 	TagAssignments []TagAssignment `gorm:"foreignKey:QuestionId;constraint:Ondelete:CASCADE"`
+	LastUsedSemester  int `gorm:"type:bigint;default:0"`
+	CreatedAt      int `gorm:"type:bigint"`
+	UsageCount	int `gorm:"type:bigint;default:0"`
+	DiscriminationScore	float64 `gorm:"type:float;default:0"`
+	
 }
 
 func (q *Question) BeforeCreate(tx *gorm.DB) (err error) {

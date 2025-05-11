@@ -6,6 +6,7 @@ import (
 	question_res "cse-question-bank/internal/module/question/model/res"
 	tag_res "cse-question-bank/internal/module/tag/model/res"
 	option_res "cse-question-bank/internal/module/tag_option/model/res"
+	"errors"
 	"strconv"
 
 	"github.com/google/uuid"
@@ -18,12 +19,14 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 	if err != nil {
 		return nil, err
 	}
-
+	if len(examList) == 0 {
+		return nil, errors.New("exam not found")
+	}
 	exam := examList[0]
 
 	existingQuestions := make(map[uuid.UUID]struct{})
 	for _, question := range exam.Questions {
-			existingQuestions[question.Id] = struct{}{}
+		existingQuestions[question.Id] = struct{}{}
 	}
 
 	filteredQuestionsList := make([]*exam_res.FilterQuestionsList, 0)
@@ -55,16 +58,15 @@ func (u *examUsecaseImpl) GetExamFilteredQuestionsList(ctx context.Context, exam
 			tagAssignmentRes = append(tagAssignmentRes, &exam_res.TagAssignment{
 				Id: tagAssignment.Id,
 				Tag: tag_res.TagResponse{
-					Id: tagAssignment.TagId,
-					Name: tagAssignment.Tag.Name,
+					Id:          tagAssignment.TagId,
+					Name:        tagAssignment.Tag.Name,
 					Description: tagAssignment.Tag.Description,
 				},
 				Option: option_res.OptionResponse{
-					Id: tagAssignment.OptionId,
+					Id:   tagAssignment.OptionId,
 					Name: tagAssignment.Option.Name,
 				},
 			})
-
 
 			filteredQuestionsList = append(filteredQuestionsList, &exam_res.FilterQuestionsList{
 				ExpectedCount: filterCondition.ExpectedCount,

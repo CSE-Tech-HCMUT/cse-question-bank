@@ -16,8 +16,24 @@ definitions:
       tagID:
         type: integer
     type: object
+  exam_res.ChildExamResponse:
+    properties:
+      code:
+        type: integer
+      id:
+        type: string
+      semester:
+        type: string
+    type: object
   exam_res.ExamResponse:
     properties:
+      children:
+        description: List of child exams
+        items:
+          $ref: '#/definitions/exam_res.ChildExamResponse'
+        type: array
+      code:
+        type: integer
       filterConditions:
         items:
           $ref: '#/definitions/exam_res.FilterCondition'
@@ -25,8 +41,11 @@ definitions:
       id:
         type: string
       numberQuestion:
-        description: Questions        []*question_res.QuestionResponse `json:"questions"`
         type: integer
+      parentExam:
+        allOf:
+        - $ref: '#/definitions/exam_res.ParentExamResponse'
+        description: Reference to the parent exam
       questions:
         items:
           $ref: '#/definitions/question_res.QuestionResponse'
@@ -61,6 +80,15 @@ definitions:
         items:
           $ref: '#/definitions/exam_res.TagAssignment'
         type: array
+    type: object
+  exam_res.ParentExamResponse:
+    properties:
+      code:
+        type: integer
+      id:
+        type: string
+      semester:
+        type: string
     type: object
   exam_res.QuestionFilterExam:
     properties:

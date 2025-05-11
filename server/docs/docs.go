@@ -1673,9 +1673,33 @@ const docTemplate = `{
                 }
             }
         },
+        "exam_res.ChildExamResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "semester": {
+                    "type": "string"
+                }
+            }
+        },
         "exam_res.ExamResponse": {
             "type": "object",
             "properties": {
+                "children": {
+                    "description": "List of child exams",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/exam_res.ChildExamResponse"
+                    }
+                },
+                "code": {
+                    "type": "integer"
+                },
                 "filterConditions": {
                     "type": "array",
                     "items": {
@@ -1686,8 +1710,15 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "numberQuestion": {
-                    "description": "Questions        []*question_res.QuestionResponse ` + "`" + `json:\"questions\"` + "`" + `",
                     "type": "integer"
+                },
+                "parentExam": {
+                    "description": "Reference to the parent exam",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/exam_res.ParentExamResponse"
+                        }
+                    ]
                 },
                 "questions": {
                     "type": "array",
@@ -1740,6 +1771,20 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/exam_res.TagAssignment"
                     }
+                }
+            }
+        },
+        "exam_res.ParentExamResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "semester": {
+                    "type": "string"
                 }
             }
         },

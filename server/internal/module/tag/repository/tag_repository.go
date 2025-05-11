@@ -13,9 +13,9 @@ type TagRepository interface {
 	Delete(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) error
 	Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Tag, error)
 
-	BeginTx(ctx context.Context) (*gorm.DB, error)
-	RollBackTx(tx *gorm.DB) error
-	CommitTx(tx *gorm.DB) error
+	// BeginTx(ctx context.Context) (*gorm.DB, error)
+	// RollBackTx(tx *gorm.DB) error
+	// CommitTx(tx *gorm.DB) error
 }
 
 type tagRepositoryImpl struct {

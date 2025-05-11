@@ -18,6 +18,7 @@ type ExamResponse struct {
 	Questions        []*question_res.QuestionResponse `json:"questions"`
 	ParentExam       *ParentExamResponse              `json:"parentExam,omitempty"` // Reference to the parent exam
 	Children         []*ChildExamResponse             `json:"children,omitempty"`   // List of child exams
+	Code             int                              `json:"code"`
 }
 
 type SubjectResponse struct {
@@ -64,6 +65,7 @@ func EntityToResponse(exam *entity.Exam) *ExamResponse {
 		Questions:        convertQuestions(exam.Questions),
 		ParentExam:       convertParentExam(exam.ParentExam),
 		Children:         convertChildExams(exam.Children),
+		Code:             exam.Code,
 	}
 }
 

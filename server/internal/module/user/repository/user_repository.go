@@ -13,9 +13,9 @@ type UserRepository interface {
 	Delete(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) error
 	Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.User, error)
 
-	BeginTx(ctx context.Context) (*gorm.DB, error)
-	RollBackTx(tx *gorm.DB) error
-	CommitTx(tx *gorm.DB) error
+	// BeginTx(ctx context.Context) (*gorm.DB, error)
+	// RollBackTx(tx *gorm.DB) error
+	// CommitTx(tx *gorm.DB) error
 }
 
 type userRepositoryImpl struct {
@@ -73,16 +73,16 @@ func (r *userRepositoryImpl) Find(ctx context.Context, db *gorm.DB, conditionMap
 	return users, nil
 }
 
-// Transaction methods
-func (r *userRepositoryImpl) BeginTx(ctx context.Context) (*gorm.DB, error) {
-	tx := r.db.WithContext(ctx).Begin()
-	return tx, tx.Error
-}
+// // Transaction methods
+// func (r *userRepositoryImpl) BeginTx(ctx context.Context) (*gorm.DB, error) {
+// 	tx := r.db.WithContext(ctx).Begin()
+// 	return tx, tx.Error
+// }
 
-func (r *userRepositoryImpl) RollBackTx(tx *gorm.DB) error {
-	return tx.Rollback().Error
-}
+// func (r *userRepositoryImpl) RollBackTx(tx *gorm.DB) error {
+// 	return tx.Rollback().Error
+// }
 
-func (r *userRepositoryImpl) CommitTx(tx *gorm.DB) error {
-	return tx.Commit().Error
-}
+// func (r *userRepositoryImpl) CommitTx(tx *gorm.DB) error {
+// 	return tx.Commit().Error
+// }

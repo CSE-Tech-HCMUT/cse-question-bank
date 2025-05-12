@@ -144,6 +144,7 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 	}
 
 	if err = validateQuestionBank(convertedQuestionBank, convertedFilterConditions); err != nil {
+		slog.Error("Question bank validation failed", "error-message", err)
 		return nil, err
 	}
 

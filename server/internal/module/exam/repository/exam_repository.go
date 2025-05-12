@@ -13,7 +13,7 @@ type ExamRepository interface {
 	Update(ctx context.Context, db *gorm.DB, exam *entity.Exam) error
 	Delete(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) error
 	Find(ctx context.Context, db *gorm.DB, conditionMap map[string]interface{}) ([]*entity.Exam, error)
-
+	// UpdateExamQuestions(ctx context.Context, db *gorm.DB, examID uint, questionIDs []uint) error
 	BeginTx(ctx context.Context) (*gorm.DB, error)
 	RollBackTx(tx *gorm.DB) error
 	CommitTx(tx *gorm.DB) error
@@ -53,6 +53,30 @@ func (r *examRepositoryImpl) Update(ctx context.Context, db *gorm.DB, exam *enti
 		return err
 	}
 	return nil
+}
+
+// UpdateExamQuestions updates the list of questions in an exam by their IDs.
+func (r *examRepositoryImpl) UpdateExamQuestions(ctx context.Context, db *gorm.DB, examID uint, questionIDs []uint) error {
+    tx := r.getDB(ctx, db)
+
+    // Retrieve the exam to update its questions
+    var exam entity.Exam
+    if err := tx.Preload("Questions").First(&exam, examID).Error; err != nil {
+        return err
+    }
+
+    // Retrieve the questions by the provided IDs
+    var questions []entity.Question
+    if err := tx.Where("id IN ?", questionIDs).Find(&questions).Error; err != nil {
+        return err
+    }
+
+    // Update the exam's questions association
+    if err := tx.Model(&exam).Association("Questions").Replace(questions); err != nil {
+        return err
+    }
+
+    return nil
 }
 
 // Delete

@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"cse-question-bank/internal/database/entity"
 	exam_res "cse-question-bank/internal/module/exam/model/res"
 	"fmt"
 	"log/slog"
@@ -151,9 +150,14 @@ func (u *examUsecaseImpl) GenerateExamAuto(ctx context.Context, examId uuid.UUID
 	// Pass maxUsageCount to normalize in calculateFitness
 	generatedExam := GeneticAlgorithm(convertedQuestionBank, convertedFilterConditions, 40, 20)
 	for _, qId := range generatedExam.QuestionList {
-		exam.Questions = append(exam.Questions, &entity.Question{
-			Id: qId,
+		questionEnt, err := u.questionRepository.Find(ctx, nil, map[string]interface{}{
+			"id": qId,
 		})
+		if err != nil {
+			slog.Error("Failed to fetch question from repository", "error-message", err)
+			return nil, err
+		}
+		exam.Questions = append(exam.Questions, questionEnt[0])
 	}
 
 	if err = u.examRepostiroy.Update(ctx, nil, exam); err != nil {
